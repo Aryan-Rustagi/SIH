@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  TOURIST
+  RESPONDER
+  ADMIN
+}
+
+enum AlertStatus {
+  ACTIVE
+  RESOLVED
+  CANCELLED
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum IncidentCategory {
+  THEFT
+  HARASSMENT
+  SCAM
+  MEDICAL
+  NATURAL_HAZARD
+  OTHER
+}
+
+model User {
+  id                String             @id @default(cuid())
+  email             String             @unique
+  name              String?
+  phone             String?
+  role              Role               @default(TOURIST)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  emergencyContacts EmergencyContact[]
+  alerts            SOSAlert[]
+  incidentReports   IncidentReport[]
+  locations         LocationHistory[]
+
+  @@map("users")
+}
+
+model EmergencyContact {
+  id           String   @id @default(cuid())
+  userId       String
+  name         String
+  phone        String
+  relationship String?
+  isPrimary    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("emergency_contacts")
+}
+
+model SOSAlert {
+  id          String      @id @default(cuid())
+  userId      String
+  status      AlertStatus @default(ACTIVE)
+  latitude    Float
+  longitude   Float
+  address     String?
+  message     String?
+  createdAt   DateTime    @default(now())
+  resolvedAt  DateTime?
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sos_alerts")
+}
+
+model IncidentReport {
+  id          String           @id @default(cuid())
+  userId      String?
+  title       String
+  description String
+  category    IncidentCategory @default(OTHER)
+  latitude    Float
+  longitude   Float
+  address     String?
+  isVerified  Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  user        User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("incident_reports")
+}
+
+model SafetyZone {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  riskLevel   RiskLevel @default(LOW)
+  latitude    Float
+  longitude   Float
+  radiusMeters Float    @default(500)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("safety_zones")
+}
+
+model LocationHistory {
+  id        String   @id @default(cuid())
+  userId    String
+  latitude  Float
+  longitude Float
+  accuracy  Float?
+  timestamp DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("location_history")
+}
