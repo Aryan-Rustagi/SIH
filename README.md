@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛡️ SafeTour Guardian - Tourist Safety & Emergency Rescue Platform
 
-## Getting Started
+A comprehensive **MERN Stack** (**M**ongoDB, **E**xpress.js, **R**eact, **N**ode.js) platform built with real-time Socket.IO communication, designed for traveler protection, emergency SOS broadcasts, safety zone navigation, and authority command & dispatch control.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🌟 Key Features
+
+- 🚨 **One-Touch Emergency SOS**: Instant panic distress button capturing device GPS coordinates and broadcasting to responders in real time.
+- 📡 **Real-Time Dispatch Console (Socket.IO)**: Police & Rescue Command Center for monitoring incoming alerts, deploying response units, and resolving emergencies.
+- 🗺️ **Safe Havens & Caution Zones**: Perimeter monitoring with real-time risk assessment and distance calculation.
+- ⚠️ **Crowd-Sourced Incident Reporting**: Verified community reports on pickpocketing, scams, harassment, medical hazards, and travel risks.
+- 📞 **In Case of Emergency (ICE) Contacts**: Direct SMS and call triggers for primary emergency contacts.
+- 🔐 **Role-Based Access Control**: Tailored portals for **Tourists**, **Responders/Police**, and **Admins**.
+
+---
+
+## 📂 Project Architecture
+
+```
+tourist-safety-app/
+├── package.json              # Root orchestration (concurrently runs client & server)
+├── .env.example              # Environment variable template
+├── server/                   # Backend (Node.js, Express.js, MongoDB / Mongoose, Socket.io)
+│   ├── src/
+│   │   ├── config/           # MongoDB connection handler
+│   │   ├── models/           # Mongoose schemas (User, SOSAlert, IncidentReport, SafetyZone, etc.)
+│   │   ├── controllers/      # Business logic & socket broadcasters
+│   │   ├── routes/           # REST endpoints (/api/auth, /api/sos, /api/incidents, /api/safety-zones)
+│   │   ├── middleware/       # JWT auth & error handling
+│   │   ├── seed.ts           # Demo database seed script
+│   │   └── server.ts         # Server bootstrap
+│   └── package.json
+└── client/                   # Frontend (React 19, Vite, Tailwind CSS v4, Lucide React, React Router)
+    ├── src/
+    │   ├── components/       # SOS Button, Navbar, AlertBanner, ZoneCard, IncidentCard
+    │   ├── context/          # AuthContext, AlertContext (Socket.IO event listener)
+    │   ├── pages/            # Tourist portal pages & Admin Command Center
+    │   ├── services/         # Axios API & Socket.io client
+    │   └── App.tsx           # Route layout and guards
+    └── package.json
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🚀 Getting Started
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. Prerequisites
+- **Node.js** (v18+ recommended)
+- **MongoDB** (Local instance running at `mongodb://127.0.0.1:27017` or MongoDB Atlas URI)
 
-## Learn More
+### 2. Setup Environment
+Ensure your `.env` in `server/.env` (and root `.env`) has:
+```env
+PORT=5000
+MONGO_URI=mongodb://127.0.0.1:27017/tourist_safety_db
+JWT_SECRET=super_secret_jwt_key_tourist_safety_2026
+CLIENT_URL=http://localhost:3000
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Install All Dependencies
+```bash
+npm run install:all
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4. Seed Demo Data (Optional)
+To populate demo users (Tourist, Responder, Admin) and initial safe zones:
+```bash
+npm run seed
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 5. Run the Application
+Start both the Express backend (`http://localhost:5000`) and the React client (`http://localhost:3000`) concurrently:
+```bash
+npm run dev
+```
 
-## Deploy on Vercel
+- **Tourist Portal**: [http://localhost:3000](http://localhost:3000)
+- **Police & Rescue Command Center**: [http://localhost:3000/admin](http://localhost:3000/admin)
+- **API Health Check**: [http://localhost:5000/api/health](http://localhost:5000/api/health)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🔑 Demo Accounts
+
+| Role | Email | Password | Access |
+|------|-------|----------|--------|
+| **Tourist** | `tourist@safetour.app` | `password123` | SOS Panic Button, Contacts, Incident Reporting |
+| **Responder / Police** | `responder@safetour.app` | `password123` | Real-time SOS Dispatch, Incident Verification |
+| **Admin** | `admin@safetour.app` | `password123` | Full Access + Safety Zone Management |
