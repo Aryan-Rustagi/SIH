@@ -11,7 +11,7 @@ A comprehensive **MERN Stack** (**M**ongoDB, **E**xpress.js, **R**eact, **N**ode
 - 🗺️ **Safe Havens & Caution Zones**: Perimeter monitoring with real-time risk assessment and distance calculation.
 - ⚠️ **Crowd-Sourced Incident Reporting**: Verified community reports on pickpocketing, scams, harassment, medical hazards, and travel risks.
 - 📞 **In Case of Emergency (ICE) Contacts**: Direct SMS and call triggers for primary emergency contacts.
-- 🔐 **Role-Based Access Control**: Tailored portals for **Tourists**, **Responders/Police**, and **Admins**.
+- 🔐 **Role-Based Access Control**: Tailored portals for **Tourists** and **Admins** (Police & Rescue Command).
 
 ---
 
@@ -31,15 +31,8 @@ tourist-safety-app/
 │   │   ├── seed.ts           # Demo database seed script
 │   │   └── server.ts         # Server bootstrap
 │   └── package.json
-└── client/                   # Frontend (React 19, Vite, Tailwind CSS v4, Lucide React, React Router)
-    ├── src/
-    │   ├── components/       # SOS Button, Navbar, AlertBanner, ZoneCard, IncidentCard
-    │   ├── context/          # AuthContext, AlertContext (Socket.IO event listener)
-    │   ├── pages/            # Tourist portal pages & Admin Command Center
-    │   ├── services/         # Axios API & Socket.io client
-    │   └── App.tsx           # Route layout and guards
-    └── package.json
-```
+└── client-tourist/           # Tourist Portal (React 19, Vite, Tailwind v4)
+└── client-admin/             # Admin & Dispatch Command Center (React 19, Vite, Tailwind v4)```
 
 ---
 
@@ -64,19 +57,19 @@ npm run install:all
 ```
 
 ### 4. Seed Demo Data (Optional)
-To populate demo users (Tourist, Responder, Admin) and initial safe zones:
+To populate demo users (Tourist and Admin) and initial safe zones:
 ```bash
 npm run seed
 ```
 
 ### 5. Run the Application
-Start both the Express backend (`http://localhost:5000`) and the React client (`http://localhost:3000`) concurrently:
+Start both the Express backend (`http://localhost:5000`) and the React clients concurrently:
 ```bash
 npm run dev
 ```
 
 - **Tourist Portal**: [http://localhost:3000](http://localhost:3000)
-- **Police & Rescue Command Center**: [http://localhost:3000/admin](http://localhost:3000/admin)
+- **Police & Rescue Command Center**: [http://localhost:3002](http://localhost:3002)
 - **API Health Check**: [http://localhost:5000/api/health](http://localhost:5000/api/health)
 
 ---
@@ -86,5 +79,4 @@ npm run dev
 | Role | Email | Password | Access |
 |------|-------|----------|--------|
 | **Tourist** | `tourist@safetour.app` | `password123` | SOS Panic Button, Contacts, Incident Reporting |
-| **Responder / Police** | `responder@safetour.app` | `password123` | Real-time SOS Dispatch, Incident Verification |
-| **Admin** | `admin@safetour.app` | `password123` | Full Access + Safety Zone Management |
+| **Admin** | `admin@safetour.app` | `password123` | Real-time SOS Dispatch, Incident Verification, Safety Zone Management |

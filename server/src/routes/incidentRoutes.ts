@@ -17,10 +17,10 @@ router.get('/', getIncidents);
 router.post('/', protect, createIncident);
 
 // Admin: get all incidents including unverified
-router.get('/admin/all', protect, authorize('ADMIN', 'RESPONDER'), getAllIncidentsAdmin);
+router.get('/admin/all', protect, authorize('ADMIN'), getAllIncidentsAdmin);
 
 // Admin: verify incident
-router.patch('/:id/verify', protect, authorize('ADMIN', 'RESPONDER'), verifyIncident);
+router.patch('/:id/verify', protect, authorize('ADMIN'), verifyIncident);
 
 // Admin or Author: delete incident
 router.delete('/:id', protect, deleteIncident);
