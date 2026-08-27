@@ -18,10 +18,10 @@ router.post('/', protect, triggerSOS);
 router.get('/my-alerts', protect, getMyAlerts);
 
 // Responders & Police Command: get active alerts
-router.get('/active', protect, authorize('RESPONDER', 'ADMIN'), getActiveAlerts);
+router.get('/active', protect, authorize('ADMIN'), getActiveAlerts);
 
 // Responder acknowledges alert
-router.patch('/:id/acknowledge', protect, authorize('RESPONDER', 'ADMIN'), acknowledgeAlert);
+router.patch('/:id/acknowledge', protect, authorize('ADMIN'), acknowledgeAlert);
 
 // Resolve alert (Responders, Admin, or User)
 router.patch('/:id/resolve', protect, resolveAlert);

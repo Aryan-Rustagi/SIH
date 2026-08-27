@@ -26,14 +26,6 @@ const seedData = async () => {
       role: 'TOURIST',
     });
 
-    const responder = await User.create({
-      name: 'Officer Rajesh Kumar',
-      email: 'responder@safetour.app',
-      password: 'password123',
-      phone: '+91 98765 43210',
-      role: 'RESPONDER',
-    });
-
     const admin = await User.create({
       name: 'Chief Sarah Jenkins',
       email: 'admin@safetour.app',
@@ -118,7 +110,7 @@ const seedData = async () => {
         longitude: 77.231,
         address: 'Bazaar North Entrance',
         isVerified: true,
-        verifiedBy: responder._id,
+        verifiedBy: admin._id,
       },
     ]);
 

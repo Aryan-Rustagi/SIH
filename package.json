@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently -n \"SERVER,CLIENT\" -c \"blue,magenta\" \"npm run dev:server\" \"npm run dev:client\"",
+    "dev": "concurrently -n \"SERVER,TOURIST,ADMIN\" -c \"blue,magenta,yellow\" \"npm run dev:server\" \"npm run dev:tourist\" \"npm run dev:admin\"",
     "dev:server": "npm run dev --prefix server",
-    "dev:client": "npm run dev --prefix client",
+    "dev:tourist": "npm run dev --prefix client-tourist",
+    "dev:admin": "npm run dev --prefix client-admin",
     "seed": "npm run seed --prefix server",
-    "build": "npm run build --prefix server && npm run build --prefix client",
-    "install:all": "npm install && npm install --prefix server && npm install --prefix client"
+    "build": "npm run build --prefix server && npm run build --prefix client-tourist && npm run build --prefix client-admin",
+    "install:all": "npm install && npm install --prefix server && npm install --prefix client-tourist && npm install --prefix client-admin"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"

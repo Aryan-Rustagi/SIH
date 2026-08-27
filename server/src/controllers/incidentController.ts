@@ -28,8 +28,8 @@ export const createIncident = async (
       longitude,
       address,
       // If submitted by Admin or Responder, auto-verify
-      isVerified: req.user?.role === 'ADMIN' || req.user?.role === 'RESPONDER',
-      verifiedBy: (req.user?.role === 'ADMIN' || req.user?.role === 'RESPONDER') ? req.user._id : undefined,
+      isVerified: req.user?.role === 'ADMIN',
+      verifiedBy: req.user?.role === 'ADMIN' ? req.user._id : undefined,
     });
 
     res.status(201).json({
