@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { SOSButton } from '../../components/SOSButton';
 import { ZoneCard, SafetyZoneData } from '../../components/ZoneCard';
 import { IncidentCard, IncidentData } from '../../components/IncidentCard';
+import { SafetyMap } from '../../components/SafetyMap';
 import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import {
@@ -157,6 +158,13 @@ export const TouristHome: React.FC = () => {
             </div>
           </Link>
         </div>
+      </section>
+
+      {/* Map View */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        {(zones.length > 0 || incidents.length > 0) && (
+          <SafetyMap zones={zones} incidents={incidents} />
+        )}
       </section>
 
       {/* Live Verified Incidents & Safe Zones Grid */}

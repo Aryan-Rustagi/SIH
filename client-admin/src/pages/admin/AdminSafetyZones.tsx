@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { SafetyZoneData, ZoneCard } from '../../components/ZoneCard';
+import { SafetyMap } from '../../components/SafetyMap';
 import {
   Layers,
   Plus,
@@ -159,6 +160,13 @@ export const AdminSafetyZones: React.FC = () => {
           <span>{feedback.message}</span>
         </div>
       )}
+
+      {/* Map View */}
+      <div className="mb-8 mt-8">
+        {zones.length > 0 && (
+          <SafetyMap zones={zones} />
+        )}
+      </div>
 
       {/* Zones List with Admin Management Controls */}
       {isLoading ? (

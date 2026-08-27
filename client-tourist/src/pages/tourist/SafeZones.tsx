@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { ZoneCard, SafetyZoneData } from '../../components/ZoneCard';
+import { SafetyMap } from '../../components/SafetyMap';
 import {
   Compass,
   Search,
@@ -157,6 +158,13 @@ export const SafeZones: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Map View */}
+      <div className="mb-8">
+        {zones.length > 0 && (
+          <SafetyMap zones={zones} />
+        )}
+      </div>
 
       {/* Filter and Search Bar */}
       <div className="flex flex-col sm:flex-row items-center gap-3 mb-8">
