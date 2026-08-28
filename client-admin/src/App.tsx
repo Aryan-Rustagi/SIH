@@ -8,6 +8,7 @@ import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { AdminSafetyZones } from './pages/admin/AdminSafetyZones';
 import { Login } from './pages/auth/Login';
 import { Register } from './pages/auth/Register';
+import { LayoutWrapper } from './components/LayoutWrapper';
 
 const ProtectedRoute: React.FC<{
   children: React.ReactNode;
@@ -36,7 +37,8 @@ export const App: React.FC = () => {
       <AlertBanner />
       <Navbar />
       <main className="main-content">
-        <Routes>
+        <LayoutWrapper>
+          <Routes>
           <Route
             path="/"
             element={
@@ -56,7 +58,8 @@ export const App: React.FC = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+          </Routes>
+        </LayoutWrapper>
       </main>
       <Footer portal="admin" />
     </div>

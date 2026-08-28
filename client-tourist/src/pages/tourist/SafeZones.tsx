@@ -133,7 +133,7 @@ export const SafeZones: React.FC = () => {
         </div>
       )}
 
-      <div className="mb-xl">{zones.length > 0 && <MapplsMap className="h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl border-4 border-gray-100 dark:border-gray-800" />}</div>
+      <div className="mb-xl">{zones.length > 0 && <MapplsMap center={[28.61, 77.23]} zoom={13} className="h-[500px] w-full rounded-2xl overflow-hidden shadow-sm border border-gray-200" />}</div>
 
       <div className="filter-bar mb-xl">
         <div className="input-group flex-1" style={{ width: '100%' }}>

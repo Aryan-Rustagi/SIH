@@ -134,7 +134,7 @@ const LeafletSafetyMap: React.FC<SafetyMapProps> = ({ zones, incidents = [], cen
         <div className="map-legend-item">Incident</div>
       </div>
 
-      <MapContainer center={center} zoom={zoom} scrollWheelZoom={false} style={{ height: '500px', width: '100%', background: '#0f172a' }} maxBounds={[[6.75, 68.16], [37.5, 97.4]]} maxBoundsViscosity={1.0} minZoom={4}>
+      <MapContainer center={center} zoom={zoom} scrollWheelZoom={false} style={{ height: '500px', width: '100%', background: '#f9fafb' }} maxBounds={[[6.75, 68.16], [37.5, 97.4]]} maxBoundsViscosity={1.0} minZoom={4}>
         <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' url={OPENSTREETMAP_TILES} />
         <RestrictedZonesLayer />
         <CurrentLocationMarker />

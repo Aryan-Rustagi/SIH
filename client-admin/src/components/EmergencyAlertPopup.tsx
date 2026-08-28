@@ -56,7 +56,7 @@ export const EmergencyAlertPopup: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-      <div className="relative w-full max-w-lg p-6 overflow-hidden bg-gray-900 border-2 border-red-500 rounded-xl shadow-2xl animate-pulse ring-4 ring-red-500/50">
+      <div className="relative w-full max-w-lg p-6 overflow-hidden bg-white border border-red-200 rounded-xl shadow-lg">
         
         {/* Blinking red background glow effect */}
         <div className="absolute inset-0 bg-red-600/10 animate-pulse pointer-events-none" />
@@ -66,19 +66,19 @@ export const EmergencyAlertPopup: React.FC = () => {
             <AlertTriangle className="w-10 h-10 text-white" />
           </div>
 
-          <h2 className="mb-2 text-3xl font-black text-transparent uppercase bg-clip-text bg-gradient-to-r from-red-400 to-red-600 tracking-widest">
+          <h2 className="mb-2 text-3xl font-black text-red-700 uppercase tracking-widest">
             Critical Emergency
           </h2>
           
-          <div className="w-full h-px mb-4 bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-50" />
+          <div className="w-full h-px mb-4 bg-red-100" />
 
           <div className="w-full space-y-4 font-mono text-sm">
-            <div className="flex items-center justify-between p-3 bg-gray-800 border border-gray-700 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg">
               <span className="text-gray-400 uppercase">User ID</span>
               <span className="font-bold text-red-400">{userId || 'UNKNOWN'}</span>
             </div>
             
-            <div className="flex items-center justify-between p-3 bg-gray-800 border border-gray-700 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg">
               <span className="text-gray-400 uppercase">Coordinates</span>
               <div className="flex items-center font-bold text-cyan-400">
                 <MapPin className="w-4 h-4 mr-2" />
@@ -90,7 +90,7 @@ export const EmergencyAlertPopup: React.FC = () => {
           <div className="flex flex-col w-full gap-3 mt-6 sm:flex-row">
             <button
               onClick={handleDispatchHelp}
-              className="flex-1 px-6 py-3 font-bold text-white transition-all bg-red-600 rounded-lg hover:bg-red-500 active:scale-95 shadow-[0_0_15px_rgba(220,38,38,0.5)] flex items-center justify-center"
+              className="flex-1 px-6 py-3 font-bold text-white transition-all bg-red-600 rounded-lg hover:bg-red-700 active:scale-95 shadow-sm flex items-center justify-center"
             >
               <AlertTriangle className="w-5 h-5 mr-2" />
               DISPATCH HELP
@@ -98,7 +98,7 @@ export const EmergencyAlertPopup: React.FC = () => {
             
             <button
               onClick={handleDismiss}
-              className="flex-1 px-6 py-3 font-bold text-gray-300 transition-all bg-transparent border border-gray-600 rounded-lg hover:bg-gray-800 hover:text-white active:scale-95 flex items-center justify-center"
+              className="flex-1 px-6 py-3 font-bold text-gray-700 transition-all bg-white border border-gray-300 rounded-lg hover:bg-gray-50 active:scale-95 flex items-center justify-center"
             >
               <X className="w-5 h-5 mr-2" />
               DISMISS ALERT

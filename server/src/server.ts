@@ -3,6 +3,8 @@ import http from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import cors from 'cors';
 import dotenv from 'dotenv';
+dotenv.config();
+
 import { connectDB } from './config/db.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { setSOSSocketIO } from './controllers/sosController.js';
@@ -15,20 +17,21 @@ import safetyZoneRoutes from './routes/safetyZoneRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
 import smsWebhookRoutes from './routes/smsWebhookRoutes.js';
 import redZoneRoutes from './routes/redZoneRoutes.js';
+import riskZoneRoutes from './routes/riskZoneRoutes.js';
+import aiRoutes from './routes/aiRoutes.js';
 
-// Load environment variables
-dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
 
 const PORT = process.env.PORT || 5000;
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000';
+const allowedOrigins = CLIENT_URL.split(',').map((origin) => origin.trim()).filter(Boolean);
 
 // Setup Socket.IO
 const io = new SocketIOServer(server, {
   cors: {
-    origin: [CLIENT_URL, 'http://localhost:3000', 'http://localhost:3002', 'http://localhost:5173'],
+    origin: [...allowedOrigins, 'http://localhost:3000', 'http://localhost:3002', 'http://localhost:5173'],
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
     credentials: true,
   },
@@ -53,7 +56,7 @@ io.on('connection', (socket) => {
 // Middleware
 app.use(
   cors({
-    origin: [CLIENT_URL, 'http://localhost:3000', 'http://localhost:3002', 'http://localhost:5173'],
+    origin: [...allowedOrigins, 'http://localhost:3000', 'http://localhost:3002', 'http://localhost:5173'],
     credentials: true,
   })
 );
@@ -77,6 +80,8 @@ app.use('/api/safety-zones', safetyZoneRoutes);
 app.use('/api/contacts', contactRoutes);
 app.use('/api/sms-webhook', smsWebhookRoutes);
 app.use('/api/red-zones', redZoneRoutes);
+app.use('/api/risk-zones', riskZoneRoutes);
+app.use('/api/ai', aiRoutes);
 
 // Global Error Handler
 app.use(errorHandler);

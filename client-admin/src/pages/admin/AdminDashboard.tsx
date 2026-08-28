@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useAlerts } from '../../context/AlertContext';
 import { useAuth } from '../../context/AuthContext';
 import { IncidentCard, IncidentData } from '../../components/IncidentCard';
+import { SafetyMap } from '../../components/SafetyMap';
+import { SafetyZoneData } from '../../components/ZoneCard';
 import api from '../../services/api';
 import {
   Radio,
@@ -13,6 +15,7 @@ import {
   Check,
   UserCheck,
   RefreshCw,
+  Search,
 } from 'lucide-react';
 
 export const AdminDashboard: React.FC = () => {
@@ -22,6 +25,7 @@ export const AdminDashboard: React.FC = () => {
   const [incidents, setIncidents] = useState<IncidentData[]>([]);
   const [loadingIncidents, setLoadingIncidents] = useState<boolean>(true);
   const [actionInProgress, setActionInProgress] = useState<string | null>(null);
+  const [zones, setZones] = useState<SafetyZoneData[]>([]);
 
   useEffect(() => {
     document.title = 'Command Center — SafeTour Admin';
@@ -32,10 +36,12 @@ export const AdminDashboard: React.FC = () => {
   const loadAllIncidents = async () => {
     try {
       setLoadingIncidents(true);
-      const res = await api.get('/incidents/admin/all');
-      if (res.data.success) {
-        setIncidents(res.data.incidents);
-      }
+      const [incidentsRes, zonesRes] = await Promise.all([
+        api.get('/incidents/admin/all'),
+        api.get('/safety-zones'),
+      ]);
+      if (incidentsRes.data.success) setIncidents(incidentsRes.data.incidents);
+      if (zonesRes.data.success) setZones(zonesRes.data.zones);
     } catch (err) {
       console.warn('Failed to load admin incidents:', err);
     } finally {
@@ -73,14 +79,24 @@ export const AdminDashboard: React.FC = () => {
   };
 
   return (
-    <div className="container page">
+    <div className="container page admin-dashboard">
+      <header className="admin-top-header">
+        <div>
+          <p className="admin-kicker">Police operations</p>
+          <h1 className="page-title">Command Center</h1>
+        </div>
+        <label className="admin-search">
+          <Search size={17} />
+          <input type="search" placeholder="Search alerts, tourists, or zones" aria-label="Search dashboard" />
+        </label>
+      </header>
       <div className="page-header-row page-header" style={{ borderBottom: '1px solid var(--border)', paddingBottom: '1.5rem' }}>
         <div>
           <span className="badge badge-rose mb-sm">
             <Radio size={14} className="animate-pulse" />
             Police & Emergency Rescue Command Center
           </span>
-          <h1 className="page-title">Live Dispatch & Incident Control</h1>
+          <h2 className="page-title">Live Dispatch & Incident Control</h2>
           <p className="page-desc">
             Real-time SOS radar dispatching, responder deployment, and crowd-sourced safety verification.
           </p>
@@ -133,9 +149,20 @@ export const AdminDashboard: React.FC = () => {
         </div>
       </div>
 
-      <div className="dispatch-grid">
+      <section className="admin-map-panel" id="tourists">
+        <div className="section-title-row">
+          <div>
+            <p className="admin-kicker">Live overview</p>
+            <h2>Safety map</h2>
+          </div>
+          <span className="text-xs text-muted">{zones.length} monitored zones</span>
+        </div>
+        <SafetyMap zones={zones} incidents={incidents.filter((incident) => incident.isVerified)} />
+      </section>
+
+      <div className="dispatch-grid" id="alerts">
         <div>
-          <div className="section-title-row">
+          <div className="section-title-row admin-feed-header">
             <div className="flex items-center gap-sm">
               <span className="live-dot" />
               <h2>Incoming SOS Distress Queue</h2>

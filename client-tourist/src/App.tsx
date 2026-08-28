@@ -13,6 +13,7 @@ import { LandingPage } from './pages/LandingPage';
 import { AboutPage } from './pages/AboutPage';
 import { Login } from './pages/auth/Login';
 import { Register } from './pages/auth/Register';
+import { LayoutWrapper } from './components/LayoutWrapper';
 
 const ProtectedRoute: React.FC<{
   children: React.ReactNode;
@@ -42,7 +43,8 @@ export const App: React.FC = () => {
       <Navbar />
 
       <main className="main-content">
-        <Routes>
+        <LayoutWrapper>
+          <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/dashboard" element={<TouristHome />} />
@@ -59,7 +61,8 @@ export const App: React.FC = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+          </Routes>
+        </LayoutWrapper>
       </main>
 
       <Footer portal="tourist" />
