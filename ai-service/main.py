@@ -3,8 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
 
-# Load environment variables
-load_dotenv()
+# Load environment variables from the root folder
+load_dotenv(dotenv_path="../.env")
 
 from routers import ai_routes
 from services.openrouter_service import get_safety_response_with_fallback
