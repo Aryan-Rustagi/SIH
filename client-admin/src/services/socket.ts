@@ -4,7 +4,10 @@ let socket: Socket | null = null;
 
 export const getSocket = (): Socket => {
   if (!socket) {
-    const rawUrl = (import.meta.env.VITE_API_URL || '').trim();
+    const configuredUrl = (import.meta.env.VITE_API_URL || '').trim();
+    const isStaleRenderUrl = configuredUrl.includes('tourist-safety-api.onrender.com') ||
+      configuredUrl.includes('tourist-safety-node-api.onrender.com');
+    const rawUrl = isStaleRenderUrl ? 'https://tourist-safety-app-1.onrender.com' : configuredUrl;
     const serverOrigin = rawUrl ? rawUrl.replace(/\/api\/?$/, '') : window.location.origin;
 
     socket = io(serverOrigin, {
