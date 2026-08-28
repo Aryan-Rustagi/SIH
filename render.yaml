@@ -38,7 +38,7 @@ services:
     staticPublishPath: dist
     envVars:
       - key: VITE_API_URL
-        value: "https://tourist-safety-node-api.onrender.com"
+        value: "https://tourist-safety-app-1.onrender.com"
       - key: VITE_AI_API_URL
         value: "https://tourist-safety-ai.onrender.com"
       - key: VITE_MAPPLS_KEY
@@ -57,7 +57,7 @@ services:
     staticPublishPath: dist
     envVars:
       - key: VITE_API_URL
-        value: "https://tourist-safety-node-api.onrender.com"
+        value: "https://tourist-safety-app-1.onrender.com"
       - key: VITE_AI_API_URL
         value: "https://tourist-safety-ai.onrender.com"
       - key: VITE_MAPPLS_KEY
