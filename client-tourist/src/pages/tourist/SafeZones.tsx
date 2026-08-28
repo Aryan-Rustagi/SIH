@@ -1,16 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { ZoneCard, SafetyZoneData } from '../../components/ZoneCard';
-import {
-  Compass,
-  Search,
-  Filter,
-  ShieldCheck,
-  AlertTriangle,
-  MapPin,
-  RefreshCw,
-  Info,
-} from 'lucide-react';
+import { MapplsMap } from '../../components/MapplsMap';
+import { Compass, Search, RefreshCw, Info } from 'lucide-react';
 
 export const SafeZones: React.FC = () => {
   const [zones, setZones] = useState<SafetyZoneData[]>([]);
@@ -30,6 +22,7 @@ export const SafeZones: React.FC = () => {
   const [evaluatingRisk, setEvaluatingRisk] = useState<boolean>(false);
 
   useEffect(() => {
+    document.title = 'Safety Zones — SafeTour Guardian';
     fetchZones();
   }, []);
 
@@ -70,7 +63,6 @@ export const SafeZones: React.FC = () => {
           }
         },
         () => {
-          // Fallback simulation
           setCurrentRiskStatus({
             risk: 'LOW',
             activeZones: [],
@@ -92,65 +84,48 @@ export const SafeZones: React.FC = () => {
     return matchesFilter && matchesSearch;
   });
 
-  const getRiskBadgeDetails = (risk: string) => {
+  const getRiskBadge = (risk: string) => {
     switch (risk) {
       case 'CRITICAL':
-        return { text: 'Critical Risk Alert Area', bg: 'bg-rose-500/20 text-rose-300 border-rose-500/40' };
+        return { text: 'Critical Risk Alert Area', cls: 'badge-rose' };
       case 'HIGH':
-        return { text: 'Elevated Risk Caution', bg: 'bg-orange-500/20 text-orange-300 border-orange-500/40' };
+        return { text: 'Elevated Risk Caution', cls: 'badge-orange' };
       case 'MEDIUM':
-        return { text: 'Moderate Caution Area', bg: 'bg-amber-500/20 text-amber-300 border-amber-500/40' };
+        return { text: 'Moderate Caution Area', cls: 'badge-amber' };
       default:
-        return { text: 'Safe & Monitored Zone', bg: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' };
+        return { text: 'Safe & Monitored Zone', cls: 'badge-emerald' };
     }
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+    <div className="container page has-bottom-nav">
+      <div className="page-header-row page-header">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-semibold mb-2">
-            <Compass className="w-3.5 h-3.5" />
+          <span className="badge badge-emerald mb-sm">
+            <Compass size={14} />
             Safety Perimeter Navigator
-          </div>
-          <h1 className="text-3xl font-extrabold text-white">Safe Havens & Monitored Zones</h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+          </span>
+          <h1 className="page-title">Safe Havens & Monitored Zones</h1>
+          <p className="page-desc">
             Browse verified safe zones, tourist police booths, embassy zones, and areas requiring caution.
           </p>
         </div>
-
-        {/* Real-time Proximity Radar Button */}
-        <button
-          onClick={evaluateCurrentLocation}
-          disabled={evaluatingRisk}
-          className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-2 transition-all shadow-md self-start md:self-auto"
-        >
-          <RefreshCw className={`w-4 h-4 text-emerald-400 ${evaluatingRisk ? 'animate-spin' : ''}`} />
+        <button type="button" onClick={evaluateCurrentLocation} disabled={evaluatingRisk} className="btn btn-secondary">
+          <RefreshCw size={16} className={evaluatingRisk ? 'animate-spin' : ''} />
           {evaluatingRisk ? 'Scanning Perimeter...' : 'Scan My Location Risk'}
         </button>
       </div>
 
-      {/* Evaluated Status Card */}
       {currentRiskStatus.evaluated && (
-        <div className="mb-8 p-4 sm:p-5 rounded-2xl glass-panel-glow border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-emerald-500/10 rounded-xl">
-              <ShieldCheck className="w-6 h-6 text-emerald-400" />
-            </div>
-            <div>
-              <div className="text-xs text-slate-400 uppercase tracking-wider font-semibold">
-                Current Location Safety Status
-              </div>
-              <div className="text-base font-bold text-white flex items-center gap-2 mt-0.5">
-                <span className={`px-2.5 py-0.5 rounded-full border text-xs font-bold ${getRiskBadgeDetails(currentRiskStatus.risk).bg}`}>
-                  {currentRiskStatus.risk}
-                </span>
-                <span>{getRiskBadgeDetails(currentRiskStatus.risk).text}</span>
-              </div>
+        <div className="card card-glow risk-banner">
+          <div>
+            <div className="label">Current Location Safety Status</div>
+            <div className="flex items-center gap-sm mt-xs">
+              <span className={`badge ${getRiskBadge(currentRiskStatus.risk).cls}`}>{currentRiskStatus.risk}</span>
+              <span className="font-semibold">{getRiskBadge(currentRiskStatus.risk).text}</span>
             </div>
           </div>
-          <div className="text-xs text-slate-400 bg-slate-950 px-3 py-2 rounded-xl border border-slate-800">
+          <div className="location-box text-xs">
             {currentRiskStatus.activeZones.length > 0
               ? `Inside: ${currentRiskStatus.activeZones.map((z: any) => z.zone.name).join(', ')}`
               : 'Within standard safety corridor'}
@@ -158,50 +133,47 @@ export const SafeZones: React.FC = () => {
         </div>
       )}
 
-      {/* Filter and Search Bar */}
-      <div className="flex flex-col sm:flex-row items-center gap-3 mb-8">
-        <div className="relative flex-1 w-full">
-          <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+      <div className="mb-xl">{zones.length > 0 && <MapplsMap className="h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl border-4 border-gray-100 dark:border-gray-800" />}</div>
+
+      <div className="filter-bar mb-xl">
+        <div className="input-group flex-1" style={{ width: '100%' }}>
+          <Search className="input-icon" size={16} />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search zones by name or landmark description..."
-            className="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500"
+            className="input input-with-icon"
           />
         </div>
-
-        {/* Risk Filter Buttons */}
-        <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
+        <div className="filter-pills">
           {['ALL', 'LOW', 'MEDIUM', 'HIGH', 'CRITICAL'].map((lvl) => (
             <button
               key={lvl}
+              type="button"
               onClick={() => setFilterLevel(lvl)}
-              className={`px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
-                filterLevel === lvl
-                  ? 'bg-emerald-600 text-white shadow-md'
-                  : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
-              }`}
+              className={`filter-pill${filterLevel === lvl ? ' active' : ''}`}
             >
-              {lvl === 'ALL' ? 'All Zones' : `${lvl}`}
+              {lvl === 'ALL' ? 'All Zones' : lvl}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Zones Grid */}
       {isLoading ? (
-        <div className="text-center py-16 text-slate-400 text-sm">
-          Loading monitored safety zones...
+        <div className="grid grid-3">
+          <div className="skeleton skeleton-card" />
+          <div className="skeleton skeleton-card" />
+          <div className="skeleton skeleton-card" />
         </div>
       ) : filteredZones.length === 0 ? (
-        <div className="glass-panel p-12 rounded-2xl text-center text-slate-400 border border-slate-800">
-          <Info className="w-8 h-8 text-slate-500 mx-auto mb-2" />
-          <h3 className="text-base font-bold text-white">No zones found</h3>
-          <p className="text-xs text-slate-400 mt-1">Try adjusting your search terms or filter selection.</p>
+        <div className="empty-state">
+          <Info className="empty-state-icon" />
+          <h3 className="empty-state-title">No zones found</h3>
+          <p className="empty-state-desc">Try adjusting your search terms or filter selection.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-3">
           {filteredZones.map((zone) => (
             <ZoneCard key={zone._id} zone={zone} />
           ))}

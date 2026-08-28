@@ -9,6 +9,8 @@ export const setSOSSocketIO = (io: SocketIOServer) => {
   ioInstance = io;
 };
 
+export const getSOSSocketIO = () => ioInstance;
+
 // Trigger Emergency SOS
 export const triggerSOS = async (
   req: AuthRequest,

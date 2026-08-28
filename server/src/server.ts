@@ -13,6 +13,8 @@ import sosRoutes from './routes/sosRoutes.js';
 import incidentRoutes from './routes/incidentRoutes.js';
 import safetyZoneRoutes from './routes/safetyZoneRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
+import smsWebhookRoutes from './routes/smsWebhookRoutes.js';
+import redZoneRoutes from './routes/redZoneRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -73,19 +75,26 @@ app.use('/api/sos', sosRoutes);
 app.use('/api/incidents', incidentRoutes);
 app.use('/api/safety-zones', safetyZoneRoutes);
 app.use('/api/contacts', contactRoutes);
+app.use('/api/sms-webhook', smsWebhookRoutes);
+app.use('/api/red-zones', redZoneRoutes);
 
 // Global Error Handler
 app.use(errorHandler);
 
 // Start Server & Connect to DB
 const startServer = async () => {
-  await connectDB();
-  server.listen(PORT, () => {
-    console.log(`===========================================`);
-    console.log(`🚀 Tourist Safety API running on port ${PORT}`);
-    console.log(`🌐 Health check: http://localhost:${PORT}/api/health`);
-    console.log(`===========================================`);
-  });
+  try {
+    await connectDB();
+    server.listen(PORT, () => {
+      console.log(`===========================================`);
+      console.log(`🚀 Tourist Safety API running on port ${PORT}`);
+      console.log(`🌐 Health check: http://localhost:${PORT}/api/health`);
+      console.log(`===========================================`);
+    });
+  } catch (error) {
+    console.error(`[Server] Startup aborted: ${(error as Error).message}`);
+    process.exitCode = 1;
+  }
 };
 
 startServer();

@@ -19,66 +19,41 @@ export const ZoneCard: React.FC<{
   const getRiskBadge = (level: SafetyZoneData['riskLevel']) => {
     switch (level) {
       case 'LOW':
-        return {
-          label: 'Safe Haven / Verified Zone',
-          icon: <ShieldCheck className="w-4 h-4 text-emerald-400" />,
-          classes: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
-        };
+        return { label: 'Safe Haven / Verified Zone', icon: <ShieldCheck size={14} />, cls: 'badge-emerald' };
       case 'MEDIUM':
-        return {
-          label: 'Moderate Caution',
-          icon: <Info className="w-4 h-4 text-amber-400" />,
-          classes: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
-        };
+        return { label: 'Moderate Caution', icon: <Info size={14} />, cls: 'badge-amber' };
       case 'HIGH':
-        return {
-          label: 'High Risk / Alert Area',
-          icon: <AlertTriangle className="w-4 h-4 text-orange-400" />,
-          classes: 'bg-orange-500/10 text-orange-400 border-orange-500/30',
-        };
+        return { label: 'High Risk / Alert Area', icon: <AlertTriangle size={14} />, cls: 'badge-orange' };
       case 'CRITICAL':
-        return {
-          label: 'Critical Hazard / Red Zone',
-          icon: <AlertOctagon className="w-4 h-4 text-rose-400" />,
-          classes: 'bg-rose-500/15 text-rose-400 border-rose-500/30 animate-pulse',
-        };
+        return { label: 'Critical Hazard / Red Zone', icon: <AlertOctagon size={14} />, cls: 'badge-rose animate-pulse' };
     }
   };
 
   const badge = getRiskBadge(zone.riskLevel);
 
   return (
-    <div
-      onClick={onSelect}
-      className="glass-card rounded-xl p-4 border flex flex-col justify-between cursor-pointer group"
-    >
+    <div onClick={onSelect} className="card card-interactive flex flex-col justify-between">
       <div>
-        <div className="flex items-start justify-between gap-2 mb-2">
-          <h4 className="text-base font-bold text-white group-hover:text-rose-400 transition-colors">
-            {zone.name}
-          </h4>
-          <span
-            className={`flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full border ${badge.classes}`}
-          >
+        <div className="flex items-start justify-between gap-sm mb-sm">
+          <h4>{zone.name}</h4>
+          <span className={`badge ${badge.cls}`} title={badge.label}>
             {badge.icon}
             {zone.riskLevel}
           </span>
         </div>
-
-        <p className="text-xs text-slate-300 line-clamp-2 mb-3">
+        <p className="text-xs text-secondary line-clamp-2 mb-md">
           {zone.description || 'Monitored area with perimeter surveillance and safety assistance.'}
         </p>
       </div>
-
-      <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
-        <div className="flex items-center gap-1">
-          <MapPin className="w-3.5 h-3.5 text-slate-500" />
+      <div className="flex items-center justify-between text-xs text-muted" style={{ borderTop: '1px solid var(--border)', paddingTop: '0.5rem' }}>
+        <div className="flex items-center gap-xs">
+          <MapPin size={14} />
           <span>
             {zone.latitude.toFixed(3)}, {zone.longitude.toFixed(3)}
           </span>
         </div>
-        <div className="text-slate-400 font-mono">
-          Radius: {zone.radiusMeters}m {distanceMeters !== undefined && `• ~${distanceMeters}m away`}
+        <div className="font-mono">
+          Radius: {zone.radiusMeters}m{distanceMeters !== undefined ? ` • ~${distanceMeters}m away` : ''}
         </div>
       </div>
     </div>

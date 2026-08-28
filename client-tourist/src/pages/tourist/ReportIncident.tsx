@@ -32,6 +32,7 @@ export const ReportIncident: React.FC = () => {
   const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
+    document.title = 'Report Incident — SafeTour Guardian';
     fetchCurrentCoords();
   }, []);
 
@@ -99,7 +100,7 @@ export const ReportIncident: React.FC = () => {
         setTitle('');
         setDescription('');
         setTimeout(() => {
-          navigate('/');
+          navigate('/dashboard');
         }, 2000);
       }
     } catch (err: any) {
@@ -110,41 +111,35 @@ export const ReportIncident: React.FC = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-10">
-      <div className="glass-panel p-6 sm:p-8 rounded-2xl border border-slate-800 shadow-2xl">
-        <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800">
-          <div className="p-3 bg-amber-500/10 rounded-xl border border-amber-500/20 text-amber-400">
-            <FileWarning className="w-6 h-6" />
+    <div className="container-md page has-bottom-nav">
+      <div className="card">
+        <div className="flex items-center gap-md mb-lg" style={{ borderBottom: '1px solid var(--border)', paddingBottom: '1rem' }}>
+          <div className="icon-box icon-box-md icon-box-amber">
+            <FileWarning size={22} />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-white">Report a Safety Incident</h1>
-            <p className="text-xs text-slate-400">
-              Contribute to real-time community safety for tourists and emergency responders.
-            </p>
+            <h1>Report a Safety Incident</h1>
+            <p className="page-desc">Contribute to real-time community safety for tourists and emergency responders.</p>
           </div>
         </div>
 
         {successMsg && (
-          <div className="mb-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm flex items-center gap-2">
-            <CheckCircle className="w-5 h-5 flex-shrink-0" />
+          <div className="alert alert-success">
+            <CheckCircle size={18} />
             <span>{successMsg}</span>
           </div>
         )}
-
         {errorMsg && (
-          <div className="mb-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-sm flex items-center gap-2">
-            <AlertTriangle className="w-5 h-5 flex-shrink-0" />
+          <div className="alert alert-error">
+            <AlertTriangle size={18} />
             <span>{errorMsg}</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Category Picker */}
+        <form onSubmit={handleSubmit} className="space-y">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-              Incident Category
-            </label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <label className="label">Incident Category</label>
+            <div className="grid grid-2">
               {categories.map((cat) => {
                 const Icon = cat.icon;
                 const isSelected = category === cat.value;
@@ -153,13 +148,9 @@ export const ReportIncident: React.FC = () => {
                     key={cat.value}
                     type="button"
                     onClick={() => setCategory(cat.value)}
-                    className={`p-3 rounded-xl border text-left text-xs font-semibold flex items-center gap-2.5 transition-all ${
-                      isSelected
-                        ? 'bg-amber-500/20 border-amber-500/60 text-amber-300 shadow-md shadow-amber-950/40'
-                        : 'bg-slate-900/80 border-slate-800 text-slate-300 hover:border-slate-700'
-                    }`}
+                    className={`category-option${isSelected ? ' selected' : ''}`}
                   >
-                    <Icon className={`w-4 h-4 ${isSelected ? 'text-amber-400' : 'text-slate-500'}`} />
+                    <Icon size={16} />
                     <span>{cat.label}</span>
                   </button>
                 );
@@ -167,72 +158,54 @@ export const ReportIncident: React.FC = () => {
             </div>
           </div>
 
-          {/* Title */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-              Summary / Headline
-            </label>
+            <label className="label">Summary / Headline</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Aggressive taxi scam outside north metro gate"
               required
-              className="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
+              className="input"
             />
           </div>
 
-          {/* Description */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-              Detailed Description
-            </label>
+            <label className="label">Detailed Description</label>
             <textarea
               rows={4}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Provide key details, visual descriptions, exact landmark, or actions taken..."
               required
-              className="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
+              className="input"
             />
           </div>
 
-          {/* Location details */}
-          <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800 space-y-3">
-            <div className="flex items-center justify-between">
-              <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                <MapPin className="w-4 h-4 text-rose-400" />
-                Incident Location
+          <div className="location-box">
+            <div className="flex items-center justify-between mb-sm">
+              <label className="label" style={{ marginBottom: 0 }}>
+                <MapPin size={14} color="#fb7185" /> Incident Location
               </label>
-              <button
-                type="button"
-                onClick={fetchCurrentCoords}
-                className="text-xs text-rose-400 hover:underline font-medium"
-              >
+              <button type="button" onClick={fetchCurrentCoords} className="link-accent">
                 {isLocating ? 'Detecting...' : 'Detect GPS'}
               </button>
             </div>
-
             <input
               type="text"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
               placeholder="Approximate address or landmark name"
-              className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white placeholder-slate-500 focus:outline-none focus:border-rose-500"
+              className="input"
             />
-
-            <div className="flex gap-3 text-xs text-slate-400">
+            <div className="flex gap-md text-xs text-muted mt-sm">
               <span>Lat: {coords.latitude.toFixed(4)}</span>
               <span>Lng: {coords.longitude.toFixed(4)}</span>
             </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-bold text-sm shadow-xl shadow-amber-600/20 flex items-center justify-center gap-2 transition-all cursor-pointer"
-          >
-            <Send className="w-4 h-4" />
+          <button type="submit" disabled={isSubmitting} className="btn btn-amber btn-block btn-lg">
+            <Send size={16} />
             {isSubmitting ? 'Transmitting Report...' : 'Publish Incident Warning'}
           </button>
         </form>

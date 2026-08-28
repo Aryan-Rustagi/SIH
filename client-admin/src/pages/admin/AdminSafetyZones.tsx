@@ -1,17 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { SafetyZoneData, ZoneCard } from '../../components/ZoneCard';
-import {
-  Layers,
-  Plus,
-  Trash2,
-  Edit2,
-  ShieldCheck,
-  AlertTriangle,
-  AlertOctagon,
-  CheckCircle,
-  MapPin,
-} from 'lucide-react';
+import { SafetyMap } from '../../components/SafetyMap';
+import { Layers, Plus, Trash2, Edit2, CheckCircle, AlertTriangle } from 'lucide-react';
 
 export const AdminSafetyZones: React.FC = () => {
   const [zones, setZones] = useState<SafetyZoneData[]>([]);
@@ -26,11 +17,10 @@ export const AdminSafetyZones: React.FC = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
 
   const [showModal, setShowModal] = useState(false);
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(
-    null
-  );
+  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
   useEffect(() => {
+    document.title = 'Zone Management — SafeTour Admin';
     fetchZones();
   }, []);
 
@@ -121,83 +111,59 @@ export const AdminSafetyZones: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-slate-800">
+    <div className="container page">
+      <div className="page-header-row page-header" style={{ borderBottom: '1px solid var(--border)', paddingBottom: '1.5rem' }}>
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-bold uppercase tracking-wider mb-2">
-            <Layers className="w-3.5 h-3.5" />
+          <span className="badge badge-purple mb-sm">
+            <Layers size={14} />
             Perimeter Control
-          </div>
-          <h1 className="text-3xl font-black text-white tracking-tight">Safety Zone Management</h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+          </span>
+          <h1 className="page-title">Safety Zone Management</h1>
+          <p className="page-desc">
             Configure designated safe havens, tourist surveillance corridors, and critical hazard perimeters.
           </p>
         </div>
-
-        <button
-          onClick={handleOpenAdd}
-          className="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold shadow-lg shadow-purple-600/30 flex items-center gap-2 transition-all self-start sm:self-auto cursor-pointer"
-        >
-          <Plus className="w-4 h-4" />
+        <button type="button" onClick={handleOpenAdd} className="btn btn-purple">
+          <Plus size={16} />
           Create Zone
         </button>
       </div>
 
       {feedback && (
-        <div
-          className={`mb-6 p-4 rounded-xl text-xs flex items-center gap-2 ${
-            feedback.type === 'success'
-              ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400'
-              : 'bg-rose-500/10 border border-rose-500/30 text-rose-400'
-          }`}
-        >
-          {feedback.type === 'success' ? (
-            <CheckCircle className="w-4 h-4" />
-          ) : (
-            <AlertTriangle className="w-4 h-4" />
-          )}
+        <div className={`alert ${feedback.type === 'success' ? 'alert-success' : 'alert-error'}`}>
+          {feedback.type === 'success' ? <CheckCircle size={16} /> : <AlertTriangle size={16} />}
           <span>{feedback.message}</span>
         </div>
       )}
 
-      {/* Zones List with Admin Management Controls */}
+      <div className="mb-xl mt-xl">{zones.length > 0 && <SafetyMap zones={zones} />}</div>
+
       {isLoading ? (
-        <div className="text-center py-16 text-slate-400 text-xs">
-          Loading perimeter zones...
+        <div className="grid grid-3">
+          <div className="skeleton skeleton-card" />
+          <div className="skeleton skeleton-card" />
+          <div className="skeleton skeleton-card" />
         </div>
       ) : zones.length === 0 ? (
-        <div className="glass-panel p-12 rounded-2xl text-center border border-slate-800">
-          <Layers className="w-12 h-12 text-slate-500 mx-auto mb-3" />
-          <h3 className="text-base font-bold text-white">No Safety Zones Defined</h3>
-          <p className="text-xs text-slate-400 mt-1 mb-4">
-            Create safe zones, embassy perimeters, or caution zones to notify tourists in real time.
-          </p>
-          <button
-            onClick={handleOpenAdd}
-            className="px-4 py-2 rounded-xl bg-purple-600 text-white text-xs font-semibold"
-          >
+        <div className="empty-state">
+          <Layers className="empty-state-icon" />
+          <h3 className="empty-state-title">No Safety Zones Defined</h3>
+          <p className="empty-state-desc">Create safe zones, embassy perimeters, or caution zones to notify tourists in real time.</p>
+          <button type="button" onClick={handleOpenAdd} className="btn btn-purple mt-md">
             Create First Zone
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-3">
           {zones.map((zone) => (
-            <div key={zone._id} className="relative group">
+            <div key={zone._id} className="zone-card-wrap">
               <ZoneCard zone={zone} />
-              <div className="absolute top-3 right-3 flex items-center gap-1 opacity-90 group-hover:opacity-100 transition-opacity">
-                <button
-                  onClick={() => handleOpenEdit(zone)}
-                  className="p-1.5 rounded-lg bg-slate-900/90 text-slate-300 hover:text-white border border-slate-700 shadow-md"
-                  title="Edit Zone"
-                >
-                  <Edit2 className="w-3 h-3" />
+              <div className="zone-card-actions">
+                <button type="button" onClick={() => handleOpenEdit(zone)} className="icon-btn" title="Edit Zone">
+                  <Edit2 size={12} />
                 </button>
-                <button
-                  onClick={() => handleDelete(zone._id)}
-                  className="p-1.5 rounded-lg bg-slate-900/90 text-rose-400 hover:text-rose-300 border border-slate-700 shadow-md"
-                  title="Delete Zone"
-                >
-                  <Trash2 className="w-3 h-3" />
+                <button type="button" onClick={() => handleDelete(zone._id)} className="icon-btn" title="Delete Zone">
+                  <Trash2 size={12} />
                 </button>
               </div>
             </div>
@@ -205,112 +171,47 @@ export const AdminSafetyZones: React.FC = () => {
         </div>
       )}
 
-      {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in">
-          <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl">
-            <h3 className="text-lg font-bold text-white mb-4">
-              {editingId ? 'Edit Safety Zone' : 'Create Safety Zone'}
-            </h3>
-
-            <form onSubmit={handleSaveZone} className="space-y-4">
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3 className="mb-md">{editingId ? 'Edit Safety Zone' : 'Create Safety Zone'}</h3>
+            <form onSubmit={handleSaveZone} className="space-y">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                  Zone Name
-                </label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Tourist Police Safe Haven - Central Gate"
-                  required
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-white focus:outline-none focus:border-purple-500"
-                />
+                <label className="label">Zone Name</label>
+                <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Tourist Police Safe Haven" required className="input" />
               </div>
-
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                  Description
-                </label>
-                <textarea
-                  rows={2}
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="e.g. 24/7 manned security kiosk with first aid and translators"
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-white focus:outline-none focus:border-purple-500"
-                />
+                <label className="label">Description</label>
+                <textarea rows={2} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="e.g. 24/7 manned security kiosk" className="input" />
               </div>
-
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                  Risk Level
-                </label>
-                <select
-                  value={riskLevel}
-                  onChange={(e) => setRiskLevel(e.target.value as any)}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-white focus:outline-none focus:border-purple-500"
-                >
+                <label className="label">Risk Level</label>
+                <select value={riskLevel} onChange={(e) => setRiskLevel(e.target.value as any)} className="input">
                   <option value="LOW">LOW (Safe Haven / Guarded Zone)</option>
                   <option value="MEDIUM">MEDIUM (Moderate Caution)</option>
                   <option value="HIGH">HIGH (Elevated Alert Area)</option>
                   <option value="CRITICAL">CRITICAL (Critical Hazard / Red Zone)</option>
                 </select>
               </div>
-
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-2">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                    Latitude
-                  </label>
-                  <input
-                    type="number"
-                    step="any"
-                    value={latitude}
-                    onChange={(e) => setLatitude(parseFloat(e.target.value))}
-                    required
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-white focus:outline-none focus:border-purple-500"
-                  />
+                  <label className="label">Latitude</label>
+                  <input type="number" step="any" value={latitude} onChange={(e) => setLatitude(parseFloat(e.target.value))} required className="input" />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                    Longitude
-                  </label>
-                  <input
-                    type="number"
-                    step="any"
-                    value={longitude}
-                    onChange={(e) => setLongitude(parseFloat(e.target.value))}
-                    required
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-white focus:outline-none focus:border-purple-500"
-                  />
+                  <label className="label">Longitude</label>
+                  <input type="number" step="any" value={longitude} onChange={(e) => setLongitude(parseFloat(e.target.value))} required className="input" />
                 </div>
               </div>
-
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                  Perimeter Radius (Meters)
-                </label>
-                <input
-                  type="number"
-                  value={radiusMeters}
-                  onChange={(e) => setRadiusMeters(parseInt(e.target.value, 10))}
-                  required
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-white focus:outline-none focus:border-purple-500"
-                />
+                <label className="label">Perimeter Radius (Meters)</label>
+                <input type="number" value={radiusMeters} onChange={(e) => setRadiusMeters(parseInt(e.target.value, 10))} required className="input" />
               </div>
-
-              <div className="flex gap-3 pt-4 border-t border-slate-800">
-                <button
-                  type="button"
-                  onClick={() => setShowModal(false)}
-                  className="flex-1 py-2.5 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-colors"
-                >
+              <div className="modal-footer">
+                <button type="button" onClick={() => setShowModal(false)} className="btn btn-secondary flex-1">
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="flex-1 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold shadow-lg shadow-purple-600/30 transition-all"
-                >
+                <button type="submit" className="btn btn-purple flex-1">
                   Save Zone
                 </button>
               </div>

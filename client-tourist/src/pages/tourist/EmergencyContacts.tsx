@@ -33,11 +33,10 @@ export const EmergencyContacts: React.FC = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
 
   const [showModal, setShowModal] = useState(false);
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(
-    null
-  );
+  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
   useEffect(() => {
+    document.title = 'Emergency Contacts — SafeTour Guardian';
     if (isAuthenticated) {
       loadContacts();
     }
@@ -122,124 +121,84 @@ export const EmergencyContacts: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-10">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+    <div className="container-md page has-bottom-nav">
+      <div className="page-header-row page-header">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20 text-xs font-semibold mb-2">
-            <Users className="w-3.5 h-3.5" />
+          <span className="badge badge-sky mb-sm">
+            <Users size={14} />
             In Case of Emergency (ICE)
-          </div>
-          <h1 className="text-3xl font-extrabold text-white">Emergency Contacts</h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+          </span>
+          <h1 className="page-title">Emergency Contacts</h1>
+          <p className="page-desc">
             Trusted contacts who receive direct notifications and coordinates whenever you trigger an SOS.
           </p>
         </div>
-
-        <button
-          onClick={handleOpenAdd}
-          className="px-4 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold shadow-lg shadow-sky-600/30 flex items-center gap-2 transition-all self-start sm:self-auto cursor-pointer"
-        >
-          <UserPlus className="w-4 h-4" />
+        <button type="button" onClick={handleOpenAdd} className="btn btn-sky">
+          <UserPlus size={16} />
           Add Contact
         </button>
       </div>
 
       {feedback && (
-        <div
-          className={`mb-6 p-4 rounded-xl text-xs flex items-center gap-2 ${
-            feedback.type === 'success'
-              ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400'
-              : 'bg-rose-500/10 border border-rose-500/30 text-rose-400'
-          }`}
-        >
-          {feedback.type === 'success' ? (
-            <CheckCircle className="w-4 h-4" />
-          ) : (
-            <AlertTriangle className="w-4 h-4" />
-          )}
+        <div className={`alert ${feedback.type === 'success' ? 'alert-success' : 'alert-error'}`}>
+          {feedback.type === 'success' ? <CheckCircle size={16} /> : <AlertTriangle size={16} />}
           <span>{feedback.message}</span>
         </div>
       )}
 
-      {/* Contacts List */}
       {isLoading ? (
-        <div className="text-center py-16 text-slate-400 text-sm">
-          Loading emergency contacts...
+        <div className="grid grid-2">
+          <div className="skeleton skeleton-card" />
+          <div className="skeleton skeleton-card" />
         </div>
       ) : contacts.length === 0 ? (
-        <div className="glass-panel p-10 rounded-2xl text-center border border-slate-800">
-          <HeartHandshake className="w-12 h-12 text-slate-500 mx-auto mb-3" />
-          <h3 className="text-base font-bold text-white">No Emergency Contacts Registered</h3>
-          <p className="text-xs text-slate-400 max-w-sm mx-auto mt-1 mb-4">
+        <div className="empty-state">
+          <HeartHandshake className="empty-state-icon" />
+          <h3 className="empty-state-title">No Emergency Contacts Registered</h3>
+          <p className="empty-state-desc">
             Add at least one family member, friend, or travel companion to ensure they receive alerts in an emergency.
           </p>
-          <button
-            onClick={handleOpenAdd}
-            className="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold"
-          >
+          <button type="button" onClick={handleOpenAdd} className="btn btn-sky mt-md">
             Add First Contact
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-2">
           {contacts.map((contact) => (
-            <div
-              key={contact._id}
-              className={`glass-card p-5 rounded-2xl border flex flex-col justify-between ${
-                contact.isPrimary ? 'border-sky-500/50 bg-slate-900/90' : 'border-slate-800'
-              }`}
-            >
+            <div key={contact._id} className={`contact-card${contact.isPrimary ? ' primary' : ''}`}>
               <div>
-                <div className="flex items-start justify-between gap-2 mb-2">
+                <div className="flex items-start justify-between gap-sm mb-sm">
                   <div>
-                    <div className="flex items-center gap-2">
-                      <h4 className="text-base font-bold text-white">{contact.name}</h4>
+                    <div className="flex items-center gap-sm">
+                      <h4>{contact.name}</h4>
                       {contact.isPrimary && (
-                        <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 text-[10px] font-bold border border-sky-500/30">
-                          <Star className="w-3 h-3 fill-sky-400 text-sky-400" />
+                        <span className="badge badge-sky">
+                          <Star size={12} />
                           PRIMARY ICE
                         </span>
                       )}
                     </div>
-                    <span className="text-xs text-slate-400">{contact.relationship || 'Emergency Contact'}</span>
+                    <span className="text-xs text-muted">{contact.relationship || 'Emergency Contact'}</span>
                   </div>
-
-                  <div className="flex items-center gap-1">
-                    <button
-                      onClick={() => handleOpenEdit(contact)}
-                      className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-                      title="Edit Contact"
-                    >
-                      <Edit2 className="w-3.5 h-3.5" />
+                  <div className="flex items-center gap-xs">
+                    <button type="button" onClick={() => handleOpenEdit(contact)} className="icon-btn-ghost" title="Edit Contact">
+                      <Edit2 size={14} />
                     </button>
-                    <button
-                      onClick={() => handleDelete(contact._id)}
-                      className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-800 transition-colors"
-                      title="Delete Contact"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
+                    <button type="button" onClick={() => handleDelete(contact._id)} className="icon-btn-ghost" title="Delete Contact">
+                      <Trash2 size={14} />
                     </button>
                   </div>
                 </div>
-
-                <div className="text-sm font-mono text-slate-200 mt-2 flex items-center gap-2">
-                  <Phone className="w-3.5 h-3.5 text-sky-400" />
+                <div className="flex items-center gap-sm font-mono text-sm mt-sm">
+                  <Phone size={14} color="#38bdf8" />
                   <span>{contact.phone}</span>
                 </div>
               </div>
-
-              <div className="mt-4 pt-3 border-t border-slate-800 flex gap-2">
-                <a
-                  href={`tel:${contact.phone}`}
-                  className="flex-1 py-2 rounded-xl bg-sky-600/20 hover:bg-sky-600/30 text-sky-300 text-xs font-bold text-center border border-sky-500/30 transition-all flex items-center justify-center gap-1.5"
-                >
-                  <Phone className="w-3.5 h-3.5" /> Call Contact
+              <div className="contact-actions">
+                <a href={`tel:${contact.phone}`} className="contact-action-btn contact-action-call">
+                  <Phone size={14} /> Call Contact
                 </a>
-                <a
-                  href={`sms:${contact.phone}`}
-                  className="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold text-center border border-slate-700 transition-all"
-                >
+                <a href={`sms:${contact.phone}`} className="contact-action-btn contact-action-sms">
                   Send SMS
                 </a>
               </div>
@@ -248,81 +207,40 @@ export const EmergencyContacts: React.FC = () => {
         </div>
       )}
 
-      {/* Add / Edit Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in">
-          <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl">
-            <h3 className="text-lg font-bold text-white mb-4">
-              {editingId ? 'Edit Emergency Contact' : 'Add Emergency Contact'}
-            </h3>
-
-            <form onSubmit={handleSaveContact} className="space-y-4">
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3 className="mb-md">{editingId ? 'Edit Emergency Contact' : 'Add Emergency Contact'}</h3>
+            <form onSubmit={handleSaveContact} className="space-y">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. John Doe"
-                  required
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-white focus:outline-none focus:border-sky-500"
-                />
+                <label className="label">Full Name</label>
+                <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. John Doe" required className="input" />
               </div>
-
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="e.g. +1 555-0199 or +91 9876543210"
-                  required
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-white focus:outline-none focus:border-sky-500"
-                />
+                <label className="label">Phone Number</label>
+                <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="e.g. +91 9876543210" required className="input" />
               </div>
-
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                  Relationship
-                </label>
-                <input
-                  type="text"
-                  value={relationship}
-                  onChange={(e) => setRelationship(e.target.value)}
-                  placeholder="e.g. Spouse, Parent, Hotel Concierge, Embassy"
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-white focus:outline-none focus:border-sky-500"
-                />
+                <label className="label">Relationship</label>
+                <input type="text" value={relationship} onChange={(e) => setRelationship(e.target.value)} placeholder="e.g. Spouse, Parent, Embassy" className="input" />
               </div>
-
-              <div className="flex items-center gap-2 pt-2">
+              <div className="flex items-center gap-sm">
                 <input
                   type="checkbox"
                   id="primaryContact"
                   checked={isPrimary}
                   onChange={(e) => setIsPrimary(e.target.checked)}
-                  className="w-4 h-4 rounded bg-slate-950 border-slate-700 text-sky-500 focus:ring-sky-500"
+                  className="checkbox"
                 />
-                <label htmlFor="primaryContact" className="text-xs text-slate-300 font-medium">
+                <label htmlFor="primaryContact" className="text-xs text-secondary">
                   Set as Primary ICE Contact (notified first)
                 </label>
               </div>
-
-              <div className="flex gap-3 pt-4 border-t border-slate-800">
-                <button
-                  type="button"
-                  onClick={() => setShowModal(false)}
-                  className="flex-1 py-2.5 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-colors"
-                >
+              <div className="modal-footer">
+                <button type="button" onClick={() => setShowModal(false)} className="btn btn-secondary flex-1">
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="flex-1 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold shadow-lg shadow-sky-600/30 transition-all"
-                >
+                <button type="submit" className="btn btn-sky flex-1">
                   Save Contact
                 </button>
               </div>
