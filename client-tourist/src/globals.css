@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
+@import './index.css';
+
+:root {
+  --font-sans: 'Inter', sans-serif;
+  --font-heading: 'Plus Jakarta Sans', sans-serif;
+}
+
+body {
+  background: #ffffff;
+  color: #111827;
+  font-family: 'Inter', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+.bg-white { background-color: #ffffff; }
+.bg-gray-50 { background-color: #f9fafb; }
+.border-gray-200 { border-color: #e5e7eb; }
+.border-gray-300 { border-color: #d1d5db; }
+.text-gray-900 { color: #111827; }
+.text-gray-600 { color: #4b5563; }
+.rounded-xl { border-radius: 0.75rem; }
+.rounded-2xl { border-radius: 1rem; }
+.rounded-lg { border-radius: 0.5rem; }
+.shadow-sm { box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06); }
+.shadow-md { box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08); }
+
+.sms-card {
+  width: 100%;
+  max-width: 28rem;
+  margin: 1.5rem auto 0;
+  padding: 1.5rem;
+  text-align: center;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+.mappls-clean-frame { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 1rem; overflow: hidden; }
+.risk-alert-banner { color: #b91c1c; }
+.location-box { background: #f9fafb; border-color: #d1d5db; color: #374151; }
+.contact-card { background: #ffffff; border-color: #e5e7eb; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06); }
+.contact-card.primary { background: #ffffff; border-color: #e5e7eb; border-left: 4px solid #2563eb; }
+.contact-action-call { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+.contact-action-sms { background: #f9fafb; color: #4b5563; border-color: #d1d5db; }
+.category-option { background: #ffffff; border-color: #e5e7eb; color: #374151; transition: all 0.2s ease; }
+.category-option:hover { background: #eff6ff; border-color: #93c5fd; }
+.category-option.selected { background: #eff6ff; border-color: #60a5fa; color: #1d4ed8; }
+.modal { background: #ffffff; border-color: #e5e7eb; box-shadow: 0 8px 30px rgba(15, 23, 42, 0.12); }
+
+.chat-fab {
+  width: 3.75rem;
+  height: 3.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-panel { animation: chat-panel-in 180ms ease-out; }
+
+@keyframes chat-panel-in {
+  from { opacity: 0; transform: translateY(0.5rem) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (max-width: 640px) {
+  .chat-fab { right: 1rem; bottom: 5rem; }
+  .chat-panel { right: 1rem; bottom: 1rem; width: calc(100vw - 2rem); height: min(600px, calc(100vh - 7rem)); }
+}
+
+@media (max-width: 640px) {
+  .sms-card { padding: 1rem; }
+}

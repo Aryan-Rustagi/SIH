@@ -52,11 +52,11 @@ export const EmergencySMSButton: React.FC<EmergencySMSButtonProps> = ({
   };
 
   return (
-    <div className="w-full max-w-md mx-auto mt-6">
+    <div className="sms-card">
       <button
         onClick={handleSendSOS}
         disabled={loading}
-        className="w-full flex items-center justify-center p-4 text-xl font-bold text-white transition-all duration-300 transform bg-red-600 rounded-2xl shadow-xl hover:bg-red-700 hover:scale-105 active:scale-95 active:shadow-inner disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+        className="w-full flex items-center justify-center py-4 px-6 text-xl font-bold text-white transition-all duration-300 bg-red-600 rounded-xl shadow-md hover:bg-red-700 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
       >
         {loading ? (
           <Loader2 className="w-8 h-8 mr-3 animate-spin" />

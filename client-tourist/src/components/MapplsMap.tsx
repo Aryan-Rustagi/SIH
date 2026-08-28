@@ -1,10 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
 import { mappls } from 'mappls-web-maps';
 import { AlertTriangle } from 'lucide-react';
 import api from '../services/api';
+import { RiskZoneOverlay } from './RiskZoneOverlay';
+
+export interface MapplsMapRef {
+  getMapInstance: () => any;
+  getMapplsObj: () => any;
+}
 
 interface MapplsMapProps {
   className?: string;
+  center?: [number, number];
+  zoom?: number;
 }
 
 // Ray-casting algorithm for Point in Polygon
@@ -27,16 +35,25 @@ const isPointInPolygon = (point: [number, number], polygon: number[][][]) => {
   return isInside;
 };
 
-export const MapplsMap: React.FC<MapplsMapProps> = ({ className = 'h-96 w-full rounded-xl overflow-hidden shadow-lg border border-gray-200' }) => {
+export const MapplsMap = forwardRef<MapplsMapRef, MapplsMapProps>(
+  ({ className = 'h-96 w-full rounded-xl overflow-hidden shadow-lg border border-gray-200', center = [28.61, 77.23], zoom = 13 }, ref) => {
   const mapRef = useRef<any>(null);
   const geojsonLayerRef = useRef<any>(null);
   const [isInDangerZone, setIsInDangerZone] = useState(false);
+  const [dangerBannerDismissed, setDangerBannerDismissed] = useState(false);
   const [redZones, setRedZones] = useState<any>(null);
+  const [mapReady, setMapReady] = useState(false);
   const watchIdRef = useRef<number | null>(null);
   const mapplsObjRef = useRef<any>(null);
   const userMarkerRef = useRef<any>(null);
   const hasCenteredRef = useRef<boolean>(false);
-  const containerId = React.useId().replace(/:/g, ''); // Generate valid HTML id
+  const containerId = React.useId().replace(/:/g, '');
+
+  // Expose map internals to parent via ref
+  useImperativeHandle(ref, () => ({
+    getMapInstance: () => mapRef.current,
+    getMapplsObj: () => mapplsObjRef.current,
+  }));
 
   useEffect(() => {
     let isMounted = true;
@@ -83,8 +100,8 @@ export const MapplsMap: React.FC<MapplsMapProps> = ({ className = 'h-96 w-full r
         const map = mapplsClassObject.Map({ 
           id: `mappls-container-${containerId}`, 
           properties: { 
-            center: [28.61, 77.23], 
-            zoom: 4,
+            center,
+            zoom,
             zoomControl: true,
             searchControl: false,
             location: true
@@ -92,6 +109,7 @@ export const MapplsMap: React.FC<MapplsMapProps> = ({ className = 'h-96 w-full r
         });
         
         mapRef.current = map;
+        setMapReady(true);
         
         fetchRedZones(map);
       });
@@ -139,6 +157,7 @@ export const MapplsMap: React.FC<MapplsMapProps> = ({ className = 'h-96 w-full r
           }
           
           setIsInDangerZone(inside);
+          if (!inside) setDangerBannerDismissed(false);
 
           // Update user location marker and center map on first fix
           if (mapRef.current && mapplsObjRef.current) {
@@ -172,21 +191,32 @@ export const MapplsMap: React.FC<MapplsMapProps> = ({ className = 'h-96 w-full r
 
   return (
     <div className="relative w-full">
-      {isInDangerZone && (
-        <div className="absolute top-4 left-4 right-4 z-50 p-4 mb-4 text-white bg-red-600 rounded-lg shadow-xl flex items-center animate-pulse">
+      {isInDangerZone && !dangerBannerDismissed && (
+        <div className="risk-alert-banner absolute top-4 left-4 right-4 z-50 p-6 bg-red-50 border border-red-200 rounded-2xl shadow-md flex items-center gap-4">
           <AlertTriangle className="w-6 h-6 mr-3 flex-shrink-0" />
-          <p className="font-bold">DANGER: You are entering a High Risk Zone</p>
+          <p className="font-bold text-red-700 flex-1">You are entering a High Risk Zone</p>
+          <button type="button" onClick={() => setDangerBannerDismissed(true)} className="btn btn-danger btn-sm">Leave Area</button>
         </div>
+      )}
+      
+      {/* Risk Zone Overlay Legend (renders on top of map) */}
+      {mapReady && mapRef.current && mapplsObjRef.current && (
+        <RiskZoneOverlay
+          mapInstance={mapRef.current}
+          mapplsObj={mapplsObjRef.current}
+        />
       )}
       
       {/* Map container - CSS rules to ensure Mappls logo stays visible */}
       <div 
         id={`mappls-container-${containerId}`}
-        className={`${className} relative z-0`}
+        className={`${className} mappls-clean-frame relative z-0`}
         style={{ minHeight: '300px' }}
       >
         {/* Mappls dynamically injects its canvas and UI here */}
       </div>
     </div>
   );
-};
+});
+
+MapplsMap.displayName = 'MapplsMap';

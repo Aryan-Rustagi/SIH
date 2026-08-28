@@ -5,6 +5,10 @@ import { EmergencySMSButton } from '../../components/EmergencySMSButton';
 import { ZoneCard, SafetyZoneData } from '../../components/ZoneCard';
 import { IncidentCard, IncidentData } from '../../components/IncidentCard';
 import { MapplsMap } from '../../components/MapplsMap';
+import { SafetyScoreCard } from '../../components/SafetyScoreCard';
+import { SafetyChatbot } from '../../components/SafetyChatbot';
+import { AiGeoFenceAlert } from '../../components/AiGeoFenceAlert';
+import { ToggleSwitch } from '../../components/ui/ToggleSwitch';
 import api from '../../services/api';
 import {
   ShieldCheck,
@@ -13,9 +17,8 @@ import {
   Users,
   Compass,
   ArrowRight,
-  Sparkles,
-  Wifi,
-  WifiOff,
+  CloudSun,
+  Navigation,
 } from 'lucide-react';
 
 export const TouristHome: React.FC = () => {
@@ -59,14 +62,11 @@ export const TouristHome: React.FC = () => {
 
   return (
     <div className="has-bottom-nav">
-      <section className="container page">
+      <section className="container page dashboard-hero">
         <div className="text-center" style={{ maxWidth: 640, margin: '0 auto 2rem' }}>
-          <div className="sih-banner">
-            <Sparkles size={14} />
-            Tourist Safety & Rapid Emergency Network
-          </div>
+          <p className="dashboard-eyebrow">Tourist safety, simplified</p>
           <h1>
-            Travel Safe, <span className="text-gradient">Stay Protected</span>
+            Travel Safe, <span className="text-blue">Stay Protected</span>
           </h1>
           <p className="hero-subtitle">
             Instant one-touch emergency response connected directly to local authorities, safe havens, and designated responders.
@@ -74,30 +74,7 @@ export const TouristHome: React.FC = () => {
           
           {/* Simulated Network Toggle */}
           <div className="flex items-center justify-center mt-6">
-            <div className="flex items-center p-1 bg-gray-100 rounded-full shadow-inner border border-gray-200">
-              <button
-                onClick={() => setIsOnline(true)}
-                className={`flex items-center px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 ${
-                  isOnline
-                    ? 'bg-green-500 text-white shadow-md'
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                <Wifi size={16} className="mr-2" />
-                Online
-              </button>
-              <button
-                onClick={() => setIsOnline(false)}
-                className={`flex items-center px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 ${
-                  !isOnline
-                    ? 'bg-red-500 text-white shadow-md'
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                <WifiOff size={16} className="mr-2" />
-                Offline Mode
-              </button>
-            </div>
+            <ToggleSwitch checked={!isOnline} onChange={(offline) => setIsOnline(!offline)} />
           </div>
         </div>
 
@@ -105,6 +82,25 @@ export const TouristHome: React.FC = () => {
           <SOSButton />
         ) : (
           <EmergencySMSButton />
+        )}
+
+        {isOnline && (
+          <div className="dashboard-card-grid">
+            <SafetyScoreCard />
+            <div className="dashboard-card">
+              <div className="dashboard-card-icon dashboard-card-icon-blue"><CloudSun size={22} /></div>
+              <p className="dashboard-card-label">Weather</p>
+              <h2>Clear conditions</h2>
+              <p className="text-secondary">Mild weather expected. Stay hydrated and check local updates before heading out.</p>
+            </div>
+            <div className="dashboard-card">
+              <div className="dashboard-card-icon dashboard-card-icon-green"><Navigation size={22} /></div>
+              <p className="dashboard-card-label">Nearby Help</p>
+              <h2>Help is close</h2>
+              <p className="text-secondary">View safe havens, police kiosks, and monitored areas on the live map.</p>
+              <Link to="/zones" className="dashboard-card-link">Find nearby help <ArrowRight size={14} /></Link>
+            </div>
+          </div>
         )}
 
         {isOnline && (
@@ -171,8 +167,14 @@ export const TouristHome: React.FC = () => {
       </section>
 
       <section className="container mb-xl">
-        <MapplsMap className="h-96 w-full rounded-2xl overflow-hidden shadow-2xl border-4 border-gray-100 dark:border-gray-800" />
+        <MapplsMap className="dashboard-map h-96 w-full rounded-xl overflow-hidden shadow-sm border border-gray-200" />
       </section>
+
+      {/* ── AI Safety Chatbot (Floating) ── */}
+      <SafetyChatbot />
+      
+      {/* ── AI GeoFence Alert Overlay ── */}
+      <AiGeoFenceAlert />
 
       <section className="container">
         <div className="grid grid-2">

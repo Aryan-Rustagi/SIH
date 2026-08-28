@@ -204,7 +204,7 @@ export const ReportIncident: React.FC = () => {
             </div>
           </div>
 
-          <button type="submit" disabled={isSubmitting} className="btn btn-amber btn-block btn-lg">
+          <button type="submit" disabled={isSubmitting} className="btn btn-primary btn-block btn-lg">
             <Send size={16} />
             {isSubmitting ? 'Transmitting Report...' : 'Publish Incident Warning'}
           </button>

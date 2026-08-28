@@ -1,0 +1,66 @@
+services:
+  # 1. Node.js Express API (Backend)
+  - type: web
+    name: tourist-safety-api
+    env: node
+    rootDir: server
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: CLIENT_URL
+        value: "https://tourist-safety-client.onrender.com"
+
+  # 2. Python FastAPI (AI Microservice)
+  - type: web
+    name: tourist-safety-ai
+    env: python
+    rootDir: ai-service
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: OPENROUTER_API_KEY
+        sync: false
+
+  # 3. React Tourist App (Frontend Static Site)
+  - type: web
+    name: tourist-safety-client
+    env: static
+    rootDir: client-tourist
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        value: "https://tourist-safety-api.onrender.com"
+      - key: VITE_AI_API_URL
+        value: "https://tourist-safety-ai.onrender.com"
+      - key: VITE_MAPPLS_KEY
+        sync: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+  # 4. React Admin Dashboard (Frontend Static Site)
+  - type: web
+    name: admin-dashboard
+    env: static
+    rootDir: client-admin
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        value: "https://tourist-safety-api.onrender.com"
+      - key: VITE_AI_API_URL
+        value: "https://tourist-safety-ai.onrender.com"
+      - key: VITE_MAPPLS_KEY
+        sync: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

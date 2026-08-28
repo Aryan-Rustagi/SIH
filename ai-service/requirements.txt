@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+scikit-learn
+xgboost
+shapely
+geopy
+joblib
+pydantic
+python-dotenv
+openai
+openrouter

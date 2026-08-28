@@ -111,7 +111,6 @@ export const SOSButton: React.FC = () => {
         </div>
       ) : (
         <div className="relative flex flex-col items-center">
-          <div className="sos-glow" />
           <button type="button" onClick={handleStartSOS} disabled={isSubmitting} className="sos-btn">
             <ShieldAlert size={72} />
             <span className="sos-btn-text">SOS</span>

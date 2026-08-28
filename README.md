@@ -136,3 +136,22 @@ npm run dev
 |------|-------|----------|--------|
 | **Tourist** | `tourist@safetour.app` | `password123` | SOS Panic Button, Contacts, Incident Reporting |
 | **Admin** | `admin@safetour.app` | `password123` | Real-time SOS Dispatch, Incident Verification, Safety Zone Management |
+
+## Production Docker Deployment
+
+Copy `.env.production.example` to `.env.production`, replace every placeholder, and rotate any
+previously exposed credentials before deployment. Then run:
+
+```bash
+docker compose -f docker-compose.prod.yml up --build -d
+```
+
+The production stack serves the Tourist Portal on port `3000`, the Police Command Center on port
+`3002`, and the API on port `5000`. MongoDB uses the persistent `mongo_data` volume. The Nginx
+configs proxy `/api` and `/socket.io` to the server and support React client-side routes.
+
+Check the API with `http://localhost:5000/api/health`. Stop the stack with:
+
+```bash
+docker compose -f docker-compose.prod.yml down
+```

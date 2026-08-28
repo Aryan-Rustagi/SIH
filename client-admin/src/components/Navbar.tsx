@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useAlerts } from '../context/AlertContext';
-import { Shield, Radio, Layers, LogOut, LogIn, Menu, X } from 'lucide-react';
+import { Shield, LayoutDashboard, Bell, Users, Layers, LogOut, LogIn, Menu, X } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -17,13 +17,22 @@ export const Navbar: React.FC = () => {
     isAuthenticated && user?.role === 'ADMIN' ? (
       <>
         <Link to="/" className={`nav-link${isCurrent('/') ? ' active' : ''}`} onClick={close}>
-          <Radio size={16} color="#f43f5e" />
-          Command Center
+          <LayoutDashboard size={16} />
+          Dashboard
           {activeAlerts.length > 0 && <span className="nav-count">{activeAlerts.length}</span>}
         </Link>
+        <a href="/#alerts" className="nav-link" onClick={close}>
+          <Bell size={16} />
+          Alerts
+          {activeAlerts.length > 0 && <span className="nav-count">{activeAlerts.length}</span>}
+        </a>
+        <a href="/#tourists" className="nav-link" onClick={close}>
+          <Users size={16} />
+          Tourists
+        </a>
         <Link to="/zones" className={`nav-link${isCurrent('/zones') ? ' active' : ''}`} onClick={close}>
-          <Layers size={16} color="#c084fc" />
-          Zone Management
+          <Layers size={16} />
+          Zones
         </Link>
       </>
     ) : null;
