@@ -29,10 +29,18 @@ const PORT = process.env.PORT || 5000;
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000';
 const allowedOrigins = CLIENT_URL.split(',').map((origin) => origin.trim()).filter(Boolean);
 
+const defaultAllowed = [
+  'http://localhost:3000',
+  'http://localhost:3002',
+  'http://localhost:5173',
+  'https://tourist-safety-client.onrender.com',
+  'https://admin-dashboard-shrd.onrender.com',
+];
+
 // Setup Socket.IO
 const io = new SocketIOServer(server, {
   cors: {
-    origin: [...allowedOrigins, 'http://localhost:3000', 'http://localhost:3002', 'http://localhost:5173'],
+    origin: [...new Set([...allowedOrigins, ...defaultAllowed])],
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
     credentials: true,
   },
@@ -57,7 +65,7 @@ io.on('connection', (socket) => {
 // Middleware
 app.use(
   cors({
-    origin: [...allowedOrigins, 'http://localhost:3000', 'http://localhost:3002', 'http://localhost:5173'],
+    origin: [...new Set([...allowedOrigins, ...defaultAllowed])],
     credentials: true,
   })
 );

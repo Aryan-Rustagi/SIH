@@ -4,9 +4,12 @@ let socket: Socket | null = null;
 
 export const getSocket = (): Socket => {
   if (!socket) {
-    socket = io(window.location.origin, {
+    const rawUrl = (import.meta.env.VITE_API_URL || '').trim();
+    const serverOrigin = rawUrl ? rawUrl.replace(/\/api\/?$/, '') : window.location.origin;
+
+    socket = io(serverOrigin, {
       path: '/socket.io',
-      transports: ['websocket'],
+      transports: ['websocket', 'polling'],
       autoConnect: true,
     });
 
