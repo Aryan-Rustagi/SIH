@@ -41,57 +41,57 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-rose-600 to-amber-500 flex items-center justify-center mx-auto mb-4 shadow-xl shadow-rose-600/30">
-            <Shield className="w-6 h-6 text-white" />
+    <div className="auth-page">
+      <div className="auth-card">
+        <div className="auth-header">
+          <div className="auth-icon">
+            <Shield size={22} color="#fff" />
           </div>
-          <h1 className="text-2xl font-black text-white">Welcome Back</h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <h1>Welcome Back</h1>
+          <p className="page-desc">
             Sign in to access your safety dashboard and emergency channels
           </p>
         </div>
 
-        <div className="glass-panel p-8 rounded-2xl border border-slate-800 shadow-2xl">
+        <div className="card">
           {errorMsg && (
-            <div className="mb-6 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+            <div className="alert alert-error">
+              <AlertTriangle size={16} />
               <span>{errorMsg}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="auth-form">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+              <label className="label">
                 Email Address
               </label>
-              <div className="relative">
-                <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <div className="input-group">
+                <Mail className="input-icon" size={16} />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com"
                   required
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-rose-500"
+                  className="input input-with-icon"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+              <label className="label">
                 Password
               </label>
-              <div className="relative">
-                <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <div className="input-group">
+                <Lock className="input-icon" size={16} />
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-rose-500"
+                  className="input input-with-icon"
                 />
               </div>
             </div>
@@ -99,7 +99,7 @@ export const Login: React.FC = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-bold text-sm shadow-xl shadow-rose-600/30 flex items-center justify-center gap-2 transition-all cursor-pointer mt-2"
+              className="btn btn-primary btn-block"
             >
               {isSubmitting ? 'Authenticating...' : 'Sign In'}
               <ArrowRight className="w-4 h-4" />
@@ -107,16 +107,16 @@ export const Login: React.FC = () => {
           </form>
 
           {/* Quick Demo Credentials */}
-          <div className="mt-8 pt-6 border-t border-slate-800/80">
-            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-400 mb-2">
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+          <div className="demo-section">
+            <div className="flex items-center gap-sm text-2xs text-muted mb-sm">
+              <Sparkles size={14} color="#fbbf24" />
               <span>Fill Quick Demo Credentials:</span>
             </div>
-            <div className="grid grid-cols-1 gap-2">
+            <div className="grid">
               <button
                 type="button"
                 onClick={() => fillDemoAccount('ADMIN')}
-                className="py-1.5 px-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-lg text-[11px] font-semibold text-purple-400 transition-colors"
+                className="btn btn-secondary btn-sm btn-block"
               >
                 Admin
               </button>
@@ -124,9 +124,9 @@ export const Login: React.FC = () => {
           </div>
         </div>
 
-        <p className="text-center text-xs text-slate-400 mt-6">
+        <p className="auth-footer">
           Don't have an account?{' '}
-          <Link to="/register" className="text-rose-400 font-semibold hover:underline">
+          <Link to="/register">
             Create an account
           </Link>
         </p>

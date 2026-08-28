@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=development
+
+  client-tourist:
+    build:
+      context: ./client-tourist
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client-tourist:/app
+      - /app/node_modules
+    env_file:
+      - .env
+    environment:
+      - API_URL=http://server:5000
+    depends_on:
+      - server
+
+  client-admin:
+    build:
+      context: ./client-admin
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    volumes:
+      - ./client-admin:/app
+      - /app/node_modules
+    env_file:
+      - .env
+    environment:
+      - API_URL=http://server:5000
+    depends_on:
+      - server

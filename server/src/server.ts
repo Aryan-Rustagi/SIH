@@ -79,13 +79,18 @@ app.use(errorHandler);
 
 // Start Server & Connect to DB
 const startServer = async () => {
-  await connectDB();
-  server.listen(PORT, () => {
-    console.log(`===========================================`);
-    console.log(`🚀 Tourist Safety API running on port ${PORT}`);
-    console.log(`🌐 Health check: http://localhost:${PORT}/api/health`);
-    console.log(`===========================================`);
-  });
+  try {
+    await connectDB();
+    server.listen(PORT, () => {
+      console.log(`===========================================`);
+      console.log(`🚀 Tourist Safety API running on port ${PORT}`);
+      console.log(`🌐 Health check: http://localhost:${PORT}/api/health`);
+      console.log(`===========================================`);
+    });
+  } catch (error) {
+    console.error(`[Server] Startup aborted: ${(error as Error).message}`);
+    process.exitCode = 1;
+  }
 };
 
 startServer();

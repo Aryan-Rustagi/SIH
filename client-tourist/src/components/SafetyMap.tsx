@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useId } from 'react';
 import {
   MapContainer,
   TileLayer,
@@ -27,26 +27,9 @@ let DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
-// States that require Inner Line Permit (ILP) — restricted for foreigners
-const RESTRICTED_STATES = [
-  'Arunachal Pradesh',
-  'Manipur',
-  'Nagaland',
-  'Mizoram',
-];
-
-// States with high Maoist/LWE activity (advisories from MHA India)
-const HIGH_ALERT_STATES = [
-  'Chhattisgarh',
-  'Jharkhand',
-];
-
-// Disputed / sensitive border territories
-const SENSITIVE_STATES = [
-  'Jammu and Kashmir',
-  'Ladakh',
-  'Sikkim',
-];
+const RESTRICTED_STATES = ['Arunachal Pradesh', 'Manipur', 'Nagaland', 'Mizoram'];
+const HIGH_ALERT_STATES = ['Chhattisgarh', 'Jharkhand'];
+const SENSITIVE_STATES = ['Jammu and Kashmir', 'Ladakh', 'Sikkim'];
 
 interface SafetyMapProps {
   zones: SafetyZoneData[];
@@ -54,6 +37,8 @@ interface SafetyMapProps {
   center?: [number, number];
   zoom?: number;
 }
+
+const OPENSTREETMAP_TILES = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
 // Sub-component: shows live user location dot
 const CurrentLocationMarker = () => {
@@ -69,20 +54,10 @@ const CurrentLocationMarker = () => {
 
   return position === null ? null : (
     <>
-      <CircleMarker
-        center={position}
-        radius={8}
-        pathOptions={{ color: '#fff', fillColor: '#3b82f6', fillOpacity: 1, weight: 3 }}
-      >
-        <Popup>
-          <div className="font-bold text-sm text-slate-900">📍 You are here</div>
-        </Popup>
+      <CircleMarker center={position} radius={8} pathOptions={{ color: '#fff', fillColor: '#3b82f6', fillOpacity: 1, weight: 3 }}>
+        <Popup><div style={{ fontWeight: 700, fontSize: 13 }}>You are here</div></Popup>
       </CircleMarker>
-      <Circle
-        center={position}
-        radius={300}
-        pathOptions={{ color: '#3b82f6', fillColor: '#3b82f6', fillOpacity: 0.12, stroke: false }}
-      />
+      <Circle center={position} radius={300} pathOptions={{ color: '#3b82f6', fillColor: '#3b82f6', fillOpacity: 0.12, stroke: false }} />
     </>
   );
 };
@@ -92,10 +67,7 @@ const RestrictedZonesLayer = () => {
   const [geoData, setGeoData] = useState<any>(null);
 
   useEffect(() => {
-    // geoBoundaries free API — India state-level boundaries (no API key required)
-    fetch(
-      'https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/IND/ADM1/geoBoundaries-IND-ADM1_simplified.geojson'
-    )
+    fetch('https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/IND/ADM1/geoBoundaries-IND-ADM1_simplified.geojson')
       .then((res) => res.json())
       .then((data) => setGeoData(data))
       .catch((err) => console.warn('Failed to load restricted zones GeoJSON:', err));
@@ -105,46 +77,14 @@ const RestrictedZonesLayer = () => {
 
   const styleFeature = (feature: any) => {
     const name = feature?.properties?.shapeName || '';
-
-    if (RESTRICTED_STATES.includes(name)) {
-      return {
-        color: '#f43f5e',       // rose — ILP restricted
-        fillColor: '#f43f5e',
-        fillOpacity: 0.25,
-        weight: 2,
-        dashArray: '6 4',
-      };
-    }
-    if (HIGH_ALERT_STATES.includes(name)) {
-      return {
-        color: '#f97316',       // orange — LWE/Maoist high alert
-        fillColor: '#f97316',
-        fillOpacity: 0.18,
-        weight: 1.5,
-        dashArray: '4 3',
-      };
-    }
-    if (SENSITIVE_STATES.includes(name)) {
-      return {
-        color: '#f59e0b',       // amber — sensitive/advisory
-        fillColor: '#f59e0b',
-        fillOpacity: 0.15,
-        weight: 1.5,
-        dashArray: '4 3',
-      };
-    }
-    // No overlay for safe states
-    return {
-      color: 'transparent',
-      fillColor: 'transparent',
-      fillOpacity: 0,
-      weight: 0,
-    };
+    if (RESTRICTED_STATES.includes(name)) return { color: '#f43f5e', fillColor: '#f43f5e', fillOpacity: 0.25, weight: 2, dashArray: '6 4' };
+    if (HIGH_ALERT_STATES.includes(name)) return { color: '#f97316', fillColor: '#f97316', fillOpacity: 0.18, weight: 1.5, dashArray: '4 3' };
+    if (SENSITIVE_STATES.includes(name)) return { color: '#f59e0b', fillColor: '#f59e0b', fillOpacity: 0.15, weight: 1.5, dashArray: '4 3' };
+    return { color: 'transparent', fillColor: 'transparent', fillOpacity: 0, weight: 0 };
   };
 
   const onEachFeature = (feature: any, layer: any) => {
     const name = feature?.properties?.shapeName || 'Unknown';
-
     let label = '';
     let details = '';
 
@@ -157,9 +97,7 @@ const RestrictedZonesLayer = () => {
     } else if (SENSITIVE_STATES.includes(name)) {
       label = '🟡 Sensitive Border Territory';
       details = 'Protected Area Permit may be required. Active military presence. Check advisories before travel.';
-    } else {
-      return; // No popup for unrestricted states
-    }
+    } else return;
 
     layer.bindPopup(`
       <div style="font-family: sans-serif; max-width: 220px;">
@@ -171,101 +109,177 @@ const RestrictedZonesLayer = () => {
     `);
   };
 
-  return (
-    <GeoJSON
-      key={geoData ? 'loaded' : 'empty'}
-      data={geoData}
-      style={styleFeature}
-      onEachFeature={onEachFeature}
-    />
-  );
+  return <GeoJSON key={geoData ? 'loaded' : 'empty'} data={geoData} style={styleFeature} onEachFeature={onEachFeature} />;
 };
 
-export const SafetyMap: React.FC<SafetyMapProps> = ({
-  zones,
-  incidents = [],
-  center = [20.5937, 78.9629], // Center of India
-  zoom = 5,
-}) => {
-  const getZoneColor = (risk: string) => {
-    switch (risk) {
-      case 'CRITICAL': return '#f43f5e';
-      case 'HIGH': return '#f97316';
-      case 'MEDIUM': return '#f59e0b';
-      default: return '#10b981';
-    }
-  };
+const getZoneColor = (risk: string) => {
+  switch (risk) {
+    case 'CRITICAL': return '#f43f5e';
+    case 'HIGH': return '#f97316';
+    case 'MEDIUM': return '#f59e0b';
+    default: return '#10b981';
+  }
+};
 
+const LeafletSafetyMap: React.FC<SafetyMapProps> = ({ zones, incidents = [], center = [20.5937, 78.9629], zoom = 5 }) => {
   return (
-    <div className="w-full rounded-2xl overflow-hidden border border-slate-800 shadow-xl relative z-0">
-      {/* Legend */}
-      <div className="absolute top-3 right-3 z-[1000] bg-slate-900/90 backdrop-blur-sm border border-slate-700 rounded-xl px-3 py-2.5 text-[11px] space-y-1.5 shadow-lg">
-        <div className="text-slate-400 font-bold uppercase tracking-wider text-[10px] mb-1">Map Legend</div>
-        <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-blue-500 border-2 border-white inline-block" /> You</div>
-        <div className="flex items-center gap-2"><span className="w-3 h-3 rounded border-2 border-rose-500 bg-rose-500/30 inline-block" /> ILP Restricted</div>
-        <div className="flex items-center gap-2"><span className="w-3 h-3 rounded border-2 border-orange-500 bg-orange-500/20 inline-block" /> High Alert (LWE)</div>
-        <div className="flex items-center gap-2"><span className="w-3 h-3 rounded border-2 border-amber-400 bg-amber-400/20 inline-block" /> Sensitive Border</div>
-        <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full border-2 border-emerald-400 bg-emerald-400/30 inline-block" /> Safety Zone</div>
-        <div className="flex items-center gap-2"><span className="w-3 h-3 flex items-center justify-center text-slate-300">📍</span> Incident</div>
+    <div className="map-wrapper">
+      <div className="map-legend">
+        <div className="map-legend-title">Map Legend (OSM)</div>
+        <div className="map-legend-item"><span className="map-legend-dot" style={{ background: '#3b82f6', border: '2px solid #fff' }} /> You</div>
+        <div className="map-legend-item"><span className="map-legend-rect" style={{ background: 'rgba(244,63,94,0.3)', border: '2px solid #f43f5e' }} /> ILP Restricted</div>
+        <div className="map-legend-item"><span className="map-legend-rect" style={{ background: 'rgba(249,115,22,0.2)', border: '2px solid #f97316' }} /> High Alert (LWE)</div>
+        <div className="map-legend-item"><span className="map-legend-rect" style={{ background: 'rgba(251,191,36,0.2)', border: '2px solid #fbbf24' }} /> Sensitive Border</div>
+        <div className="map-legend-item"><span className="map-legend-dot" style={{ background: 'rgba(52,211,153,0.3)', border: '2px solid #34d399' }} /> Safety Zone</div>
+        <div className="map-legend-item">Incident</div>
       </div>
 
-      <MapContainer
-        center={center}
-        zoom={zoom}
-        scrollWheelZoom={false}
-        style={{ height: '500px', width: '100%', background: '#0f172a' }}
-        maxBounds={[[6.75, 68.16], [37.5, 97.4]]}
-        maxBoundsViscosity={1.0}
-        minZoom={4}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-
-        {/* Restricted zones from geoBoundaries API */}
+      <MapContainer center={center} zoom={zoom} scrollWheelZoom={false} style={{ height: '500px', width: '100%', background: '#0f172a' }} maxBounds={[[6.75, 68.16], [37.5, 97.4]]} maxBoundsViscosity={1.0} minZoom={4}>
+        <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' url={OPENSTREETMAP_TILES} />
         <RestrictedZonesLayer />
-
-        {/* User's Current Location */}
         <CurrentLocationMarker />
-
-        {/* Safety Zones from our DB */}
         {zones.map((zone) => (
-          <Circle
-            key={zone._id}
-            center={[zone.latitude, zone.longitude]}
-            radius={zone.radiusMeters}
-            pathOptions={{
-              color: getZoneColor(zone.riskLevel),
-              fillColor: getZoneColor(zone.riskLevel),
-              fillOpacity: 0.2,
-              weight: 2,
-            }}
-          >
-            <Popup>
-              <div className="text-slate-900">
-                <h3 className="font-bold text-sm">{zone.name}</h3>
-                <p className="text-xs mt-1 font-semibold">Risk: {zone.riskLevel}</p>
-              </div>
-            </Popup>
+          <Circle key={zone._id} center={[zone.latitude, zone.longitude]} radius={zone.radiusMeters} pathOptions={{ color: getZoneColor(zone.riskLevel), fillColor: getZoneColor(zone.riskLevel), fillOpacity: 0.2, weight: 2 }}>
+            <Popup><div><strong>{zone.name}</strong><p style={{ fontSize: 12, marginTop: 4 }}>Risk: {zone.riskLevel}</p></div></Popup>
           </Circle>
         ))}
-
-        {/* Incidents from our DB */}
         {incidents.map((incident) => (
-          <Marker
-            key={incident._id}
-            position={[incident.latitude, incident.longitude]}
-          >
-            <Popup>
-              <div className="text-slate-900">
-                <h3 className="font-bold text-sm">{incident.category.replace('_', ' ')}</h3>
-                <p className="text-xs mt-1">{incident.description}</p>
-              </div>
-            </Popup>
+          <Marker key={incident._id} position={[incident.latitude, incident.longitude]}>
+            <Popup><div><strong>{incident.category.replace('_', ' ')}</strong><p style={{ fontSize: 12, marginTop: 4 }}>{incident.description}</p></div></Popup>
           </Marker>
         ))}
       </MapContainer>
+    </div>
+  );
+};
+
+export const SafetyMap: React.FC<SafetyMapProps> = (props) => {
+  const reactId = useId();
+  const containerId = 'map-' + reactId.replace(/[^a-zA-Z0-9]/g, '');
+  const containerRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<any>(null);
+  const [mapSource, setMapSource] = useState<'mappls' | 'osm' | 'loading'>('loading');
+  const MAPPLS_KEY = import.meta.env.VITE_MAPPLS_KEY?.trim();
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const initMappls = async () => {
+      if (!MAPPLS_KEY) {
+        setMapSource('osm');
+        return;
+      }
+      try {
+        // @ts-ignore
+        const mapplsModule = await import('mappls-web-maps');
+        const mapplsClassObject = new mapplsModule.mappls();
+
+        const timeout = setTimeout(() => {
+          if (isMounted && !mapInstanceRef.current) {
+            console.warn('Mappls SDK timed out, switching to OpenStreetMap...');
+            setMapSource('osm');
+          }
+        }, 5000);
+
+        mapplsClassObject.initialize(MAPPLS_KEY, { map: true, version: '3.0' }, () => {
+          clearTimeout(timeout);
+          if (!isMounted || !containerRef.current) return;
+
+          try {
+            const newMap = mapplsClassObject.Map({
+              id: containerRef.current.id,
+              properties: {
+                center: [props.center?.[0] || 20.5937, props.center?.[1] || 78.9629],
+                zoom: props.zoom || 5,
+              },
+            });
+
+            newMap.on('load', () => {
+              if (!isMounted) return;
+              
+              // Map is loaded, draw incidents
+              props.incidents?.forEach((incident) => {
+                // @ts-ignore
+                if (window.mappls) {
+                  // @ts-ignore
+                  new window.mappls.Marker({
+                    map: newMap,
+                    position: { lat: incident.latitude, lng: incident.longitude },
+                    popupHtml: `<div><strong>${incident.category.replace('_', ' ')}</strong><p style="font-size: 12px; margin-top: 4px">${incident.description}</p></div>`,
+                  });
+                }
+              });
+
+              // Draw zones
+              props.zones?.forEach((zone) => {
+                // @ts-ignore
+                if (window.mappls) {
+                  // @ts-ignore
+                  new window.mappls.Circle({
+                    map: newMap,
+                    center: { lat: zone.latitude, lng: zone.longitude },
+                    radius: zone.radiusMeters,
+                    fillColor: getZoneColor(zone.riskLevel),
+                    fillOpacity: 0.2,
+                    strokeColor: getZoneColor(zone.riskLevel),
+                    strokeWeight: 2,
+                    popupHtml: `<div><strong>${zone.name}</strong><p style="font-size: 12px; margin-top: 4px">Risk: ${zone.riskLevel}</p></div>`
+                  });
+                }
+              });
+            });
+
+            mapInstanceRef.current = newMap;
+            setMapSource('mappls');
+          } catch (e) {
+            console.error('Error creating Mappls map instance:', e);
+            setMapSource('osm');
+          }
+        });
+      } catch (err) {
+        console.warn('Mappls initialization failed, falling back to OpenStreetMap:', err);
+        setMapSource('osm');
+      }
+    };
+
+    initMappls();
+
+    return () => {
+      isMounted = false;
+      if (mapInstanceRef.current && typeof mapInstanceRef.current.remove === 'function') {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+    };
+  }, [props.incidents, props.zones, props.center, props.zoom]);
+
+  if (mapSource === 'osm') {
+    return <LeafletSafetyMap {...props} />;
+  }
+
+  return (
+    <div className="map-wrapper" style={{ position: 'relative' }}>
+      <div className="map-legend">
+        <div className="map-legend-title">Map Legend (Mappls)</div>
+        <div className="map-legend-item"><span className="map-legend-dot" style={{ background: '#3b82f6', border: '2px solid #fff' }} /> You</div>
+        <div className="map-legend-item"><span className="map-legend-rect" style={{ background: 'rgba(244,63,94,0.3)', border: '2px solid #f43f5e' }} /> ILP Restricted</div>
+        <div className="map-legend-item"><span className="map-legend-rect" style={{ background: 'rgba(249,115,22,0.2)', border: '2px solid #f97316' }} /> High Alert (LWE)</div>
+        <div className="map-legend-item"><span className="map-legend-rect" style={{ background: 'rgba(251,191,36,0.2)', border: '2px solid #fbbf24' }} /> Sensitive Border</div>
+        <div className="map-legend-item"><span className="map-legend-dot" style={{ background: 'rgba(52,211,153,0.3)', border: '2px solid #34d399' }} /> Safety Zone</div>
+        <div className="map-legend-item">Incident</div>
+      </div>
+      
+      {mapSource === 'loading' && (
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#0f172a', color: '#fff', zIndex: 10 }}>
+          Loading Map...
+        </div>
+      )}
+      
+      <div
+        id={containerId}
+        ref={containerRef}
+        style={{ height: '500px', width: '100%', background: '#0f172a' }}
+      />
     </div>
   );
 };

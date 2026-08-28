@@ -1,10 +1,29 @@
 # 🛡️ SafeTour Guardian - Tourist Safety & Emergency Rescue Platform
 
+![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?logo=node.js&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=111827)
+![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-47A248?logo=mongodb&logoColor=white)
+![Socket.IO](https://img.shields.io/badge/Socket.IO-realtime-010101?logo=socket.io&logoColor=white)
+
+SafeTour Guardian is a dual-portal safety network for tourists and police or rescue teams. It
+combines one-touch SOS dispatch, GPS-aware safety zones, verified incident intelligence, and ICE
+contacts in a presentation-ready Smart India Hackathon prototype.
+
 A comprehensive **MERN Stack** (**M**ongoDB, **E**xpress.js, **R**eact, **N**ode.js) platform built with real-time Socket.IO communication, designed for traveler protection, emergency SOS broadcasts, safety zone navigation, and authority command & dispatch control.
 
 ---
 
-## 🌟 Key Features
+## Problem Statement
+
+Tourists move through unfamiliar cities, remote circuits, and permit-controlled regions where
+fragmented helplines, language barriers, and limited local context can delay a response. Existing
+reports are difficult for responders to verify and command teams often lack a live, location-linked
+queue of tourist distress calls.
+
+SafeTour Guardian addresses this gap with one tourist workflow and one responder workflow backed by
+the same authenticated API and real-time event channel.
+
+## Key Features
 
 - 🚨 **One-Touch Emergency SOS**: Instant panic distress button capturing device GPS coordinates and broadcasting to responders in real time.
 - 📡 **Real-Time Dispatch Console (Socket.IO)**: Police & Rescue Command Center for monitoring incoming alerts, deploying response units, and resolving emergencies.
@@ -15,7 +34,7 @@ A comprehensive **MERN Stack** (**M**ongoDB, **E**xpress.js, **R**eact, **N**ode
 
 ---
 
-## 📂 Project Architecture
+## Project Architecture
 
 ```
 tourist-safety-app/
@@ -31,16 +50,53 @@ tourist-safety-app/
 │   │   ├── seed.ts           # Demo database seed script
 │   │   └── server.ts         # Server bootstrap
 │   └── package.json
-└── client-tourist/           # Tourist Portal (React 19, Vite, Tailwind v4)
-└── client-admin/             # Admin & Dispatch Command Center (React 19, Vite, Tailwind v4)```
+└── client-tourist/           # Tourist Portal (React 19, Vite, vanilla CSS)
+└── client-admin/             # Admin & Dispatch Command Center (React 19, Vite, vanilla CSS)```
 
 ---
 
-## 🚀 Getting Started
+```mermaid
+flowchart LR
+	Tourist[Tourist Portal\nReact + Vite] --> API[Express REST API]
+	Admin[Command Center\nReact + Vite] --> API
+	Tourist <--> Socket[Socket.IO]
+	Admin <--> Socket
+	API --> DB[(MongoDB)]
+	Tourist --> Geo[Leaflet + geoBoundaries]
+```
+
+Both portals use a shared visual language built from vanilla CSS custom properties and semantic
+component classes with no utility framework required at runtime or build time.
+
+## Screenshots
+
+Add final pitch screenshots here:
+
+- `docs/screenshots/tourist-dashboard.png`
+- `docs/screenshots/command-center.png`
+- `docs/screenshots/safety-zones.png`
+
+## Team
+
+Replace these role placeholders with the registered SIH team before submission:
+
+| Role | Team member |
+|------|-------------|
+| Product and pitch lead | Team Member 1 |
+| Backend and realtime systems | Team Member 2 |
+| Frontend and UX | Team Member 3 |
+| Geo intelligence and research | Team Member 4 |
+
+## Getting Started
 
 ### 1. Prerequisites
 - **Node.js** (v18+ recommended)
 - **MongoDB** (Local instance running at `mongodb://127.0.0.1:27017` or MongoDB Atlas URI)
+
+Authentication requires a reachable MongoDB database. For MongoDB Atlas, add the machine running
+the server to the cluster Network Access IP allowlist and verify `server/.env` contains a valid
+`MONGO_URI`. The API now stops at startup when MongoDB is unavailable instead of accepting auth
+requests that can only time out.
 
 ### 2. Setup Environment
 Ensure your `.env` in `server/.env` (and root `.env`) has:
@@ -74,7 +130,7 @@ npm run dev
 
 ---
 
-## 🔑 Demo Accounts
+## Demo Accounts
 
 | Role | Email | Password | Access |
 |------|-------|----------|--------|

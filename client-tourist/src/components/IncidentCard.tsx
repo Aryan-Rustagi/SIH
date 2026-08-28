@@ -33,17 +33,17 @@ export const IncidentCard: React.FC<{
   const getCategoryIcon = (category: IncidentData['category']) => {
     switch (category) {
       case 'THEFT':
-        return <UserX className="w-4 h-4 text-amber-400" />;
+        return <UserX size={16} color="#fbbf24" />;
       case 'HARASSMENT':
-        return <AlertCircle className="w-4 h-4 text-rose-400" />;
+        return <AlertCircle size={16} color="#fb7185" />;
       case 'SCAM':
-        return <AlertCircle className="w-4 h-4 text-orange-400" />;
+        return <AlertCircle size={16} color="#f97316" />;
       case 'MEDICAL':
-        return <Stethoscope className="w-4 h-4 text-emerald-400" />;
+        return <Stethoscope size={16} color="#34d399" />;
       case 'NATURAL_HAZARD':
-        return <Flame className="w-4 h-4 text-red-500" />;
+        return <Flame size={16} color="#f43f5e" />;
       default:
-        return <HelpCircle className="w-4 h-4 text-sky-400" />;
+        return <HelpCircle size={16} color="#38bdf8" />;
     }
   };
 
@@ -62,59 +62,48 @@ export const IncidentCard: React.FC<{
   };
 
   return (
-    <div className="glass-card rounded-xl p-4 border flex flex-col justify-between">
+    <div className="card card-interactive flex flex-col justify-between">
       <div>
-        <div className="flex items-start justify-between gap-2 mb-2">
-          <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-lg bg-slate-800 border border-slate-700">
+        <div className="flex items-start justify-between gap-sm mb-sm">
+          <div className="flex items-center gap-sm">
+            <div className="icon-box icon-box-sm icon-box-slate" style={{ background: 'var(--bg-input)', border: '1px solid var(--border-subtle)' }}>
               {getCategoryIcon(incident.category)}
             </div>
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+              <span className="label" style={{ marginBottom: 0 }}>
                 {incident.category.replace('_', ' ')}
               </span>
-              <h4 className="text-sm font-bold text-white leading-tight">
-                {incident.title}
-              </h4>
+              <h4>{incident.title}</h4>
             </div>
           </div>
 
           {incident.isVerified ? (
-            <span className="flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              <ShieldCheck className="w-3 h-3" />
+            <span className="badge badge-emerald">
+              <ShieldCheck size={12} />
               Verified
             </span>
           ) : (
-            <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">
-              Unverified
-            </span>
+            <span className="badge badge-slate">Unverified</span>
           )}
         </div>
 
-        <p className="text-xs text-slate-300 mt-2 mb-3 line-clamp-3">
-          {incident.description}
-        </p>
+        <p className="text-xs text-secondary mt-sm mb-md line-clamp-3">{incident.description}</p>
       </div>
 
-      <div className="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400">
-        <div className="flex items-center gap-1">
-          <MapPin className="w-3 h-3 text-slate-500" />
+      <div className="flex flex-wrap items-center justify-between gap-sm text-2xs text-muted" style={{ borderTop: '1px solid var(--border)', paddingTop: '0.5rem' }}>
+        <div className="flex items-center gap-xs">
+          <MapPin size={12} />
           <span>{incident.address || `${incident.latitude.toFixed(3)}, ${incident.longitude.toFixed(3)}`}</span>
         </div>
-
-        <div className="flex items-center gap-1 text-slate-500">
-          <Clock className="w-3 h-3" />
+        <div className="flex items-center gap-xs">
+          <Clock size={12} />
           <span>{formatDate(incident.createdAt)}</span>
         </div>
-
         {showAdminControls && onVerifyToggle && (
           <button
+            type="button"
             onClick={onVerifyToggle}
-            className={`mt-2 w-full py-1.5 px-3 rounded-lg text-xs font-semibold transition-all ${
-              incident.isVerified
-                ? 'bg-slate-800 hover:bg-slate-700 text-slate-300'
-                : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-md'
-            }`}
+            className={`btn btn-sm btn-block ${incident.isVerified ? 'btn-secondary' : 'btn-success'}`}
           >
             {incident.isVerified ? 'Revoke Verification' : 'Verify & Publish'}
           </button>
