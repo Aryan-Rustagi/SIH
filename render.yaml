@@ -15,7 +15,7 @@ services:
       - key: OPENROUTER_API_KEY
         sync: false
       - key: CLIENT_URL
-        value: "https://tourist-safety-client.onrender.com"
+        value: "https://tourist-safety-client.onrender.com,https://admin-dashboard-shrd.onrender.com"
 
   # 2. Python FastAPI (AI Microservice)
   - type: web
