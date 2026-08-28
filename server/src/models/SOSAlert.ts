@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema, Types } from 'mongoose';
 
-export type AlertStatus = 'ACTIVE' | 'ACKNOWLEDGED' | 'RESOLVED' | 'CANCELLED';
+export type AlertStatus = 'PENDING' | 'ACTIVE' | 'ACKNOWLEDGED' | 'RESOLVED' | 'CANCELLED';
 
 export interface ISOSAlert extends Document {
   userId: Types.ObjectId;
@@ -25,7 +25,7 @@ const SOSAlertSchema = new Schema<ISOSAlert>(
     },
     status: {
       type: String,
-      enum: ['ACTIVE', 'ACKNOWLEDGED', 'RESOLVED', 'CANCELLED'],
+      enum: ['PENDING', 'ACTIVE', 'ACKNOWLEDGED', 'RESOLVED', 'CANCELLED'],
       default: 'ACTIVE',
       index: true,
     },

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { ZoneCard, SafetyZoneData } from '../../components/ZoneCard';
-import { SafetyMap } from '../../components/SafetyMap';
+import { MapplsMap } from '../../components/MapplsMap';
 import { Compass, Search, RefreshCw, Info } from 'lucide-react';
 
 export const SafeZones: React.FC = () => {
@@ -133,7 +133,7 @@ export const SafeZones: React.FC = () => {
         </div>
       )}
 
-      <div className="mb-xl">{zones.length > 0 && <SafetyMap zones={zones} />}</div>
+      <div className="mb-xl">{zones.length > 0 && <MapplsMap className="h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl border-4 border-gray-100 dark:border-gray-800" />}</div>
 
       <div className="filter-bar mb-xl">
         <div className="input-group flex-1" style={{ width: '100%' }}>

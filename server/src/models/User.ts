@@ -9,6 +9,8 @@ export interface IUser extends Document {
   password?: string;
   phone?: string;
   role: UserRole;
+  latitude?: number;
+  longitude?: number;
   createdAt: Date;
   updatedAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -42,6 +44,12 @@ const UserSchema = new Schema<IUser>(
       type: String,
       enum: ['TOURIST', 'ADMIN'],
       default: 'TOURIST',
+    },
+    latitude: {
+      type: Number,
+    },
+    longitude: {
+      type: Number,
     },
   },
   {

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { SOSButton } from '../../components/SOSButton';
+import { EmergencySMSButton } from '../../components/EmergencySMSButton';
 import { ZoneCard, SafetyZoneData } from '../../components/ZoneCard';
 import { IncidentCard, IncidentData } from '../../components/IncidentCard';
-import { SafetyMap } from '../../components/SafetyMap';
+import { MapplsMap } from '../../components/MapplsMap';
 import api from '../../services/api';
 import {
   ShieldCheck,
@@ -13,12 +14,15 @@ import {
   Compass,
   ArrowRight,
   Sparkles,
+  Wifi,
+  WifiOff,
 } from 'lucide-react';
 
 export const TouristHome: React.FC = () => {
   const [zones, setZones] = useState<SafetyZoneData[]>([]);
   const [incidents, setIncidents] = useState<IncidentData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isOnline, setIsOnline] = useState<boolean>(true);
 
   useEffect(() => {
     document.title = 'Dashboard — SafeTour Guardian';
@@ -67,33 +71,69 @@ export const TouristHome: React.FC = () => {
           <p className="hero-subtitle">
             Instant one-touch emergency response connected directly to local authorities, safe havens, and designated responders.
           </p>
+          
+          {/* Simulated Network Toggle */}
+          <div className="flex items-center justify-center mt-6">
+            <div className="flex items-center p-1 bg-gray-100 rounded-full shadow-inner border border-gray-200">
+              <button
+                onClick={() => setIsOnline(true)}
+                className={`flex items-center px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 ${
+                  isOnline
+                    ? 'bg-green-500 text-white shadow-md'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                <Wifi size={16} className="mr-2" />
+                Online
+              </button>
+              <button
+                onClick={() => setIsOnline(false)}
+                className={`flex items-center px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 ${
+                  !isOnline
+                    ? 'bg-red-500 text-white shadow-md'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                <WifiOff size={16} className="mr-2" />
+                Offline Mode
+              </button>
+            </div>
+          </div>
         </div>
 
-        <SOSButton />
+        {isOnline ? (
+          <SOSButton />
+        ) : (
+          <EmergencySMSButton />
+        )}
 
-        <div className="helpline-grid mt-xl" style={{ maxWidth: 960, marginLeft: 'auto', marginRight: 'auto' }}>
-          {emergencyNumbers.map((item) => (
-            <a key={item.number} href={`tel:${item.number}`} className="helpline-card">
-              <div>
-                <div className="flex items-center justify-between mb-sm">
-                  <div className={`helpline-icon ${item.icon}`}>
-                    <PhoneCall size={16} />
+        {isOnline && (
+          <div className="helpline-grid mt-xl" style={{ maxWidth: 960, marginLeft: 'auto', marginRight: 'auto' }}>
+            {emergencyNumbers.map((item) => (
+              <a key={item.number} href={`tel:${item.number}`} className="helpline-card">
+                <div>
+                  <div className="flex items-center justify-between mb-sm">
+                    <div className={`helpline-icon ${item.icon}`}>
+                      <PhoneCall size={16} />
+                    </div>
+                    <span className="helpline-number">{item.number}</span>
                   </div>
-                  <span className="helpline-number">{item.number}</span>
+                  <h4 className="helpline-title">{item.title}</h4>
+                  <p className="helpline-desc">{item.desc}</p>
                 </div>
-                <h4 className="helpline-title">{item.title}</h4>
-                <p className="helpline-desc">{item.desc}</p>
-              </div>
-              <span className="helpline-action">
-                Tap to Call <ArrowRight size={12} />
-              </span>
-            </a>
-          ))}
-        </div>
+                <span className="helpline-action">
+                  Tap to Call <ArrowRight size={12} />
+                </span>
+              </a>
+            ))}
+          </div>
+        )}
       </section>
 
-      <section className="container mb-xl">
-        <div className="grid grid-3">
+      {isOnline && (
+        <>
+          <section className="container mb-xl">
+            <div className="grid grid-3">
           <Link to="/zones" className="action-card">
             <div className="icon-box icon-box-md icon-box-emerald">
               <Compass size={22} />
@@ -131,7 +171,7 @@ export const TouristHome: React.FC = () => {
       </section>
 
       <section className="container mb-xl">
-        {(zones.length > 0 || incidents.length > 0) && <SafetyMap zones={zones} incidents={incidents} />}
+        <MapplsMap className="h-96 w-full rounded-2xl overflow-hidden shadow-2xl border-4 border-gray-100 dark:border-gray-800" />
       </section>
 
       <section className="container">
@@ -197,6 +237,8 @@ export const TouristHome: React.FC = () => {
           </div>
         </div>
       </section>
+        </>
+      )}
     </div>
   );
 };
