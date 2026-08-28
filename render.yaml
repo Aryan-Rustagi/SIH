@@ -1,7 +1,7 @@
 services:
   # 1. Node.js Express API (Backend)
   - type: web
-    name: tourist-safety-api
+    name: tourist-safety-node-api
     env: node
     plan: free
     rootDir: server
@@ -38,7 +38,7 @@ services:
     staticPublishPath: dist
     envVars:
       - key: VITE_API_URL
-        value: "https://tourist-safety-api.onrender.com"
+        value: "https://tourist-safety-node-api.onrender.com"
       - key: VITE_AI_API_URL
         value: "https://tourist-safety-ai.onrender.com"
       - key: VITE_MAPPLS_KEY
@@ -57,7 +57,7 @@ services:
     staticPublishPath: dist
     envVars:
       - key: VITE_API_URL
-        value: "https://tourist-safety-api.onrender.com"
+        value: "https://tourist-safety-node-api.onrender.com"
       - key: VITE_AI_API_URL
         value: "https://tourist-safety-ai.onrender.com"
       - key: VITE_MAPPLS_KEY
