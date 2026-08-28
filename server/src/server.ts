@@ -3,7 +3,8 @@ import http from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import cors from 'cors';
 import dotenv from 'dotenv';
-dotenv.config();
+import path from 'path';
+dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
 
 import { connectDB } from './config/db.js';
 import { errorHandler } from './middleware/errorHandler.js';
