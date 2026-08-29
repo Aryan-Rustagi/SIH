@@ -21,6 +21,7 @@ import redZoneRoutes from './routes/redZoneRoutes.js';
 import riskZoneRoutes from './routes/riskZoneRoutes.js';
 import aiRoutes from './routes/aiRoutes.js';
 import weatherRoutes from './routes/weatherRoutes.js';
+import smsRoutes from './routes/smsRoutes.js';
 
 const app = express();
 const server = http.createServer(app);
@@ -92,6 +93,7 @@ app.use('/api/red-zones', redZoneRoutes);
 app.use('/api/risk-zones', riskZoneRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/weather', weatherRoutes);
+app.use('/api/sms', smsRoutes);
 
 // Global Error Handler
 app.use(errorHandler);
