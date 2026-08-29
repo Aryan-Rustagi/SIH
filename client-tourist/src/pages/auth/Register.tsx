@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth, UserRole } from '../../context/AuthContext';
-import { Shield, Lock, Mail, User, Phone, AlertTriangle, ArrowRight } from 'lucide-react';
+import { Shield, Lock, Mail, User, Phone, AlertTriangle, ArrowRight, ShieldCheck, Zap, Globe } from 'lucide-react';
 
 export const Register: React.FC = () => {
   const { register } = useAuth();
@@ -15,90 +15,193 @@ export const Register: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-  useEffect(() => {
-    document.title = 'Create Account — SafeTour Guardian';
-  }, []);
+  useEffect(() => { document.title = 'Create Account — SafeTour Guardian'; }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
-
-    if (password.length < 6) {
-      setErrorMsg('Password must be at least 6 characters.');
-      return;
-    }
-
+    if (password.length < 6) { setErrorMsg('Password must be at least 6 characters.'); return; }
     setIsSubmitting(true);
     const res = await register(name, email, password, role, phone);
     setIsSubmitting(false);
-
-    if (res.success) {
-      navigate('/dashboard');
-    } else {
-      setErrorMsg(res.message || 'Registration failed.');
-    }
+    if (res.success) navigate('/dashboard');
+    else setErrorMsg(res.message || 'Registration failed.');
   };
+
+  const perks = [
+    { icon: ShieldCheck, text: 'Instant SOS emergency dispatch' },
+    { icon: Zap, text: 'Real-time safety zone alerts' },
+    { icon: Globe, text: 'Trusted by SIH 2026' },
+  ];
 
   return (
     <div className="auth-page">
-      <div className="auth-card" style={{ maxWidth: 480 }}>
-        <div className="auth-header">
-          <div className="auth-icon">
-            <Shield size={22} color="#fff" />
-          </div>
-          <h1>Create Your Account</h1>
-          <p className="page-desc">Join the tourist safety and emergency response network</p>
+
+      {/* ── Left Panel ── */}
+      <div className="auth-panel-left">
+        <div style={{
+          position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none',
+        }}>
+          <div style={{
+            position: 'absolute', top: '10%', right: '-10%',
+            width: 350, height: 350,
+            background: 'radial-gradient(circle, rgba(13,148,136,0.15) 0%, transparent 70%)',
+            borderRadius: '50%',
+          }} />
+          <div style={{
+            position: 'absolute', bottom: '10%', left: '-5%',
+            width: 280, height: 280,
+            background: 'radial-gradient(circle, rgba(229,62,62,0.1) 0%, transparent 70%)',
+            borderRadius: '50%',
+          }} />
         </div>
 
-        <div className="card">
+        <div className="auth-panel-left-content">
+          <div className="navbar-brand" style={{ marginBottom: '2.5rem' }}>
+            <div className="navbar-brand-icon">
+              <Shield size={20} color="#fff" />
+            </div>
+            <span className="navbar-brand-text" style={{ color: 'white' }}>SafeTour Guardian</span>
+          </div>
+
+          <h2 className="auth-panel-tagline">
+            Join the safety<br />network today
+          </h2>
+
+          <p className="auth-panel-desc">
+            Create a free account to access the full tourist
+            safety toolkit — SOS, maps, contacts, and AI assistance.
+          </p>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {perks.map(p => {
+              const Icon = p.icon;
+              return (
+                <div key={p.text} style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
+                  <div style={{
+                    width: 36, height: 36, borderRadius: 'var(--r-lg)',
+                    background: 'rgba(255,255,255,0.1)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    flexShrink: 0,
+                  }}>
+                    <Icon size={16} color="white" />
+                  </div>
+                  <span style={{ fontSize: '0.9375rem', color: 'var(--navy-300)' }}>{p.text}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Right Panel ── */}
+      <div className="auth-panel-right">
+        <div className="auth-card" style={{ maxWidth: 440 }}>
+
+          <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.8125rem', color: 'var(--text-muted)', marginBottom: '2rem', textDecoration: 'none' }}>
+            ← Back to home
+          </Link>
+
+          <div className="auth-logo">
+            <div style={{ width: 40, height: 40, borderRadius: 'var(--r-lg)', background: 'var(--navy-900)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Shield size={18} color="#fff" />
+            </div>
+          </div>
+
+          <h1 className="auth-card-title">Create your account</h1>
+          <p className="auth-card-subtitle" style={{ marginBottom: '2rem' }}>
+            Join the tourist safety and emergency response network
+          </p>
+
           {errorMsg && (
-            <div className="alert alert-error">
-              <AlertTriangle size={16} />
+            <div className="alert alert-error" style={{ marginBottom: '1.25rem' }}>
+              <AlertTriangle size={14} />
               <span>{errorMsg}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="auth-form">
+          <form onSubmit={handleSubmit} className="auth-form" id="register-form">
             <div>
-              <label className="label">Full Name</label>
+              <label className="label" htmlFor="reg-name">Full Name</label>
               <div className="input-group">
-                <User className="input-icon" size={16} />
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Jane Doe" required className="input input-with-icon" />
+                <User className="input-icon" size={15} />
+                <input
+                  id="reg-name"
+                  type="text"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  placeholder="Jane Doe"
+                  required
+                  className="input input-with-icon"
+                />
               </div>
             </div>
+
             <div>
-              <label className="label">Email Address</label>
+              <label className="label" htmlFor="reg-email">Email Address</label>
               <div className="input-group">
-                <Mail className="input-icon" size={16} />
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="name@example.com" required className="input input-with-icon" />
+                <Mail className="input-icon" size={15} />
+                <input
+                  id="reg-email"
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  required
+                  className="input input-with-icon"
+                />
               </div>
             </div>
-            <div className="grid grid-2">
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
               <div>
-                <label className="label">Phone (Optional)</label>
+                <label className="label" htmlFor="reg-phone">Phone (Optional)</label>
                 <div className="input-group">
-                  <Phone className="input-icon" size={16} />
-                  <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 98765 43210" className="input input-with-icon" />
+                  <Phone className="input-icon" size={15} />
+                  <input
+                    id="reg-phone"
+                    type="tel"
+                    value={phone}
+                    onChange={e => setPhone(e.target.value)}
+                    placeholder="+91 98765…"
+                    className="input input-with-icon"
+                  />
                 </div>
               </div>
               <div>
-                <label className="label">Password</label>
+                <label className="label" htmlFor="reg-password">Password</label>
                 <div className="input-group">
-                  <Lock className="input-icon" size={16} />
-                  <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Min 6 chars" required className="input input-with-icon" />
+                  <Lock className="input-icon" size={15} />
+                  <input
+                    id="reg-password"
+                    type="password"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    placeholder="Min 6 chars"
+                    required
+                    className="input input-with-icon"
+                  />
                 </div>
               </div>
             </div>
-            <button type="submit" disabled={isSubmitting} className="btn btn-primary btn-block">
-              {isSubmitting ? 'Creating Account...' : 'Complete Registration'}
+
+            <button
+              type="submit"
+              id="register-submit-btn"
+              disabled={isSubmitting}
+              className="btn btn-primary btn-block btn-lg"
+              style={{ marginTop: '0.5rem' }}
+            >
+              {isSubmitting ? 'Creating Account…' : 'Create Account'}
               <ArrowRight size={16} />
             </button>
           </form>
-        </div>
 
-        <p className="auth-footer">
-          Already have an account? <Link to="/login">Sign In</Link>
-        </p>
+          <p className="auth-footer-link" style={{ marginTop: '1.5rem' }}>
+            Already have an account?{' '}
+            <Link to="/login">Sign In</Link>
+          </p>
+        </div>
       </div>
     </div>
   );
