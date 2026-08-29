@@ -17,10 +17,9 @@ interface MapplsMapProps {
 
 // Ray-casting algorithm for Point in Polygon
 const isPointInPolygon = (point: [number, number], polygon: number[][][]) => {
+  if (!polygon || !polygon[0] || polygon[0].length < 3) return false;
   const [lng, lat] = point;
   let isInside = false;
-
-  // Assuming a simple polygon without holes (polygon[0] is the outer ring)
   const ring = polygon[0];
   
   for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
@@ -28,7 +27,7 @@ const isPointInPolygon = (point: [number, number], polygon: number[][][]) => {
     const xj = ring[j][0], yj = ring[j][1];
 
     const intersect = ((yi > lat) !== (yj > lat))
-        && (lng < (xj - xi) * (lat - yi) / (yj - yi) + xi);
+        && (lng < (xj - xi) * (lat - yi) / (yj - yi + 0.000000001) + xi);
     if (intersect) isInside = !isInside;
   }
 
@@ -47,6 +46,7 @@ export const MapplsMap = forwardRef<MapplsMapRef, MapplsMapProps>(
   const mapplsObjRef = useRef<any>(null);
   const userMarkerRef = useRef<any>(null);
   const hasCenteredRef = useRef<boolean>(false);
+  const lastGeoCheckRef = useRef<number>(0);
   const containerId = React.useId().replace(/:/g, '');
 
   // Expose map internals to parent via ref
@@ -63,6 +63,7 @@ export const MapplsMap = forwardRef<MapplsMapRef, MapplsMapProps>(
     const fetchRedZones = async (map: any) => {
       try {
         const res = await api.get('/red-zones');
+        if (!isMounted) return;
         if (res.data.success && res.data.geoJson) {
           const geoJson = res.data.geoJson;
           setRedZones(geoJson);
@@ -71,7 +72,7 @@ export const MapplsMap = forwardRef<MapplsMapRef, MapplsMapProps>(
           geojsonLayerRef.current = mapplsClassObject.addGeoJson({
             map: map,
             data: geoJson,
-            fitbounds: true,
+            fitbounds: false,
             style: {
               fillColor: 'red',
               fillOpacity: 0.4,
@@ -91,7 +92,6 @@ export const MapplsMap = forwardRef<MapplsMapRef, MapplsMapProps>(
       mapplsClassObject.initialize("reqpzxosewtfxhrtixlizunwfgebmjwqfjbc", loadObject, () => {
         if (!isMounted) return;
         
-        // Extra safeguard: clear container if it already has children
         const container = document.getElementById(`mappls-container-${containerId}`);
         if (container && container.childNodes.length > 0) {
           container.innerHTML = '';
@@ -120,48 +120,56 @@ export const MapplsMap = forwardRef<MapplsMapRef, MapplsMapProps>(
     return () => {
       isMounted = false;
       if (mapRef.current) {
-        // Mappls map remove method
         try {
           mapRef.current.remove();
         } catch (e) {
           console.warn('Map cleanup error', e);
         }
       }
-      // Force clear the container to prevent double rendering in React Strict Mode
       const container = document.getElementById(`mappls-container-${containerId}`);
       if (container) container.innerHTML = '';
       
       if (watchIdRef.current !== null) {
         navigator.geolocation.clearWatch(watchIdRef.current);
+        watchIdRef.current = null;
       }
     };
   }, []);
 
-  // Geofencing Tracker
+  // Geofencing Tracker (throttled to avoid CPU spikes)
   useEffect(() => {
-    if (redZones && navigator.geolocation) {
-      watchIdRef.current = navigator.geolocation.watchPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          let inside = false;
-          
-          if (redZones.features) {
-            for (const feature of redZones.features) {
-              if (feature.geometry.type === 'Polygon') {
-                if (isPointInPolygon([longitude, latitude], feature.geometry.coordinates)) {
-                  inside = true;
-                  break;
-                }
+    if (!redZones || !navigator.geolocation) return;
+
+    watchIdRef.current = navigator.geolocation.watchPosition(
+      (position) => {
+        const now = Date.now();
+        // Throttle calculation to at most once every 2 seconds
+        if (now - lastGeoCheckRef.current < 2000) return;
+        lastGeoCheckRef.current = now;
+
+        const { latitude, longitude } = position.coords;
+        let inside = false;
+        
+        if (redZones.features && Array.isArray(redZones.features)) {
+          for (const feature of redZones.features) {
+            if (feature.geometry?.type === 'Polygon' && Array.isArray(feature.geometry.coordinates)) {
+              if (isPointInPolygon([longitude, latitude], feature.geometry.coordinates)) {
+                inside = true;
+                break;
               }
             }
           }
-          
-          setIsInDangerZone(inside);
-          if (!inside) setDangerBannerDismissed(false);
+        }
+        
+        setIsInDangerZone((prev) => (prev !== inside ? inside : prev));
+        if (!inside) {
+          setDangerBannerDismissed((prev) => (prev ? false : prev));
+        }
 
-          // Update user location marker and center map on first fix
-          if (mapRef.current && mapplsObjRef.current) {
-            if (!userMarkerRef.current) {
+        // Update user location marker and center map on first fix
+        if (mapRef.current && mapplsObjRef.current) {
+          if (!userMarkerRef.current) {
+            try {
               // @ts-ignore
               userMarkerRef.current = new mapplsObjRef.current.Marker({
                 map: mapRef.current,
@@ -170,23 +178,36 @@ export const MapplsMap = forwardRef<MapplsMapRef, MapplsMapProps>(
                 width: 16,
                 height: 16,
               });
-            } else {
-              userMarkerRef.current.setPosition({ lat: latitude, lng: longitude });
+            } catch (e) {
+              console.warn('Marker creation error', e);
             }
+          } else {
+            try {
+              userMarkerRef.current.setPosition({ lat: latitude, lng: longitude });
+            } catch (e) {}
+          }
 
-            if (!hasCenteredRef.current) {
+          if (!hasCenteredRef.current) {
+            try {
               mapRef.current.setCenter({ lat: latitude, lng: longitude });
               mapRef.current.setZoom(14);
               hasCenteredRef.current = true;
-            }
+            } catch (e) {}
           }
-        },
-        (error) => {
-          console.warn('Geolocation error', error);
-        },
-        { enableHighAccuracy: true }
-      );
-    }
+        }
+      },
+      (error) => {
+        console.warn('Geolocation error', error);
+      },
+      { enableHighAccuracy: false, timeout: 10000, maximumAge: 5000 }
+    );
+
+    return () => {
+      if (watchIdRef.current !== null) {
+        navigator.geolocation.clearWatch(watchIdRef.current);
+        watchIdRef.current = null;
+      }
+    };
   }, [redZones]);
 
   return (

@@ -16,7 +16,7 @@ const variants: Record<ButtonVariant, string> = {
 
 export const Button: React.FC<ButtonProps> = ({ variant = 'primary', children, className = '', ...props }) => (
   <button
-    className={`inline-flex items-center justify-center gap-2 rounded-lg py-3 px-6 font-semibold transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 ${variants[variant]} ${className}`.trim()}
+    className={`inline-flex items-center justify-center gap-2 rounded-xl py-3 px-6 font-semibold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 ${variants[variant]} ${className}`.trim()}
     {...props}
   >
     {children}

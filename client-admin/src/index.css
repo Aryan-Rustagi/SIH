@@ -9,16 +9,16 @@
   --bg-body: #ffffff;
   --bg-surface: #ffffff;
   --bg-card: #ffffff;
-  --bg-card-hover: #f8fafc;
+  --bg-card-hover: #f9fafb;
   --bg-input: #ffffff;
-  --bg-overlay: rgba(15, 23, 42, 0.45);
+  --bg-overlay: rgba(17, 24, 39, 0.4);
 
   --border: #e5e7eb;
   --border-subtle: #e5e7eb;
-  --border-hover: #cbd5e1;
+  --border-hover: #93c5fd;
 
   --text-primary: #111827;
-  --text-secondary: #4b5563;
+  --text-secondary: #6b7280;
   --text-muted: #6b7280;
   --text-inverse: #ffffff;
 
@@ -42,10 +42,10 @@
   --purple-600: #9333ea;
 
   /* Gradients */
-  --gradient-brand: linear-gradient(135deg, #f43f5e, #f59e0b);
-  --gradient-danger: linear-gradient(135deg, #e11d48, #dc2626);
-  --gradient-success: linear-gradient(135deg, #059669, #10b981);
-  --gradient-sky: linear-gradient(135deg, #0284c7, #0ea5e9);
+  --gradient-brand: none;
+  --gradient-danger: none;
+  --gradient-success: none;
+  --gradient-sky: none;
 
   /* Typography */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -69,7 +69,7 @@
 
   /* Shadows */
   --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
-  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 1px 2px rgba(15, 23, 42, 0.06);
   --shadow-lg: 0 8px 30px rgba(15, 23, 42, 0.12);
   --shadow-glow-rose: 0 0 30px -10px rgba(244, 63, 94, 0.4);
   --shadow-glow-sky: 0 0 30px -10px rgba(14, 165, 233, 0.4);
@@ -248,7 +248,7 @@ h4 { font-size: 1rem; }
 .card {
   background: var(--bg-card);
   border: 1px solid #e5e7eb;
-  border-radius: 0.75rem;
+  border-radius: 1rem;
   padding: var(--space-lg);
   transition: all var(--transition);
 }
@@ -265,10 +265,9 @@ h4 { font-size: 1rem; }
 }
 
 .card-glow {
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(244, 63, 94, 0.25);
-  border-radius: var(--radius-xl);
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
   padding: var(--space-lg);
   box-shadow: var(--shadow-glow-rose);
 }
@@ -294,7 +293,7 @@ h4 { font-size: 1rem; }
   font-size: 0.8125rem;
   font-weight: 600;
   border: none;
-  transition: all var(--transition);
+  transition: all 0.2s ease;
   white-space: nowrap;
   line-height: 1.4;
 }
@@ -399,7 +398,7 @@ h4 { font-size: 1rem; }
 }
 
 .input::placeholder { color: var(--text-muted); }
-.input:focus { border-color: var(--rose-500); }
+.input:focus { border-color: #2563eb; box-shadow: 0 0 0 2px #bfdbfe; }
 
 .input-with-icon {
   padding-left: 2.5rem;
@@ -826,8 +825,8 @@ textarea.input {
   width: 100%;
   max-width: 28rem;
   padding: var(--space-lg);
-  background: rgba(136, 19, 55, 0.15);
-  border: 2px solid rgba(244, 63, 94, 0.6);
+  background: #fef2f2;
+  border: 1px solid #fecaca;
   border-radius: var(--radius-xl);
   animation: glow-border 2s ease-in-out infinite alternate;
 }
@@ -1839,7 +1838,7 @@ textarea.input {
 
 .stat-card-danger {
   border-color: rgba(244, 63, 94, 0.3);
-  background: rgba(136, 19, 55, 0.15);
+  background: #fef2f2;
 }
 
 .helpline-icon {

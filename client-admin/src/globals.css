@@ -25,3 +25,21 @@ h1, h2, h3, h4, h5, h6 { font-family: 'Plus Jakarta Sans', sans-serif; }
 .rounded-lg { border-radius: 0.5rem; }
 .shadow-sm { box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06); }
 .shadow-md { box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08); }
+
+.glass-card, .glass-panel { background: #ffffff; border-color: #e5e7eb; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06); }
+.glass-card:hover, .glass-panel:hover { border-color: #bfdbfe; }
+.text-slate-200, .text-slate-300, .text-slate-400 { color: #4b5563; }
+.bg-slate-900, .bg-slate-950 { background-color: #ffffff; }
+.border-slate-700, .border-slate-800 { border-color: #e5e7eb; }
+.glass-card .text-white, .glass-panel .text-white { color: #111827; }
+.badge-sky { background: #e0f2fe; color: #0369a1; border-color: #bae6fd; }
+.badge-orange { background: #ffedd5; color: #c2410c; border-color: #fed7aa; }
+.bg-red-950, .bg-rose-950 { background-color: #fef2f2; }
+.bg-black\/80 { background-color: rgba(17, 24, 39, 0.4); }
+.admin-tourist-dashboard .text-white { color: #111827; }
+.admin-tourist-dashboard .text-slate-200, .admin-tourist-dashboard .text-slate-300, .admin-tourist-dashboard .text-slate-400 { color: #4b5563; }
+.admin-tourist-dashboard .bg-gradient-to-r { background-image: none; color: #2563eb; }
+.admin-tourist-dashboard .bg-red-600.text-white, .admin-tourist-dashboard .bg-blue-600.text-white { color: #ffffff; }
+.sos-alert-card { background: #ffffff; border: 1px solid #fecaca; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06); transition: all 0.2s ease; }
+.sos-alert-card.acknowledged { background: #ffffff; border-color: #fde68a; }
+.location-box { background: #f9fafb; border-color: #d1d5db; color: #374151; }

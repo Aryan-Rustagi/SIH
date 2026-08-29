@@ -95,7 +95,7 @@ export const SOSButton: React.FC = () => {
             </div>
             <div>
               GPS:{' '}
-              <span className="text-white">
+                <span className="text-gray-900">
                 {myActiveAlert.latitude.toFixed(4)}, {myActiveAlert.longitude.toFixed(4)}
               </span>
             </div>

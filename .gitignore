@@ -16,10 +16,21 @@ node_modules/
 # builds & output
 /build
 /dist
+dist/
 server/dist/
 client/dist/
+client-tourist/dist/
+client-admin/dist/
 /.next/
 /out/
+
+# python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+env/
+venv/
 
 # misc
 .DS_Store

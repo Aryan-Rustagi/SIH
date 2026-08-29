@@ -52,8 +52,10 @@ export const SafetyChatbot: React.FC = () => {
 
   // Auto-scroll to latest message
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isTyping]);
+    if (isOpen) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages, isTyping, isOpen]);
 
   const sendMessage = async (text: string) => {
     if (!text.trim() || isTyping) return;
@@ -123,9 +125,7 @@ export const SafetyChatbot: React.FC = () => {
       {/* ── Toggle Button ── */}
       <button
         onClick={() => setIsOpen(true)}
-        className={`chat-fab fixed bottom-6 right-6 z-[100] p-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-md transition-all duration-300 ${
-          isOpen ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100 hover:scale-110'
-        }`}
+        className={`chat-fab ${isOpen ? 'chat-hidden' : ''}`}
         aria-label="Open AI Safety Assistant"
       >
         <MessageCircle className="w-8 h-8" />
@@ -134,9 +134,7 @@ export const SafetyChatbot: React.FC = () => {
 
       {/* ── Chat Window ── */}
       <div 
-        className={`chat-panel fixed bottom-6 right-6 z-[100] flex flex-col w-[380px] h-[600px] max-h-[85vh] max-w-[calc(100vw-3rem)] bg-white rounded-2xl border border-gray-200 shadow-xl overflow-hidden transition-all duration-300 origin-bottom-right ${
-          isOpen ? 'scale-100 opacity-100 pointer-events-auto' : 'scale-0 opacity-0 pointer-events-none'
-        }`}
+        className={`chat-panel ${isOpen ? '' : 'chat-hidden'}`}
       >
         {/* ── Header ── */}
         <div className="flex items-center gap-3 px-5 py-4 bg-white border-b border-gray-200">

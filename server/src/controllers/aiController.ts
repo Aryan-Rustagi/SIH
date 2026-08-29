@@ -40,6 +40,7 @@ Current Time: ${time || new Date().toISOString()}
 Current Weather/Conditions: ${currentWeather || 'Unknown'}
 
 Based on general knowledge of safety, time of day, and typical risks in this region, provide a risk assessment.
+CRITICAL: If the weather conditions indicate a hazard (e.g. heavy rain, extreme heat, storms), explicitly warn the user and adjust the risk score and suggested action accordingly.
 Return ONLY a raw JSON object (no markdown, no backticks) with the following structure:
 {
   "riskScore": (a number between 0 and 100),
