@@ -1,45 +1,132 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
+/* globals.css — supplemental overrides */
 @import './index.css';
 
-:root {
-  --font-sans: 'Inter', sans-serif;
-  --font-heading: 'Plus Jakarta Sans', sans-serif;
+/* Legacy utility classes used by component files */
+.bg-white          { background-color: #ffffff; }
+.bg-gray-50        { background-color: var(--navy-50); }
+.border-gray-200   { border-color: var(--border); }
+.border-gray-300   { border-color: var(--border-strong); }
+.text-gray-900     { color: var(--text-primary); }
+.text-gray-600     { color: var(--text-secondary); }
+
+/* Tailwind-compat classes used by the chatbot & other components */
+.w-8  { width:  2rem; }
+.w-9  { width:  2.25rem; }
+.w-4  { width:  1rem; }
+.w-5  { width:  1.25rem; }
+.h-8  { height: 2rem; }
+.h-9  { height: 2.25rem; }
+.h-4  { height: 1rem; }
+.h-5  { height: 1.25rem; }
+.p-1  { padding: 0.25rem; }
+.px-4 { padding-left: 1rem; padding-right: 1rem; }
+.py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+.space-y-4 > * + * { margin-top: 1rem; }
+.space-y-1 > * + * { margin-top: 0.25rem; }
+.list-disc     { list-style: disc; }
+.list-decimal  { list-style: decimal; }
+.ml-4          { margin-left: 1rem; }
+.mb-2          { margin-bottom: 0.5rem; }
+.mt-1\.5       { margin-top: 0.375rem; }
+.last\:mb-0:last-child { margin-bottom: 0; }
+.text-\[10px\] { font-size: 0.625rem; }
+.text-indigo-300 { color: #a5b4fc; }
+.text-blue-700   { color: var(--sky-600); }
+.bg-gray-100     { background-color: var(--navy-100); }
+.text-blue-400   { color: var(--sky-500); }
+
+/* Category / modal used in incident reporting */
+.category-option {
+  background: var(--bg-white);
+  border: 1.5px solid var(--border-strong);
+  color: var(--text-primary);
+  border-radius: var(--r-lg);
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  font-family: var(--font);
+  font-size: 0.875rem;
+  font-weight: 500;
+  width: 100%;
+  text-align: left;
+}
+.category-option:hover    { background: var(--teal-50); border-color: var(--teal-500); }
+.category-option.selected { background: var(--teal-50); border-color: var(--teal-600); color: var(--teal-700); }
+
+/* Contact cards */
+.contact-card {
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: var(--s-4);
+  box-shadow: var(--shadow-sm);
+}
+.contact-card.primary { border-left: 3px solid var(--navy-900); }
+
+.contact-action-call {
+  background: var(--sky-100);
+  color: var(--sky-600);
+  border: 1px solid #bae6fd;
+  border-radius: var(--r-md);
+  padding: 0.375rem 0.875rem;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  font-family: var(--font);
+}
+.contact-action-sms {
+  background: var(--navy-100);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  padding: 0.375rem 0.875rem;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  font-family: var(--font);
 }
 
-body {
-  background: #ffffff;
-  color: #111827;
-  font-family: 'Inter', sans-serif;
+/* Map container */
+.mappls-clean-frame {
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  overflow: hidden;
 }
 
-h1, h2, h3, h4, h5, h6 { font-family: 'Plus Jakarta Sans', sans-serif; }
+/* SMS card */
+.sms-card {
+  width: 100%;
+  max-width: 28rem;
+  margin: 1.5rem auto 0;
+  padding: 1.5rem;
+  text-align: center;
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-md);
+}
 
-.bg-white { background-color: #ffffff; }
-.bg-gray-50 { background-color: #f9fafb; }
-.border-gray-200 { border-color: #e5e7eb; }
-.border-gray-300 { border-color: #d1d5db; }
-.text-gray-900 { color: #111827; }
-.text-gray-600 { color: #4b5563; }
-.rounded-xl { border-radius: 0.75rem; }
-.rounded-2xl { border-radius: 1rem; }
-.rounded-lg { border-radius: 0.5rem; }
-.shadow-sm { box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06); }
-.shadow-md { box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08); }
+/* Risk/alert overlays */
+.risk-alert-banner { color: var(--red-700); }
+.location-box { background: var(--navy-50); border-color: var(--border-strong); color: var(--text-primary); }
 
-.glass-card, .glass-panel { background: #ffffff; border-color: #e5e7eb; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06); }
-.glass-card:hover, .glass-panel:hover { border-color: #bfdbfe; }
-.text-slate-200, .text-slate-300, .text-slate-400 { color: #4b5563; }
-.bg-slate-900, .bg-slate-950 { background-color: #ffffff; }
-.border-slate-700, .border-slate-800 { border-color: #e5e7eb; }
-.glass-card .text-white, .glass-panel .text-white { color: #111827; }
-.badge-sky { background: #e0f2fe; color: #0369a1; border-color: #bae6fd; }
-.badge-orange { background: #ffedd5; color: #c2410c; border-color: #fed7aa; }
-.bg-red-950, .bg-rose-950 { background-color: #fef2f2; }
-.bg-black\/80 { background-color: rgba(17, 24, 39, 0.4); }
-.admin-tourist-dashboard .text-white { color: #111827; }
-.admin-tourist-dashboard .text-slate-200, .admin-tourist-dashboard .text-slate-300, .admin-tourist-dashboard .text-slate-400 { color: #4b5563; }
-.admin-tourist-dashboard .bg-gradient-to-r { background-image: none; color: #2563eb; }
-.admin-tourist-dashboard .bg-red-600.text-white, .admin-tourist-dashboard .bg-blue-600.text-white { color: #ffffff; }
-.sos-alert-card { background: #ffffff; border: 1px solid #fecaca; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06); transition: all 0.2s ease; }
-.sos-alert-card.acknowledged { background: #ffffff; border-color: #fde68a; }
-.location-box { background: #f9fafb; border-color: #d1d5db; color: #374151; }
+/* Modal */
+.modal {
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-2xl);
+  box-shadow: var(--shadow-xl);
+}
+
+/* Responsive: landing hero grid stacks on mobile */
+@media (max-width: 900px) {
+  .landing-hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2.5rem !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .sms-card { padding: 1rem; }
+}

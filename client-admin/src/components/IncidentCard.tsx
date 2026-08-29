@@ -8,6 +8,7 @@ import {
   UserX,
   Stethoscope,
   HelpCircle,
+  User,
 } from 'lucide-react';
 
 export interface IncidentData {
@@ -22,6 +23,7 @@ export interface IncidentData {
   createdAt: string;
   userId?: {
     name?: string;
+    phone?: string;
   };
 }
 
@@ -73,7 +75,7 @@ export const IncidentCard: React.FC<{
               <span className="label" style={{ marginBottom: 0 }}>
                 {incident.category.replace('_', ' ')}
               </span>
-              <h4>{incident.title}</h4>
+              <h4 className="text-sm font-bold text-gray-900">{incident.title}</h4>
             </div>
           </div>
 
@@ -88,6 +90,16 @@ export const IncidentCard: React.FC<{
         </div>
 
         <p className="text-xs text-secondary mt-sm mb-md line-clamp-3">{incident.description}</p>
+        
+        {showAdminControls && (
+          <div className="bg-gray-50 border border-gray-100 rounded-lg p-3 text-xs text-gray-700 mb-4 flex items-center gap-2">
+            <User size={14} className="text-gray-400" />
+            <div>
+              <strong>Reported by:</strong> {incident.userId?.name || 'Anonymous User'} 
+              {incident.userId?.phone && ` (${incident.userId.phone})`}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-sm text-2xs text-muted" style={{ borderTop: '1px solid var(--border)', paddingTop: '0.5rem' }}>
@@ -95,20 +107,24 @@ export const IncidentCard: React.FC<{
           <MapPin size={12} />
           <span>{incident.address || `${incident.latitude.toFixed(3)}, ${incident.longitude.toFixed(3)}`}</span>
         </div>
-        <div className="flex items-center gap-xs">
+        <div className="flex items-center gap-xs text-gray-600 font-medium">
           <Clock size={12} />
           <span>{formatDate(incident.createdAt)}</span>
         </div>
+        
         {showAdminControls && onVerifyToggle && (
-          <button
-            type="button"
-            onClick={onVerifyToggle}
-            className={`btn btn-sm btn-block ${incident.isVerified ? 'btn-secondary' : 'btn-success'}`}
-          >
-            {incident.isVerified ? 'Revoke Verification' : 'Verify & Publish'}
-          </button>
+          <div className="w-full mt-2">
+            <button
+              type="button"
+              onClick={onVerifyToggle}
+              className={`btn btn-sm btn-block ${incident.isVerified ? 'bg-gray-100 text-gray-800 hover:bg-gray-200' : 'btn-success'}`}
+            >
+              {incident.isVerified ? 'Revoke Verification' : 'Verify & Publish'}
+            </button>
+          </div>
         )}
       </div>
     </div>
   );
 };
+
