@@ -186,8 +186,8 @@ export const EmergencyContacts: React.FC = () => {
           {contacts.map((contact) => (
             <div
               key={contact._id}
-              className={`glass-card p-5 rounded-2xl border flex flex-col justify-between ${
-                contact.isPrimary ? 'border-sky-500/50 bg-slate-900/90' : 'border-slate-800'
+              className={`glass-card p-6 rounded-2xl border flex flex-col justify-between transition-all duration-200 ${
+                contact.isPrimary ? 'border-gray-200 border-l-4 border-l-blue-600 bg-white' : 'border-gray-200 bg-white'
               }`}
             >
               <div>

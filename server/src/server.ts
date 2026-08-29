@@ -20,7 +20,7 @@ import smsWebhookRoutes from './routes/smsWebhookRoutes.js';
 import redZoneRoutes from './routes/redZoneRoutes.js';
 import riskZoneRoutes from './routes/riskZoneRoutes.js';
 import aiRoutes from './routes/aiRoutes.js';
-
+import weatherRoutes from './routes/weatherRoutes.js';
 
 const app = express();
 const server = http.createServer(app);
@@ -91,6 +91,7 @@ app.use('/api/sms-webhook', smsWebhookRoutes);
 app.use('/api/red-zones', redZoneRoutes);
 app.use('/api/risk-zones', riskZoneRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/weather', weatherRoutes);
 
 // Global Error Handler
 app.use(errorHandler);

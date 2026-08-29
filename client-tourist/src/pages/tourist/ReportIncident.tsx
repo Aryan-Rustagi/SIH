@@ -187,7 +187,7 @@ export const ReportIncident: React.FC = () => {
               <label className="label" style={{ marginBottom: 0 }}>
                 <MapPin size={14} color="#fb7185" /> Incident Location
               </label>
-              <button type="button" onClick={fetchCurrentCoords} className="link-accent">
+              <button type="button" onClick={fetchCurrentCoords} className="btn btn-danger btn-sm">
                 {isLocating ? 'Detecting...' : 'Detect GPS'}
               </button>
             </div>

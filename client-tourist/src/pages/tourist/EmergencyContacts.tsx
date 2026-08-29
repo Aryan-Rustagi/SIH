@@ -165,7 +165,7 @@ export const EmergencyContacts: React.FC = () => {
       ) : (
         <div className="grid grid-2">
           {contacts.map((contact) => (
-            <div key={contact._id} className={`contact-card${contact.isPrimary ? ' primary' : ''}`}>
+            <div key={contact._id} className={`contact-card transition-all duration-200${contact.isPrimary ? ' primary' : ''}`}>
               <div>
                 <div className="flex items-start justify-between gap-sm mb-sm">
                   <div>

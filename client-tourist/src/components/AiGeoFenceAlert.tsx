@@ -46,45 +46,45 @@ export const AiGeoFenceAlert: React.FC = () => {
   if (!isVisible || !alertData) return null;
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity">
-      <div className="bg-red-950 border-2 border-red-500 rounded-2xl p-8 max-w-lg w-full shadow-[0_0_100px_rgba(239,68,68,0.4)] animate-in fade-in zoom-in duration-300 relative">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm transition-opacity">
+      <div className="bg-white border border-red-200 rounded-2xl p-8 max-w-lg w-full shadow-lg animate-in fade-in zoom-in duration-300 relative">
         <button 
           onClick={() => setIsVisible(false)}
-          className="absolute top-4 right-4 text-red-400 hover:text-white transition-colors p-2"
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-900 transition-all duration-200 p-2"
         >
           <X className="w-6 h-6" />
         </button>
 
         <div className="flex flex-col items-center text-center">
           <div className="w-24 h-24 bg-red-500/20 rounded-full flex items-center justify-center mb-6 animate-pulse">
-            <AlertOctagon className="w-12 h-12 text-red-500" />
+            <AlertOctagon className="w-12 h-12 text-red-600" />
           </div>
           
-          <h2 className="text-3xl font-black text-white tracking-tight mb-2 uppercase">
+          <h2 className="text-3xl font-black text-gray-900 tracking-tight mb-2 uppercase">
             DANGER
           </h2>
-          <h3 className="text-xl font-bold text-red-400 mb-4">
+          <h3 className="text-xl font-bold text-red-700 mb-4">
             You are entering a High Risk Zone
           </h3>
           
-          <div className="bg-red-900/50 border border-red-500/50 rounded-xl p-4 w-full mb-6 text-left">
-            <p className="text-red-200">
-              <span className="font-bold text-white">Zone Name:</span> {alertData.zone_name}
+          <div className="bg-red-50 border border-red-200 rounded-xl p-4 w-full mb-6 text-left">
+            <p className="text-red-700">
+              <span className="font-bold text-gray-900">Zone Name:</span> {alertData.zone_name}
             </p>
-            <p className="text-red-200">
-              <span className="font-bold text-white">Risk Level:</span> {alertData.risk_level}
+            <p className="text-red-700">
+              <span className="font-bold text-gray-900">Risk Level:</span> {alertData.risk_level}
             </p>
           </div>
 
-          <p className="text-red-300 mb-6 font-medium">
+          <p className="text-gray-600 mb-6 font-medium">
             Please exercise extreme caution or leave the area immediately. Use the Safety Assistant if you need help.
           </p>
 
           <button 
             onClick={() => setIsVisible(false)}
-            className="w-full py-4 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-red-500/25"
+            className="w-full py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all duration-200 shadow-sm"
           >
-            I Understand
+            Leave Area
           </button>
         </div>
       </div>

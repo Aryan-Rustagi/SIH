@@ -8,6 +8,7 @@ import { MapplsMap } from '../../components/MapplsMap';
 import { SafetyScoreCard } from '../../components/SafetyScoreCard';
 import { SafetyChatbot } from '../../components/SafetyChatbot';
 import { AiGeoFenceAlert } from '../../components/AiGeoFenceAlert';
+import { WeatherCard } from '../../components/WeatherCard';
 import { ToggleSwitch } from '../../components/ui/ToggleSwitch';
 import api from '../../services/api';
 import {
@@ -65,7 +66,7 @@ export const TouristHome: React.FC = () => {
       <section className="container page dashboard-hero">
         <div className="text-center" style={{ maxWidth: 640, margin: '0 auto 2rem' }}>
           <p className="dashboard-eyebrow">Tourist safety, simplified</p>
-          <h1>
+          <h1 className="text-5xl font-extrabold">
             Travel Safe, <span className="text-blue">Stay Protected</span>
           </h1>
           <p className="hero-subtitle">
@@ -87,12 +88,7 @@ export const TouristHome: React.FC = () => {
         {isOnline && (
           <div className="dashboard-card-grid">
             <SafetyScoreCard />
-            <div className="dashboard-card">
-              <div className="dashboard-card-icon dashboard-card-icon-blue"><CloudSun size={22} /></div>
-              <p className="dashboard-card-label">Weather</p>
-              <h2>Clear conditions</h2>
-              <p className="text-secondary">Mild weather expected. Stay hydrated and check local updates before heading out.</p>
-            </div>
+            <WeatherCard />
             <div className="dashboard-card">
               <div className="dashboard-card-icon dashboard-card-icon-green"><Navigation size={22} /></div>
               <p className="dashboard-card-label">Nearby Help</p>
