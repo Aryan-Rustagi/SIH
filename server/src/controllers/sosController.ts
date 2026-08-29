@@ -2,6 +2,7 @@ import { Response, NextFunction } from 'express';
 import { SOSAlert } from '../models/SOSAlert.js';
 import { AuthRequest } from '../middleware/auth.js';
 import { Server as SocketIOServer } from 'socket.io';
+import { sendEmergencyAlert } from '../utils/smsUtils.js';
 
 let ioInstance: SocketIOServer | null = null;
 
@@ -68,6 +69,18 @@ export const triggerSOS = async (
     if (ioInstance) {
       ioInstance.emit('new_sos_alert', populatedAlert);
       console.log(`[Socket.IO] Broadcasted SOS Alert ID: ${alert._id}`);
+    }
+
+    // Send SMS to nearest police station
+    try {
+      // Placeholder 10-digit number for the nearest police station
+      const nearestPoliceStationNumber = '9876543210';
+      const smsMessage = `EMERGENCY SOS from ${req.user.name || 'Tourist'}: Location: ${latitude}, ${longitude}. ${address ? 'Address: ' + address : ''}. Message: ${alert.message}`;
+      await sendEmergencyAlert(nearestPoliceStationNumber, smsMessage);
+      console.log(`[SMS] Sent emergency alert to nearest police station: ${nearestPoliceStationNumber}`);
+    } catch (smsError: any) {
+      console.error(`[SMS Error] Failed to send emergency alert: ${smsError.message}`);
+      // Not throwing the error to ensure the SOS request still completes successfully
     }
 
     res.status(201).json({
