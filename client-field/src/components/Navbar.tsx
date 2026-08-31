@@ -12,12 +12,12 @@ export const Navbar: React.FC = () => {
       <div className="container flex justify-between items-center h-16">
         {/* Brand */}
         <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-teal-700 flex items-center justify-center text-white shadow-md shadow-teal-500/20 group-hover:scale-105 transition-transform">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center text-white shadow-md shadow-green-500/20 group-hover:scale-105 transition-transform">
             <Truck size={20} />
           </div>
           <div>
             <div className="font-black text-lg tracking-tight text-slate-800 leading-none">NER Logistics</div>
-            <div className="text-[10px] text-teal-600 font-bold tracking-widest uppercase mt-0.5">Field Portal</div>
+            <div className="text-[10px] text-green-600 font-bold tracking-widest uppercase mt-0.5">Field Portal</div>
           </div>
         </Link>
         
@@ -29,7 +29,7 @@ export const Navbar: React.FC = () => {
                 to="/dashboard"
                 className={({ isActive }) =>
                   `text-sm font-semibold transition-colors px-3 py-1.5 rounded-lg ${
-                    isActive ? 'text-teal-700 bg-teal-50 font-bold' : 'text-slate-600 hover:text-teal-600'
+                    isActive ? 'text-green-700 bg-green-50 font-bold' : 'text-slate-600 hover:text-green-600'
                   }`
                 }
               >
@@ -39,7 +39,7 @@ export const Navbar: React.FC = () => {
                 to="/route-checker"
                 className={({ isActive }) =>
                   `text-sm font-semibold transition-colors px-3 py-1.5 rounded-lg ${
-                    isActive ? 'text-teal-700 bg-teal-50 font-bold' : 'text-slate-600 hover:text-teal-600'
+                    isActive ? 'text-green-700 bg-green-50 font-bold' : 'text-slate-600 hover:text-green-600'
                   }`
                 }
               >
@@ -49,7 +49,7 @@ export const Navbar: React.FC = () => {
                 to="/deliveries"
                 className={({ isActive }) =>
                   `text-sm font-semibold transition-colors px-3 py-1.5 rounded-lg ${
-                    isActive ? 'text-teal-700 bg-teal-50 font-bold' : 'text-slate-600 hover:text-teal-600'
+                    isActive ? 'text-green-700 bg-green-50 font-bold' : 'text-slate-600 hover:text-green-600'
                   }`
                 }
               >
@@ -58,12 +58,12 @@ export const Navbar: React.FC = () => {
 
               <div className="flex items-center gap-3 border-l border-slate-200 pl-5">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-teal-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
+                  <div className="w-8 h-8 rounded-lg bg-green-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
                     {user?.name?.charAt(0) || 'O'}
                   </div>
                   <div className="text-left leading-tight hidden lg:block">
                     <div className="text-xs font-bold text-slate-800">{user?.name || 'Officer'}</div>
-                    <div className="text-[10px] text-teal-600 font-semibold">{user?.assignedDistrict || 'Kamrup'}</div>
+                    <div className="text-[10px] text-green-600 font-semibold">{user?.assignedDistrict || 'Kamrup'}</div>
                   </div>
                 </div>
                 <button
@@ -85,13 +85,13 @@ export const Navbar: React.FC = () => {
         {/* Mobile menu button */}
         <div className="md:hidden flex items-center gap-2">
           {isAuthenticated && (
-            <div className="w-8 h-8 rounded-lg bg-teal-600 text-white flex items-center justify-center font-bold text-xs">
+            <div className="w-8 h-8 rounded-lg bg-green-600 text-white flex items-center justify-center font-bold text-xs">
               {user?.name?.charAt(0) || 'O'}
             </div>
           )}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 text-slate-600 hover:text-teal-600 rounded-lg"
+            className="p-2 text-slate-600 hover:text-green-600 rounded-lg"
           >
             {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
@@ -106,7 +106,7 @@ export const Navbar: React.FC = () => {
               <div className="p-3 bg-slate-50 rounded-xl mb-1 flex items-center justify-between">
                 <div>
                   <div className="font-bold text-sm text-slate-800">{user?.name}</div>
-                  <div className="text-xs text-teal-600 font-semibold">{user?.assignedDistrict || 'Assigned: Kamrup'}</div>
+                  <div className="text-xs text-green-600 font-semibold">{user?.assignedDistrict || 'Assigned: Kamrup'}</div>
                 </div>
                 <button onClick={logout} className="text-xs font-bold text-red-600 bg-red-50 px-2.5 py-1 rounded-lg">
                   Logout
@@ -136,7 +136,7 @@ export const Navbar: React.FC = () => {
               <Link
                 to="/route-checker"
                 onClick={() => setMobileMenuOpen(false)}
-                className="font-semibold text-sm text-teal-700 py-2 border-b border-slate-100 flex items-center gap-2"
+                className="font-semibold text-sm text-green-700 py-2 border-b border-slate-100 flex items-center gap-2"
               >
                 <Navigation size={16} /> AI Route Checker
               </Link>

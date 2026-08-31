@@ -39,20 +39,20 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-navy-950 via-navy-900 to-navy-950 p-4 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-white p-4 relative overflow-hidden">
       
-      {/* Background glow circle */}
-      <div className="absolute w-96 h-96 rounded-full bg-teal-500/10 blur-3xl -top-20 -left-20 pointer-events-none" />
-      <div className="absolute w-96 h-96 rounded-full bg-blue-500/10 blur-3xl -bottom-20 -right-20 pointer-events-none" />
+      {/* Background mesh/glow */}
+      <div className="absolute w-[800px] h-[800px] rounded-full bg-green-500/5 blur-3xl -top-40 -left-40 pointer-events-none" />
+      <div className="absolute w-[800px] h-[800px] rounded-full bg-slate-100/50 blur-3xl -bottom-40 -right-40 pointer-events-none" />
 
-      <div className="max-w-md w-full bg-white rounded-3xl p-8 shadow-2xl border border-slate-100 relative z-10">
+      <div className="max-w-md w-full bg-white rounded-3xl p-8 shadow-elevated border border-slate-200 relative z-10">
         
         {/* Header */}
         <div className="flex flex-col items-center text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal-500 to-teal-700 flex items-center justify-center text-white shadow-lg shadow-teal-500/25 mb-3">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center text-white shadow-lg shadow-green-500/25 mb-3">
             <Shield size={28} />
           </div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-teal-50 text-teal-700 text-[10px] font-bold uppercase tracking-wider mb-1">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-green-50 text-green-700 text-[10px] font-bold uppercase tracking-wider mb-1 border border-green-200">
             <Radio size={12} className="text-red-500 animate-pulse" /> Command Center
           </div>
           <h1 className="text-2xl font-black text-slate-800 tracking-tight">NER Logistics Administrator</h1>
@@ -104,7 +104,7 @@ export const Login: React.FC = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="btn btn-primary w-full py-4 text-sm font-bold mt-2 shadow-lg shadow-teal-500/20"
+            className="btn btn-primary w-full py-4 text-sm font-bold mt-2 shadow-lg shadow-green-500/20"
           >
             {isSubmitting ? 'Authenticating...' : 'Access Command Console'} <ArrowRight size={18} />
           </button>
@@ -115,7 +115,7 @@ export const Login: React.FC = () => {
           <button
             type="button"
             onClick={fillAdmin}
-            className="w-full py-2.5 px-3 rounded-xl bg-slate-50 hover:bg-teal-50 border border-slate-200 hover:border-teal-300 text-slate-700 hover:text-teal-700 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
+            className="w-full py-2.5 px-3 rounded-xl bg-slate-50 hover:bg-green-50 border border-slate-200 hover:border-green-300 text-slate-700 hover:text-green-700 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
           >
             <Sparkles size={14} className="text-amber-500" /> Auto-Fill Admin Credentials
           </button>
@@ -126,7 +126,7 @@ export const Login: React.FC = () => {
               href="http://localhost:3000"
               target="_blank"
               rel="noreferrer"
-              className="text-teal-600 font-bold hover:underline"
+              className="text-green-600 font-bold hover:underline"
             >
               Open Field Officer Portal
             </a>

@@ -39,49 +39,50 @@ export const LandingPage: React.FC = () => {
   return (
     <div className="min-h-[calc(100vh-4rem)] flex flex-col justify-between bg-slate-50">
       {/* Hero Section */}
-      <section className="bg-navy-950 text-white py-16 px-4 relative overflow-hidden">
-        <div className="container grid lg:grid-cols-12 gap-12 items-center">
+      <section className="bg-white text-slate-900 py-16 px-4 relative overflow-hidden border-b border-slate-200/60">
+        <div className="absolute top-0 left-0 w-full h-full bg-hero-mesh opacity-60 pointer-events-none"></div>
+        <div className="container grid lg:grid-cols-12 gap-12 items-center relative z-10">
           
           {/* Left Column - Value Proposition */}
           <div className="lg:col-span-7 flex flex-col gap-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-300 text-xs font-bold uppercase tracking-wider w-fit">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-50 border border-green-200 text-green-700 text-xs font-bold uppercase tracking-wider w-fit shadow-sm">
               <Sparkles size={14} /> AI-Powered Logistics Accessibility Platform
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight">
-              Smarter Logistics Across <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400">North East India</span>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight text-slate-900">
+              Smarter Logistics Across <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-500">North East India</span>
             </h1>
 
-            <p className="text-slate-300 text-base sm:text-lg leading-relaxed max-w-xl font-normal">
+            <p className="text-slate-600 text-base sm:text-lg leading-relaxed max-w-xl font-normal">
               Real-time monitoring of mountain passes, bridge accessibility, and transport networks across difficult terrain. Predict landslide disruptions and keep essential supply chains moving.
             </p>
 
             {/* Quick stats pills */}
             <div className="grid grid-cols-3 gap-3 pt-2 max-w-lg">
-              <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
-                <div className="text-2xl font-black text-white">8</div>
-                <div className="text-[11px] text-slate-400 font-semibold uppercase mt-0.5">NER States</div>
+              <div className="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                <div className="text-2xl font-black text-slate-800">8</div>
+                <div className="text-[11px] text-slate-500 font-semibold uppercase mt-0.5">NER States</div>
               </div>
-              <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
-                <div className="text-2xl font-black text-teal-400">24/7</div>
-                <div className="text-[11px] text-slate-400 font-semibold uppercase mt-0.5">Live Tracking</div>
+              <div className="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                <div className="text-2xl font-black text-green-600">24/7</div>
+                <div className="text-[11px] text-slate-500 font-semibold uppercase mt-0.5">Live Tracking</div>
               </div>
-              <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
-                <div className="text-2xl font-black text-emerald-400">AI</div>
-                <div className="text-[11px] text-slate-400 font-semibold uppercase mt-0.5">Detour Engine</div>
+              <div className="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                <div className="text-2xl font-black text-emerald-600">AI</div>
+                <div className="text-[11px] text-slate-500 font-semibold uppercase mt-0.5">Detour Engine</div>
               </div>
             </div>
           </div>
 
           {/* Right Column - Field Officer Login Card */}
           <div className="lg:col-span-5">
-            <div className="bg-white text-slate-900 p-8 rounded-3xl shadow-2xl border border-slate-100 relative">
+            <div className="bg-white text-slate-900 p-8 rounded-3xl shadow-elevated border border-slate-200 relative">
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h2 className="text-2xl font-black text-slate-800 tracking-tight">Field Officer Login</h2>
                   <p className="text-xs font-semibold text-slate-500 mt-0.5">Access regional ground dispatch portal</p>
                 </div>
-                <div className="w-10 h-10 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center font-bold">
+                <div className="w-10 h-10 rounded-2xl bg-green-50 text-green-600 flex items-center justify-center font-bold border border-green-100">
                   <ShieldCheck size={22} />
                 </div>
               </div>
@@ -139,16 +140,16 @@ export const LandingPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={fillDemo}
-                  className="font-bold text-teal-600 hover:text-teal-700 underline"
+                  className="font-bold text-green-600 hover:text-green-700 underline"
                 >
                   Fill Demo Credentials
                 </button>
               </div>
 
               {/* Command Center Link */}
-              <div className="mt-3 p-3 bg-slate-50 rounded-xl flex items-center justify-between text-xs font-medium text-slate-600">
+              <div className="mt-3 p-3 bg-slate-50 rounded-xl flex items-center justify-between text-xs font-medium text-slate-600 border border-slate-100">
                 <span>Looking for Command Center?</span>
-                <a href="http://localhost:3002" target="_blank" rel="noreferrer" className="text-teal-700 font-bold hover:underline">
+                <a href="http://localhost:3002" target="_blank" rel="noreferrer" className="text-green-700 font-bold hover:underline">
                   Port 3002 ➔
                 </a>
               </div>
@@ -167,7 +168,7 @@ export const LandingPage: React.FC = () => {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="card p-6 flex flex-col gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-green-50 text-green-600 flex items-center justify-center border border-green-100">
               <Navigation size={24} />
             </div>
             <h4 className="font-bold text-base text-slate-800">AI Route Predictor</h4>

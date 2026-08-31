@@ -106,7 +106,7 @@ export const DashboardHome: React.FC = () => {
         <div>
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xs font-bold text-teal-600 uppercase tracking-widest">Live Operations Monitoring</span>
+            <span className="text-xs font-bold text-green-600 uppercase tracking-widest">Live Operations Monitoring</span>
           </div>
           <h1 className="text-3xl font-black text-slate-800 tracking-tight mt-1">NER Logistics Command Center</h1>
           <p className="text-sm text-slate-500 font-medium mt-0.5">Real-time terrain accessibility, road disruptions, and essential supply tracking.</p>
@@ -140,7 +140,7 @@ export const DashboardHome: React.FC = () => {
           title="Vehicles In Transit"
           value={stats.vehiclesInTransit}
           icon={<Truck size={22} />}
-          color="teal"
+          color="green"
           trend="GPS Synced"
           trendUp={true}
         />
@@ -170,7 +170,7 @@ export const DashboardHome: React.FC = () => {
           <div className="flex justify-between items-center mb-4">
             <div>
               <h3 className="font-bold text-lg text-slate-800 flex items-center gap-2">
-                <Compass size={20} className="text-teal-600" /> Interactive NER GIS Logistics Map
+                <Compass size={20} className="text-green-600" /> Interactive NER GIS Logistics Map
               </h3>
               <p className="text-xs text-slate-500 font-medium">Click markers for live transit hub status & terrain conditions</p>
             </div>
@@ -223,7 +223,7 @@ export const DashboardHome: React.FC = () => {
                           <div className="font-bold text-blue-700">🚚 {v.vehicleId}</div>
                           <div className="text-slate-600 font-medium">Cargo: {v.cargoType}</div>
                           <div className="text-slate-500">Driver: {v.driverName}</div>
-                          <div className="mt-1 font-bold text-teal-600">{v.status}</div>
+                          <div className="mt-1 font-bold text-green-600">{v.status}</div>
                         </div>
                       </Popup>
                     </Marker>
@@ -263,7 +263,7 @@ export const DashboardHome: React.FC = () => {
               <h3 className="font-bold text-lg text-slate-800">Critical Alerts</h3>
               <p className="text-xs text-slate-500 font-medium">Broadcasted to field units</p>
             </div>
-            <Link to="/alerts" className="text-xs font-bold text-teal-600 hover:text-teal-700 flex items-center gap-1">
+            <Link to="/alerts" className="text-xs font-bold text-green-600 hover:text-green-700 flex items-center gap-1">
               View All <ArrowRight size={13} />
             </Link>
           </div>

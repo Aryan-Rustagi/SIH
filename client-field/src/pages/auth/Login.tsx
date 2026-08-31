@@ -42,7 +42,7 @@ export const Login: React.FC = () => {
         
         {/* Logo & Header */}
         <div className="flex flex-col items-center text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal-500 to-teal-700 flex items-center justify-center text-white shadow-lg shadow-teal-500/25 mb-3">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center text-white shadow-lg shadow-green-500/25 mb-3">
             <Truck size={28} />
           </div>
           <h1 className="text-2xl font-black text-slate-800 tracking-tight">Field Officer Portal</h1>
@@ -94,7 +94,7 @@ export const Login: React.FC = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="btn btn-primary w-full py-4 text-sm font-bold mt-2 shadow-lg shadow-teal-500/20"
+            className="btn btn-primary w-full py-4 text-sm font-bold mt-2 shadow-lg shadow-green-500/20"
           >
             {isSubmitting ? 'Authenticating...' : 'Sign In'} <ArrowRight size={18} />
           </button>
@@ -105,7 +105,7 @@ export const Login: React.FC = () => {
           <button
             type="button"
             onClick={fillDemo}
-            className="w-full py-2.5 px-3 rounded-xl bg-slate-50 hover:bg-teal-50 border border-slate-200 hover:border-teal-300 text-slate-700 hover:text-teal-700 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
+            className="w-full py-2.5 px-3 rounded-xl bg-slate-50 hover:bg-green-50 border border-slate-200 hover:border-green-300 text-slate-700 hover:text-green-700 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
           >
             <Sparkles size={14} className="text-amber-500" /> Auto-Fill Demo Credentials
           </button>
@@ -116,7 +116,7 @@ export const Login: React.FC = () => {
               href="http://localhost:3002"
               target="_blank"
               rel="noreferrer"
-              className="text-teal-600 font-bold hover:underline"
+              className="text-green-600 font-bold hover:underline"
             >
               Open Command Center
             </a>

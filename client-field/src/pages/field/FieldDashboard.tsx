@@ -51,28 +51,28 @@ export const FieldDashboard: React.FC = () => {
   return (
     <div className="pb-28 min-h-screen bg-slate-50">
       {/* Header Banner */}
-      <div className="bg-navy-950 text-white pt-8 pb-14 px-4 rounded-b-[2rem] shadow-xl relative overflow-hidden">
-        <div className="container max-w-4xl">
+      <div className="bg-white border-b border-slate-200/80 pt-8 pb-14 px-4 rounded-b-[2rem] shadow-sm relative overflow-hidden">
+        <div className="container max-w-4xl relative z-10">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
             <div>
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-                <p className="text-teal-400 font-bold text-xs tracking-widest uppercase">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                <p className="text-green-600 font-bold text-xs tracking-widest uppercase">
                   Assigned Regional Sector
                 </p>
               </div>
-              <h1 className="text-3xl sm:text-4xl font-black tracking-tight mt-1">
+              <h1 className="text-3xl sm:text-4xl font-black tracking-tight mt-1 text-slate-800">
                 {user?.assignedDistrict || 'Kamrup Metropolitan'}
               </h1>
-              <p className="text-xs text-slate-400 mt-0.5">
-                Sector Officer: <span className="text-slate-200 font-semibold">{user?.name || 'Officer'}</span> ({user?.designation || 'Logistics Supervisor'})
+              <p className="text-xs text-slate-500 mt-0.5">
+                Sector Officer: <span className="text-slate-700 font-semibold">{user?.name || 'Officer'}</span> ({user?.designation || 'Logistics Supervisor'})
               </p>
             </div>
 
             <button
               onClick={fetchData}
               disabled={loading}
-              className="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-semibold backdrop-blur-sm transition-colors"
+              className="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold backdrop-blur-sm transition-colors border border-slate-200/60"
             >
               <RefreshCw size={13} className={loading ? 'animate-spin' : ''} /> Refresh
             </button>
@@ -119,14 +119,14 @@ export const FieldDashboard: React.FC = () => {
 
             <Link
               to="/route-checker"
-              className="flex flex-col items-center gap-2.5 p-4 bg-gradient-to-b from-teal-50 to-teal-50/40 border border-teal-200/60 rounded-2xl hover:bg-teal-100/60 transition-all duration-200 group text-center"
+              className="flex flex-col items-center gap-2.5 p-4 bg-gradient-to-b from-green-50 to-green-50/40 border border-green-200/60 rounded-2xl hover:bg-green-100/60 transition-all duration-200 group text-center"
             >
-              <div className="w-12 h-12 rounded-2xl bg-teal-600 text-white flex items-center justify-center shadow-md shadow-teal-500/20 group-hover:scale-105 transition-transform">
+              <div className="w-12 h-12 rounded-2xl bg-green-600 text-white flex items-center justify-center shadow-md shadow-green-500/20 group-hover:scale-105 transition-transform">
                 <Navigation size={22} />
               </div>
               <div>
-                <span className="text-xs font-bold text-teal-900 block leading-tight">AI Route Check</span>
-                <span className="text-[10px] text-teal-600 font-medium">Detours & Delays</span>
+                <span className="text-xs font-bold text-green-900 block leading-tight">AI Route Check</span>
+                <span className="text-[10px] text-green-600 font-medium">Detours & Delays</span>
               </div>
             </Link>
 
@@ -152,9 +152,9 @@ export const FieldDashboard: React.FC = () => {
         <div className="my-8">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-bold text-lg text-slate-800 flex items-center gap-2">
-              <Map size={20} className="text-teal-600" /> Key Highway Corridors
+              <Map size={20} className="text-green-600" /> Key Highway Corridors
             </h3>
-            <Link to="/route-checker" className="text-xs font-bold text-teal-600 hover:text-teal-700 flex items-center gap-1">
+            <Link to="/route-checker" className="text-xs font-bold text-green-600 hover:text-green-700 flex items-center gap-1">
               Check Detour <ArrowUpRight size={14} />
             </Link>
           </div>
