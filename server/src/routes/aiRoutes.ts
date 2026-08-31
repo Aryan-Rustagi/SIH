@@ -1,21 +1,18 @@
 import { Router } from 'express';
 import {
-  getRiskScore,
-  generateRedZones,
-  safetyChat,
-  generateRiskZones,
-  checkGeofence,
+  predictDisruption,
+  suggestAlternateRoutes,
+  logisticsChat,
+  getCorridorRisk,
 } from '../controllers/aiController.js';
+import { protect } from '../middleware/auth.js';
 
 const router = Router();
 
-// Groq-powered
-router.post('/risk-score', getRiskScore);
-router.post('/generate-red-zones', generateRedZones);
-
-// xAI Grok-powered
-router.post('/chat', safetyChat);
-router.post('/check-geofence', checkGeofence);
-router.post('/generate-risk-zones', generateRiskZones);
+// AI Intelligence Endpoints
+router.post('/predict-disruption', protect, predictDisruption);
+router.post('/suggest-routes', protect, suggestAlternateRoutes);
+router.post('/chat', protect, logisticsChat);
+router.post('/corridor-risk', protect, getCorridorRisk);
 
 export default router;

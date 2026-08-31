@@ -8,8 +8,6 @@ import {
   getTourists,
 } from '../controllers/authController.js';
 import { protect } from '../middleware/auth.js';
-import { upload } from '../middleware/upload.js';
-import { verifyKYC } from '../controllers/kycController.js';
 
 const router = Router();
 
@@ -18,11 +16,8 @@ router.post('/register', register);
 router.post('/login', login);
 router.post('/google', googleAuth);
 
-// KYC Verification
-router.post('/kyc', upload.single('document'), verifyKYC);
-
-// Get All Tourists (Admin only)
-router.get('/tourists', getTourists);
+// Get All Users (Admin only)
+router.get('/users', getTourists);
 
 // Get Current User
 router.get('/me', protect, getMe);

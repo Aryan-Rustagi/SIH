@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-export type UserRole = 'TOURIST' | 'ADMIN';
+export type UserRole = 'FIELD_OFFICER' | 'ADMIN';
 
 export interface IUser extends Document {
   name: string;
@@ -11,11 +11,8 @@ export interface IUser extends Document {
   avatar?: string;
   phone?: string;
   role: UserRole;
-  blockchainId?: string;
-  idType?: string;
-  idNumberMasked?: string;
-  kycDocumentUrl?: string;
-  isKycVerified: boolean;
+  assignedDistrict?: string;
+  designation?: string;
   latitude?: number;
   longitude?: number;
   createdAt: Date;
@@ -58,26 +55,14 @@ const UserSchema = new Schema<IUser>(
     },
     role: {
       type: String,
-      enum: ['TOURIST', 'ADMIN'],
-      default: 'TOURIST',
+      enum: ['FIELD_OFFICER', 'ADMIN'],
+      default: 'FIELD_OFFICER',
     },
-    blockchainId: {
-      type: String,
-      index: true,
-    },
-    idType: {
-      type: String,
-      enum: ['Aadhaar', 'Passport'],
-    },
-    idNumberMasked: {
+    assignedDistrict: {
       type: String,
     },
-    kycDocumentUrl: {
+    designation: {
       type: String,
-    },
-    isKycVerified: {
-      type: Boolean,
-      default: false,
     },
     latitude: {
       type: Number,

@@ -10,21 +10,18 @@ dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
 import { connectDB } from './config/db.js';
 import { errorHandler } from './middleware/errorHandler.js';
-import { setSOSSocketIO } from './controllers/sosController.js';
 
 // Route Imports
 import authRoutes from './routes/authRoutes.js';
-import sosRoutes from './routes/sosRoutes.js';
-import incidentRoutes from './routes/incidentRoutes.js';
-import safetyZoneRoutes from './routes/safetyZoneRoutes.js';
-import contactRoutes from './routes/contactRoutes.js';
-import smsWebhookRoutes from './routes/smsWebhookRoutes.js';
-import redZoneRoutes from './routes/redZoneRoutes.js';
-import riskZoneRoutes from './routes/riskZoneRoutes.js';
+import vehicleRoutes from './routes/vehicleRoutes.js';
+import routeRoutes from './routes/routeRoutes.js';
+import disruptionRoutes from './routes/disruptionRoutes.js';
+import deliveryRoutes from './routes/deliveryRoutes.js';
+import fieldReportRoutes from './routes/fieldReportRoutes.js';
+import alertRoutes from './routes/alertRoutes.js';
+import districtRoutes from './routes/districtRoutes.js';
 import aiRoutes from './routes/aiRoutes.js';
 import weatherRoutes from './routes/weatherRoutes.js';
-import smsRoutes from './routes/smsRoutes.js';
-import blockchainRoutes from './routes/blockchainRoutes.js';
 
 const app = express();
 const server = http.createServer(app);
@@ -37,8 +34,6 @@ const defaultAllowed = [
   'http://localhost:3000',
   'http://localhost:3002',
   'http://localhost:5173',
-  'https://tourist-safety-client.onrender.com',
-  'https://admin-dashboard-shrd.onrender.com',
 ];
 
 // Setup Socket.IO
@@ -50,15 +45,13 @@ const io = new SocketIOServer(server, {
   },
 });
 
-setSOSSocketIO(io);
-
 // Socket.io connection handling
 io.on('connection', (socket) => {
   console.log(`[Socket.io] Client connected: ${socket.id}`);
 
-  socket.on('join_responders', () => {
-    socket.join('responders_channel');
-    console.log(`[Socket.io] Socket ${socket.id} joined responders channel`);
+  socket.on('join_command_center', () => {
+    socket.join('command_center_channel');
+    console.log(`[Socket.io] Socket ${socket.id} joined command center channel`);
   });
 
   socket.on('disconnect', () => {
@@ -80,24 +73,22 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/api/health', (_req, res) => {
   res.json({
     status: 'ok',
-    service: 'Tourist Safety MERN Backend',
+    service: 'NER Logistics API',
     timestamp: new Date().toISOString(),
   });
 });
 
 // Mount Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/sos', sosRoutes);
-app.use('/api/incidents', incidentRoutes);
-app.use('/api/safety-zones', safetyZoneRoutes);
-app.use('/api/contacts', contactRoutes);
-app.use('/api/sms-webhook', smsWebhookRoutes);
-app.use('/api/red-zones', redZoneRoutes);
-app.use('/api/risk-zones', riskZoneRoutes);
+app.use('/api/vehicles', vehicleRoutes);
+app.use('/api/routes', routeRoutes);
+app.use('/api/disruptions', disruptionRoutes);
+app.use('/api/deliveries', deliveryRoutes);
+app.use('/api/field-reports', fieldReportRoutes);
+app.use('/api/alerts', alertRoutes);
+app.use('/api/districts', districtRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/weather', weatherRoutes);
-app.use('/api/sms', smsRoutes);
-app.use('/api/blockchain', blockchainRoutes);
 
 // Serve static uploads
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
@@ -111,7 +102,7 @@ const startServer = async () => {
     await connectDB();
     server.listen(PORT, () => {
       console.log(`===========================================`);
-      console.log(`🚀 Tourist Safety API running on port ${PORT}`);
+      console.log(`🚀 NER Logistics API running on port ${PORT}`);
       console.log(`🌐 Health check: http://localhost:${PORT}/api/health`);
       console.log(`===========================================`);
     });

@@ -3,9 +3,6 @@ import jwt from 'jsonwebtoken';
 import { OAuth2Client } from 'google-auth-library';
 import { User, IUser, UserRole } from '../models/User.js';
 import { AuthRequest } from '../middleware/auth.js';
-import { EmergencyContact } from '../models/EmergencyContact.js';
-
-import { createBlock } from '../utils/blockchain.js';
 
 // Helper to generate JWT
 const generateToken = (id: string, role: UserRole): string => {
@@ -45,24 +42,8 @@ export const register = async (
       email: email.toLowerCase(),
       password,
       phone,
-      role: role || 'TOURIST',
+      role: role || 'FIELD_OFFICER',
     });
-
-    // Mint Blockchain Digital ID for the tourist prototype
-    try {
-      const block = await createBlock({
-        userId: user._id.toString(),
-        name: user.name,
-        email: user.email,
-        phone: user.phone || '',
-        role: user.role,
-        type: 'DIGITAL_IDENTITY_MINT',
-      });
-      user.blockchainId = block.hash;
-      await user.save();
-    } catch (blockErr) {
-      console.warn('Failed to mint initial blockchain block:', blockErr);
-    }
 
     const token = generateToken(user._id.toString(), user.role);
 
@@ -75,7 +56,6 @@ export const register = async (
         email: user.email,
         phone: user.phone,
         role: user.role,
-        blockchainId: user.blockchainId,
         createdAt: user.createdAt,
       },
     });
@@ -100,7 +80,6 @@ export const login = async (
       return;
     }
 
-    // Explicitly include password for verification
     const user = await User.findOne({ email: email.toLowerCase() }).select('+password');
 
     if (!user) {
@@ -120,24 +99,6 @@ export const login = async (
       return;
     }
 
-    // Auto-mint blockchainId if existing user doesn't have one
-    if (!user.blockchainId) {
-      try {
-        const block = await createBlock({
-          userId: user._id.toString(),
-          name: user.name,
-          email: user.email,
-          phone: user.phone || '',
-          role: user.role,
-          type: 'DIGITAL_IDENTITY_MINT',
-        });
-        user.blockchainId = block.hash;
-        await user.save();
-      } catch (e) {
-        console.warn('Could not auto-mint block on login:', e);
-      }
-    }
-
     const token = generateToken(user._id.toString(), user.role);
 
     res.json({
@@ -149,7 +110,6 @@ export const login = async (
         email: user.email,
         phone: user.phone,
         role: user.role,
-        blockchainId: user.blockchainId,
         createdAt: user.createdAt,
       },
     });
@@ -169,25 +129,6 @@ export const getMe = async (
       return;
     }
 
-    if (!req.user.blockchainId) {
-      try {
-        const block = await createBlock({
-          userId: req.user._id.toString(),
-          name: req.user.name,
-          email: req.user.email,
-          phone: req.user.phone || '',
-          role: req.user.role,
-          type: 'DIGITAL_IDENTITY_MINT',
-        });
-        req.user.blockchainId = block.hash;
-        await req.user.save();
-      } catch (e) {
-        console.warn('Could not auto-mint block on getMe:', e);
-      }
-    }
-
-    const contacts = await EmergencyContact.find({ userId: req.user._id });
-
     res.json({
       success: true,
       user: {
@@ -196,10 +137,8 @@ export const getMe = async (
         email: req.user.email,
         phone: req.user.phone,
         role: req.user.role,
-        blockchainId: req.user.blockchainId,
         createdAt: req.user.createdAt,
       },
-      contacts,
     });
   } catch (error) {
     next(error);
@@ -232,7 +171,6 @@ export const updateProfile = async (
         email: user?.email,
         phone: user?.phone,
         role: user?.role,
-        blockchainId: user?.blockchainId,
       },
     });
   } catch (error) {
@@ -267,59 +205,26 @@ export const googleAuth = async (
 
     const { email, name, sub: googleId, picture: avatar } = payload;
 
-    // Check if user exists by googleId or email
     let user = await User.findOne({
       $or: [{ googleId }, { email: email.toLowerCase() }],
     });
 
     if (user) {
-      // If user exists without googleId, link it
       if (!user.googleId) {
         user.googleId = googleId;
       }
       if (avatar && !user.avatar) {
         user.avatar = avatar;
       }
-      if (!user.blockchainId) {
-        try {
-          const block = await createBlock({
-            userId: user._id.toString(),
-            name: user.name,
-            email: user.email,
-            phone: user.phone || '',
-            role: user.role,
-            type: 'DIGITAL_IDENTITY_MINT',
-          });
-          user.blockchainId = block.hash;
-        } catch (e) {
-          console.warn('Could not mint block for existing Google user:', e);
-        }
-      }
       await user.save();
     } else {
-      // Create new user
       user = await User.create({
         name: name || 'Google User',
         email: email.toLowerCase(),
         googleId,
         avatar,
-        role: role || 'TOURIST',
+        role: role || 'FIELD_OFFICER',
       });
-
-      try {
-        const block = await createBlock({
-          userId: user._id.toString(),
-          name: user.name,
-          email: user.email,
-          phone: user.phone || '',
-          role: user.role,
-          type: 'DIGITAL_IDENTITY_MINT',
-        });
-        user.blockchainId = block.hash;
-        await user.save();
-      } catch (e) {
-        console.warn('Could not mint block for new Google user:', e);
-      }
     }
 
     const token = generateToken(user._id.toString(), user.role);
@@ -334,7 +239,6 @@ export const googleAuth = async (
         phone: user.phone,
         role: user.role,
         avatar: user.avatar,
-        blockchainId: user.blockchainId,
         createdAt: user.createdAt,
       },
     });
@@ -353,14 +257,14 @@ export const getTourists = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const tourists = await User.find({ role: 'TOURIST' })
+    const users = await User.find()
       .select('-password -__v')
       .sort('-createdAt');
       
     res.json({
       success: true,
-      count: tourists.length,
-      tourists,
+      count: users.length,
+      users,
     });
   } catch (error) {
     next(error);

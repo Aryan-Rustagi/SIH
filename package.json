@@ -1,16 +1,16 @@
 {
-  "name": "tourist-safety-app",
+  "name": "ner-logistics-platform",
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently -n \"SERVER,TOURIST,ADMIN,AI\" -c \"blue,magenta,yellow,green\" \"npm run dev:server\" \"npm run dev:tourist\" \"npm run dev:admin\" \"npm run dev:ai\"",
+    "dev": "concurrently -n \"SERVER,FIELD,DASHBOARD,AI\" -c \"blue,magenta,yellow,green\" \"npm run dev:server\" \"npm run dev:field\" \"npm run dev:dashboard\" \"npm run dev:ai\"",
     "dev:server": "npm run dev --prefix server",
-    "dev:tourist": "npm run dev --prefix client-tourist",
-    "dev:admin": "npm run dev --prefix client-admin",
+    "dev:field": "npm run dev --prefix client-field",
+    "dev:dashboard": "npm run dev --prefix client-dashboard",
     "dev:ai": "cd ai-service && .venv\\Scripts\\uvicorn main:app --host 0.0.0.0 --port 8000 --reload",
     "seed": "npm run seed --prefix server",
-    "build": "npm run build --prefix server && npm run build --prefix client-tourist && npm run build --prefix client-admin",
-    "install:all": "npm install && npm install --prefix server && npm install --prefix client-tourist && npm install --prefix client-admin"
+    "build": "npm run build --prefix server && npm run build --prefix client-field && npm run build --prefix client-dashboard",
+    "install:all": "npm install && npm install --prefix server && npm install --prefix client-field && npm install --prefix client-dashboard"
   },
   "devDependencies": {
     "concurrently": "^9.2.4"

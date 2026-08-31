@@ -15,14 +15,14 @@ services:
     environment:
       - NODE_ENV=development
 
-  client-tourist:
+  client-field:
     build:
-      context: ./client-tourist
+      context: ./client-field
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
     volumes:
-      - ./client-tourist:/app
+      - ./client-field:/app
       - /app/node_modules
     env_file:
       - .env
@@ -31,14 +31,14 @@ services:
     depends_on:
       - server
 
-  client-admin:
+  client-dashboard:
     build:
-      context: ./client-admin
+      context: ./client-dashboard
       dockerfile: Dockerfile
     ports:
       - "3002:3002"
     volumes:
-      - ./client-admin:/app
+      - ./client-dashboard:/app
       - /app/node_modules
     env_file:
       - .env

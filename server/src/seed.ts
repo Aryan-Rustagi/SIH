@@ -1,128 +1,159 @@
+import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import path from 'path';
-import { connectDB } from './config/db.js';
-import { User } from './models/User.js';
-import { SafetyZone } from './models/SafetyZone.js';
-import { IncidentReport } from './models/IncidentReport.js';
-import { EmergencyContact } from './models/EmergencyContact.js';
 
-dotenv.config();
-dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
+// Models
+import User from './models/User.js';
+import Vehicle from './models/Vehicle.js';
+import Route from './models/Route.js';
+import RouteDisruption from './models/RouteDisruption.js';
+import DeliveryTracking from './models/DeliveryTracking.js';
+import Alert from './models/Alert.js';
+import District from './models/District.js';
+
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
 
-const seedData = async () => {
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/ner_logistics_db';
+
+const seedDatabase = async () => {
   try {
-    await connectDB();
-    console.log('🌱 Clearing existing demo data...');
+    await mongoose.connect(MONGO_URI);
+    console.log('Connected to MongoDB.');
 
+    // Clear existing
     await User.deleteMany({});
-    await SafetyZone.deleteMany({});
-    await IncidentReport.deleteMany({});
-    await EmergencyContact.deleteMany({});
+    await Vehicle.deleteMany({});
+    await Route.deleteMany({});
+    await RouteDisruption.deleteMany({});
+    await DeliveryTracking.deleteMany({});
+    await Alert.deleteMany({});
+    await District.deleteMany({});
 
-    console.log('👤 Creating default demo users...');
-    const tourist = await User.create({
-      name: 'Elena Rostova',
-      email: 'tourist@safetour.app',
-      password: 'password123',
-      phone: '+1 (555) 234-5678',
-      role: 'TOURIST',
-    });
+    console.log('Cleared existing database.');
 
-    const admin = await User.create({
-      name: 'Chief Sarah Jenkins',
+    // Users
+    const adminUser = await User.create({
+      name: 'Central Admin',
       email: 'admin@safetour.app',
       password: 'password123',
-      phone: '+1 (555) 999-0000',
       role: 'ADMIN',
+      phone: '+919999999999',
     });
 
-    console.log('📞 Creating emergency contacts...');
-    await EmergencyContact.create([
-      {
-        userId: tourist._id,
-        name: 'Mark Rostova (Spouse)',
-        phone: '+1 (555) 345-6789',
-        relationship: 'Spouse',
-        isPrimary: true,
-      },
-      {
-        userId: tourist._id,
-        name: 'Embassy Consular Services',
-        phone: '+1 (555) 000-1122',
-        relationship: 'Embassy / Consulate',
-        isPrimary: false,
-      },
-    ]);
+    const fieldOfficer = await User.create({
+      name: 'Field Officer Raj',
+      email: 'tourist@safetour.app', // keep same email for demo
+      password: 'password123',
+      role: 'FIELD_OFFICER',
+      phone: '+918888888888',
+      assignedDistrict: 'Kamrup Metropolitan',
+      designation: 'Logistics Supervisor',
+    });
 
-    console.log('🛡️ Creating safety zones...');
-    await SafetyZone.create([
-      {
-        name: 'Central Tourist Police Booth & First Aid',
-        description: '24/7 manned police assistance booth with certified first responders and translators.',
-        riskLevel: 'LOW',
-        latitude: 28.6139,
-        longitude: 77.209,
-        radiusMeters: 600,
-      },
-      {
-        name: 'Heritage Corridor Safe Haven',
-        description: 'High-visibility monitored tourist precinct with active security patrols and CCTV.',
-        riskLevel: 'LOW',
-        latitude: 28.619,
-        longitude: 77.215,
-        radiusMeters: 800,
-      },
-      {
-        name: 'Old Bazaar Concourse',
-        description: 'Crowded market area. Keep valuables secure and be vigilant of pickpockets.',
-        riskLevel: 'MEDIUM',
-        latitude: 28.6505,
-        longitude: 77.2303,
-        radiusMeters: 450,
-      },
-      {
-        name: 'Unlit Alleyway / High Alert Zone',
-        description: 'Poor lighting and reported aggressive touts after dark. Avoid traveling alone.',
-        riskLevel: 'HIGH',
-        latitude: 28.642,
-        longitude: 77.221,
-        radiusMeters: 300,
-      },
-    ]);
+    // Districts
+    const districtsData = [
+      { name: 'Kamrup Metropolitan', state: 'Assam', connectivityStatus: 'CONNECTED' },
+      { name: 'East Khasi Hills', state: 'Meghalaya', connectivityStatus: 'PARTIAL', activeDisruptionsCount: 1 },
+      { name: 'Tawang', state: 'Arunachal Pradesh', connectivityStatus: 'DISCONNECTED', activeDisruptionsCount: 1 },
+      { name: 'Dimapur', state: 'Nagaland', connectivityStatus: 'CONNECTED' },
+      { name: 'Imphal West', state: 'Manipur', connectivityStatus: 'PARTIAL', activeDisruptionsCount: 1 },
+    ];
+    await District.insertMany(districtsData);
 
-    console.log('⚠️ Creating sample incident reports...');
-    await IncidentReport.create([
-      {
-        userId: tourist._id,
-        title: 'Overcharging Scam by Unlicensed Taxi',
-        description: 'Driver refused to engage meter and demanded 5x tariff upon arrival. Reported to local authorities.',
-        category: 'SCAM',
-        latitude: 28.6145,
-        longitude: 77.211,
-        address: 'Outside Gate 3, Central Metro Station',
-        isVerified: true,
-        verifiedBy: admin._id,
+    // Routes
+    const route1 = await Route.create({
+      name: 'Guwahati - Shillong Corridor',
+      startPoint: 'Guwahati, Assam',
+      endPoint: 'Shillong, Meghalaya',
+      waypoints: {
+        type: 'LineString',
+        coordinates: [
+          [91.7362, 26.1445], // Guwahati
+          [91.8833, 25.5788], // Shillong
+        ],
       },
-      {
-        userId: tourist._id,
-        title: 'Pickpocketing attempt near ticket counter',
-        description: 'Two individuals creating fake distraction while attempting to unclip backpack zipper.',
-        category: 'THEFT',
-        latitude: 28.651,
-        longitude: 77.231,
-        address: 'Bazaar North Entrance',
-        isVerified: true,
-        verifiedBy: admin._id,
-      },
-    ]);
+      districtsCovered: ['Kamrup Metropolitan', 'Ri Bhoi', 'East Khasi Hills'],
+      condition: 'OPEN',
+      riskLevel: 'LOW',
+    });
 
-    console.log('✅ Demo database seeded successfully!');
+    const route2 = await Route.create({
+      name: 'Tezpur - Tawang Highway',
+      startPoint: 'Tezpur, Assam',
+      endPoint: 'Tawang, Arunachal Pradesh',
+      waypoints: {
+        type: 'LineString',
+        coordinates: [
+          [92.7926, 26.6528], // Tezpur
+          [91.8673, 27.5878], // Tawang
+        ],
+      },
+      districtsCovered: ['Sonitpur', 'West Kameng', 'Tawang'],
+      condition: 'CLOSED',
+      riskLevel: 'CRITICAL',
+    });
+
+    // Vehicles
+    const vehicle1 = await Vehicle.create({
+      vehicleId: 'AS-01-HC-1234',
+      type: 'TRUCK',
+      currentLocation: { type: 'Point', coordinates: [91.75, 26.12] },
+      driverName: 'Sanjay Kumar',
+      driverPhone: '+91 7777777777',
+      cargoType: 'MEDICINE',
+      status: 'IN_TRANSIT',
+      assignedRoute: route1._id,
+    });
+
+    const vehicle2 = await Vehicle.create({
+      vehicleId: 'AR-02-B-9876',
+      type: 'SUPPLY',
+      currentLocation: { type: 'Point', coordinates: [92.1, 27.2] },
+      driverName: 'Dorjee',
+      driverPhone: '+91 6666666666',
+      cargoType: 'FOOD',
+      status: 'DELAYED',
+      assignedRoute: route2._id,
+    });
+
+    // Disruptions
+    await RouteDisruption.create({
+      routeId: route2._id,
+      type: 'LANDSLIDE',
+      severity: 'CRITICAL',
+      location: { type: 'Point', coordinates: [92.1, 27.2] },
+      predictedDurationHours: 48,
+      status: 'ACTIVE',
+      reportedBy: fieldOfficer._id,
+    });
+
+    // Deliveries
+    await DeliveryTracking.create({
+      vehicleId: vehicle1._id,
+      origin: 'Guwahati Depot',
+      destination: 'Shillong Civil Hospital',
+      cargoManifest: 'Medical Supplies & Vaccines',
+      estimatedArrival: new Date(Date.now() + 1000 * 60 * 60 * 2), // +2 hours
+      status: 'IN_TRANSIT',
+    });
+
+    // Alerts
+    await Alert.create({
+      type: 'REGION_INACCESSIBLE',
+      message: 'Tawang district disconnected due to massive landslides in West Kameng.',
+      affectedDistricts: ['Tawang', 'West Kameng'],
+      affectedRoutes: [route2._id],
+      severity: 'CRITICAL',
+      isActive: true,
+    });
+
+    console.log('Seed data inserted successfully.');
     process.exit(0);
   } catch (error) {
-    console.error('❌ Seeding failed:', error);
+    console.error('Seeding error:', error);
     process.exit(1);
   }
 };
 
-seedData();
+seedDatabase();

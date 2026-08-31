@@ -32,9 +32,9 @@ services:
       timeout: 5s
       retries: 5
 
-  tourist:
+  field:
     build:
-      context: ./client-tourist
+      context: ./client-field
       dockerfile: Dockerfile
     restart: unless-stopped
     ports:
@@ -43,9 +43,9 @@ services:
       server:
         condition: service_healthy
 
-  admin:
+  dashboard:
     build:
-      context: ./client-admin
+      context: ./client-dashboard
       dockerfile: Dockerfile
     restart: unless-stopped
     ports:

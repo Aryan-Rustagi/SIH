@@ -1,0 +1,516 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════════════
+   NER LOGISTICS — COMMAND CENTER DASHBOARD
+   Premium Design System
+   ═══════════════════════════════════════════════ */
+
+@layer base {
+  :root {
+    /* ── Core Palette ── */
+    --teal-50: #f0fdfa;
+    --teal-100: #ccfbf1;
+    --teal-200: #99f6e4;
+    --teal-300: #5eead4;
+    --teal-400: #2dd4bf;
+    --teal-500: #14b8a6;
+    --teal-600: #0d9488;
+    --teal-700: #0f766e;
+
+    --navy-50: #f0f3f9;
+    --navy-100: #dae1ef;
+    --navy-200: #bcc8df;
+    --navy-300: #94a3c4;
+    --navy-400: #6b7da5;
+    --navy-500: #4f6289;
+    --navy-600: #3e4f72;
+    --navy-700: #2d3a57;
+    --navy-800: #1a2540;
+    --navy-900: #0d1526;
+    --navy-950: #060a14;
+
+    --emerald-500: #10b981;
+    --amber-500: #f59e0b;
+    --red-500: #ef4444;
+
+    /* ── Typography ── */
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  * {
+    @apply border-slate-200;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased;
+    font-family: var(--font-sans);
+    font-feature-settings: 'cv11', 'ss01';
+    font-variation-settings: 'opsz' 32;
+    overflow: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight font-bold;
+  }
+
+  ::selection {
+    @apply bg-teal-500 text-white;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   COMPONENT SYSTEM
+   ═══════════════════════════════════════════════ */
+
+@layer components {
+
+  /* ── Buttons ── */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-semibold
+           rounded-xl transition-all duration-200 ease-out
+           active:scale-[0.97] outline-none
+           focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-teal-500;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-b from-teal-500 to-teal-600 text-white
+           hover:from-teal-400 hover:to-teal-600
+           shadow-lg shadow-teal-500/25;
+  }
+
+  .btn-sm {
+    @apply px-3.5 py-1.5 text-xs rounded-lg;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   SIDEBAR — Premium Dark Navigation
+   ═══════════════════════════════════════════════ */
+
+aside.w-64 {
+  background: linear-gradient(180deg, #060a14 0%, #0d1526 40%, #0a1320 100%);
+  box-shadow: inset -1px 0 0 rgba(255,255,255,0.04);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Subtle glow behind the logo */
+aside.w-64 > div:first-child > div:first-child {
+  position: relative;
+}
+
+aside.w-64 > div:first-child > div:first-child::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -16px;
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle, rgba(20, 184, 166, 0.15), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Nav link active state glow */
+aside nav a[class*="bg-teal-500"] {
+  position: relative;
+  box-shadow: 0 0 16px rgba(20, 184, 166, 0.1);
+}
+
+aside nav a[class*="bg-teal-500"]::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 20px;
+  border-radius: 0 4px 4px 0;
+  background: linear-gradient(180deg, #2dd4bf, #14b8a6);
+}
+
+aside nav a[class*="bg-red-500"]::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 20px;
+  border-radius: 0 4px 4px 0;
+  background: linear-gradient(180deg, #f87171, #ef4444);
+}
+
+aside nav a[class*="bg-amber-500"]::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 20px;
+  border-radius: 0 4px 4px 0;
+  background: linear-gradient(180deg, #fbbf24, #f59e0b);
+}
+
+/* Nav link hover micro-animation */
+aside nav a {
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+aside nav a:hover {
+  transform: translateX(2px);
+}
+
+/* User card at bottom */
+aside .mt-auto {
+  border-color: rgba(255,255,255,0.04);
+}
+
+aside .mt-auto .bg-navy-900 {
+  background: linear-gradient(135deg, rgba(13, 21, 38, 0.8), rgba(26, 37, 64, 0.6));
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* ═══════════════════════════════════════════════
+   TOP BAR — Frosted Glass Header
+   ═══════════════════════════════════════════════ */
+
+header.h-16 {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+}
+
+/* Search input premium styling */
+header input[type="text"] {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+header input[type="text"]:focus {
+  @apply bg-white shadow-md;
+  width: calc(100% + 40px);
+}
+
+/* Notification bell animation */
+header button .animate-ping {
+  animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* ═══════════════════════════════════════════════
+   MAIN CONTENT AREA
+   ═══════════════════════════════════════════════ */
+
+main.flex-1 {
+  overflow-y: auto;
+  overflow-x: hidden;
+  background:
+    linear-gradient(180deg, rgba(248, 250, 252, 1) 0%, rgba(241, 245, 249, 1) 100%);
+}
+
+/* Page title animation */
+main h1 {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+main h1 + p {
+  animation: fadeInUp 0.5s ease-out 0.1s backwards;
+}
+
+/* ═══════════════════════════════════════════════
+   STAT CARDS — with gradient borders
+   ═══════════════════════════════════════════════ */
+
+main .grid > div.bg-white {
+  @apply transition-all duration-300;
+  position: relative;
+  overflow: hidden;
+}
+
+main .grid > div.bg-white::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(20, 184, 166, 0.3), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+main .grid > div.bg-white:hover::before {
+  opacity: 1;
+}
+
+main .grid > div.bg-white:hover {
+  @apply shadow-card-hover;
+  transform: translateY(-2px);
+}
+
+/* Stagger stat card entrance */
+main .grid > div.bg-white {
+  animation: scaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+main .grid > div.bg-white:nth-child(1) { animation-delay: 0ms; }
+main .grid > div.bg-white:nth-child(2) { animation-delay: 80ms; }
+main .grid > div.bg-white:nth-child(3) { animation-delay: 160ms; }
+main .grid > div.bg-white:nth-child(4) { animation-delay: 240ms; }
+
+/* ═══════════════════════════════════════════════
+   MAP PLACEHOLDER
+   ═══════════════════════════════════════════════ */
+
+.bg-slate-100.rounded-xl.border {
+  background:
+    linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%),
+    radial-gradient(circle at 30% 40%, rgba(20, 184, 166, 0.05), transparent 60%);
+  background-size: 100% 100%, 100% 100%;
+}
+
+/* ═══════════════════════════════════════════════
+   ALERT CARDS IN DASHBOARD
+   ═══════════════════════════════════════════════ */
+
+div.bg-red-50.border.border-red-100,
+div.bg-amber-50.border.border-amber-100 {
+  transition: all 0.2s ease;
+}
+
+div.bg-red-50.border.border-red-100:hover {
+  @apply shadow-glow-red;
+  transform: translateX(4px);
+}
+
+div.bg-amber-50.border.border-amber-100:hover {
+  box-shadow: 0 0 24px -4px rgba(245, 158, 11, 0.25);
+  transform: translateX(4px);
+}
+
+/* ═══════════════════════════════════════════════
+   TABLE STYLES (District View)
+   ═══════════════════════════════════════════════ */
+
+table {
+  @apply w-full;
+}
+
+table thead {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+table thead th {
+  @apply bg-slate-50/90;
+  backdrop-filter: blur(8px);
+}
+
+table tbody tr {
+  @apply transition-all duration-150;
+}
+
+table tbody tr:hover {
+  @apply bg-teal-50/30;
+}
+
+table tbody tr:hover td:first-child {
+  @apply text-teal-700;
+}
+
+/* Status badges in tables */
+table span[class*="bg-emerald-100"] {
+  @apply shadow-sm;
+}
+
+table span[class*="bg-red-100"] {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════
+   VEHICLE CARDS
+   ═══════════════════════════════════════════════ */
+
+main .grid > div.bg-white.rounded-xl.shadow-sm {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+main .grid > div.bg-white.rounded-xl.shadow-sm:hover {
+  @apply shadow-elevated;
+  transform: translateY(-3px);
+}
+
+/* ═══════════════════════════════════════════════
+   ROUTE MANAGEMENT CARDS
+   ═══════════════════════════════════════════════ */
+
+.flex.flex-col.gap-4 > div.bg-white.rounded-xl {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.flex.flex-col.gap-4 > div.bg-white.rounded-xl:hover {
+  @apply shadow-elevated;
+  transform: translateX(4px);
+}
+
+.flex.flex-col.gap-4 > div.bg-white.rounded-xl::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 4px 0 0 4px;
+  background: linear-gradient(180deg, #14b8a6, #0d9488);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.flex.flex-col.gap-4 > div.bg-white.rounded-xl:hover::before {
+  opacity: 1;
+}
+
+/* ═══════════════════════════════════════════════
+   ALERT CENTER — Border-left accent cards
+   ═══════════════════════════════════════════════ */
+
+div.bg-white.rounded-xl.shadow-sm.border[style*="border-left-color"] {
+  transition: all 0.2s ease;
+}
+
+div.bg-white.rounded-xl.shadow-sm.border[style*="border-left-color"]:hover {
+  @apply shadow-elevated;
+  transform: translateX(4px);
+}
+
+/* ═══════════════════════════════════════════════
+   FIELD REPORT CARDS
+   ═══════════════════════════════════════════════ */
+
+main .grid > div.bg-white.rounded-xl.shadow-sm.border.overflow-hidden {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+main .grid > div.bg-white.rounded-xl.shadow-sm.border.overflow-hidden:hover {
+  @apply shadow-elevated;
+  transform: translateY(-4px);
+}
+
+main .grid > div.bg-white.rounded-xl.shadow-sm.border.overflow-hidden:hover .h-40 img {
+  transform: scale(1.05);
+  transition: transform 0.5s ease;
+}
+
+main .grid > div .h-40 {
+  overflow: hidden;
+}
+
+main .grid > div .h-40 img {
+  transition: transform 0.5s ease;
+}
+
+/* ═══════════════════════════════════════════════
+   SCROLLBAR — Minimal, elegant
+   ═══════════════════════════════════════════════ */
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.5);
+}
+
+/* Sidebar scrollbar — ultra thin */
+aside::-webkit-scrollbar {
+  width: 3px;
+}
+
+aside::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+}
+
+/* ═══════════════════════════════════════════════
+   KEYFRAMES
+   ═══════════════════════════════════════════════ */
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   FOCUS & ACCESSIBILITY
+   ═══════════════════════════════════════════════ */
+
+*:focus-visible {
+  @apply outline-none ring-2 ring-teal-500 ring-offset-2;
+}
+
+/* ═══════════════════════════════════════════════
+   LOGIN PAGE (Dashboard)
+   ═══════════════════════════════════════════════ */
+
+body > #root > div > [class*="Login"],
+div[class*="min-h-screen"] {
+  background: linear-gradient(135deg, #060a14 0%, #0d1526 50%, #060a14 100%);
+}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE POLISH
+   ═══════════════════════════════════════════════ */
+
+@media (max-width: 1280px) {
+  aside.w-64 {
+    width: 240px;
+  }
+
+  .ml-64 {
+    margin-left: 240px;
+  }
+}
+
+/* Smooth transitions for ALL interactive elements */
+a, button, input, select, textarea {
+  @apply transition-all duration-200;
+}
