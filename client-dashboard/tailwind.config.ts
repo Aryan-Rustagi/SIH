@@ -23,6 +23,20 @@ const config: Config = {
           950: '#060a14',
         },
       },
+      backgroundColor: {
+        'glass': 'rgba(255, 255, 255, 0.7)',
+        'glass-dark': 'rgba(30, 41, 59, 0.5)',
+      },
+      backdropBlur: {
+        'xs': '2px',
+      },
+      borderRadius: {
+        '3xl': '1.5rem',
+      },
+      boxShadow: {
+        'lg-glow': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 0 60px rgba(0, 0, 0, 0.1)',
+        'inner-light': 'inset 0 2px 4px 0 rgba(255, 255, 255, 0.1)',
+      },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-out',
         'fade-in-up': 'fadeInUp 0.6s ease-out',
@@ -32,6 +46,7 @@ const config: Config = {
         'shimmer': 'shimmer 2s linear infinite',
         'pulse-glow': 'pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'float': 'float 6s ease-in-out infinite',
+        'bounce-slow': 'bounceSlow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
       keyframes: {
         fadeIn: {
@@ -65,6 +80,10 @@ const config: Config = {
         float: {
           '0%, 100%': { transform: 'translateY(0px)' },
           '50%': { transform: 'translateY(-8px)' },
+        },
+        bounceSlow: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
         },
       },
       boxShadow: {

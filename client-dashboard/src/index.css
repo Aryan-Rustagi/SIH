@@ -2,14 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ═══════════════════════════════════════════════
-   NER LOGISTICS — COMMAND CENTER DASHBOARD
-   Premium Design System
-   ═══════════════════════════════════════════════ */
-
 @layer base {
   :root {
-    /* ── Core Palette ── */
+    --bg: #f4f7fb;
+    --bg-soft: #eef7f7;
+    --surface: rgba(255, 255, 255, 0.82);
+    --surface-strong: #ffffff;
+    --surface-alt: #f8fafc;
+    --border: rgba(148, 163, 184, 0.22);
+    --border-strong: rgba(15, 23, 42, 0.08);
+    --text: #0f172a;
+    --text-muted: #475569;
     --teal-50: #f0fdfa;
     --teal-100: #ccfbf1;
     --teal-200: #99f6e4;
@@ -18,7 +21,6 @@
     --teal-500: #14b8a6;
     --teal-600: #0d9488;
     --teal-700: #0f766e;
-
     --navy-50: #f0f3f9;
     --navy-100: #dae1ef;
     --navy-200: #bcc8df;
@@ -30,18 +32,16 @@
     --navy-800: #1a2540;
     --navy-900: #0d1526;
     --navy-950: #060a14;
-
     --emerald-500: #10b981;
     --amber-500: #f59e0b;
     --red-500: #ef4444;
-
-    /* ── Typography ── */
-    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-sans: 'Inter', 'Segoe UI', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
   }
 
   * {
-    @apply border-slate-200;
+    box-sizing: border-box;
+    border-color: var(--border);
   }
 
   html {
@@ -49,59 +49,124 @@
   }
 
   body {
-    @apply bg-slate-50 text-slate-900 antialiased;
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at top left, rgba(20, 184, 166, 0.12), transparent 25%),
+      radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.10), transparent 30%),
+      var(--bg);
+    color: var(--text);
     font-family: var(--font-sans);
     font-feature-settings: 'cv11', 'ss01';
     font-variation-settings: 'opsz' 32;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     overflow: hidden;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  ::selection {
+    background: rgba(20, 184, 166, 0.25);
+    color: var(--navy-900);
+  }
+
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: rgba(148, 163, 184, 0.08);
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: rgba(100, 116, 139, 0.4);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: rgba(71, 85, 105, 0.6);
+    border: 2px solid transparent;
+    background-clip: content-box;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply tracking-tight font-bold;
-  }
-
-  ::selection {
-    @apply bg-teal-500 text-white;
+    letter-spacing: -0.04em;
   }
 }
 
-/* ═══════════════════════════════════════════════
-   COMPONENT SYSTEM
-   ═══════════════════════════════════════════════ */
-
 @layer components {
-
-  /* ── Buttons ── */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-semibold
-           rounded-xl transition-all duration-200 ease-out
-           active:scale-[0.97] outline-none
-           focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-teal-500;
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-xl transition-all duration-200 ease-out active:scale-[0.98] outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-teal-500;
   }
 
   .btn-primary {
-    @apply bg-gradient-to-b from-teal-500 to-teal-600 text-white
-           hover:from-teal-400 hover:to-teal-600
-           shadow-lg shadow-teal-500/25;
+    @apply bg-gradient-to-r from-teal-500 via-teal-500 to-emerald-500 text-white shadow-lg shadow-teal-500/20 hover:shadow-xl hover:shadow-teal-500/25;
+  }
+
+  .btn-secondary {
+    @apply bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-200;
   }
 
   .btn-sm {
     @apply px-3.5 py-1.5 text-xs rounded-lg;
   }
+
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-[0_12px_40px_rgba(15,23,42,0.06)];
+  }
+
+  .status-pill {
+    @apply inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-[11px] font-semibold tracking-wide uppercase;
+  }
 }
 
-/* ═══════════════════════════════════════════════
-   SIDEBAR — Premium Dark Navigation
-   ═══════════════════════════════════════════════ */
+@layer utilities {
+  .dashboard-shell {
+    @apply min-h-screen bg-slate-50;
+    background:
+      radial-gradient(circle at top left, rgba(20, 184, 166, 0.10), transparent 20%),
+      radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.07), transparent 24%),
+      #f8fafc;
+  }
+
+  .dashboard-frame {
+    @apply flex min-h-screen;
+  }
+
+  .dashboard-main {
+    @apply flex-1 ml-64 flex flex-col;
+  }
+
+  .page-header {
+    @apply mb-6 flex flex-col gap-2;
+  }
+
+  .metric-card {
+    @apply relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white/90 p-5 shadow-[0_12px_28px_rgba(15,23,42,0.05)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_32px_rgba(15,23,42,0.08)];
+  }
+}
 
 aside.w-64 {
-  background: linear-gradient(180deg, #060a14 0%, #0d1526 40%, #0a1320 100%);
-  box-shadow: inset -1px 0 0 rgba(255,255,255,0.04);
+  background: linear-gradient(180deg, #040b17 0%, #0d1526 38%, #0b1322 100%);
+  box-shadow: inset -1px 0 0 rgba(255,255,255,0.04), 12px 0 40px rgba(2, 6, 23, 0.18);
   overflow-y: auto;
   overflow-x: hidden;
 }
 
-/* Subtle glow behind the logo */
 aside.w-64 > div:first-child > div:first-child {
   position: relative;
 }
@@ -109,144 +174,114 @@ aside.w-64 > div:first-child > div:first-child {
 aside.w-64 > div:first-child > div:first-child::before {
   content: '';
   position: absolute;
-  top: -8px;
+  top: -10px;
   left: -16px;
-  width: 80px;
-  height: 80px;
-  background: radial-gradient(circle, rgba(20, 184, 166, 0.15), transparent 70%);
+  width: 90px;
+  height: 90px;
+  background: radial-gradient(circle, rgba(45, 212, 191, 0.22), transparent 72%);
   pointer-events: none;
   z-index: 0;
 }
 
-/* Nav link active state glow */
-aside nav a[class*="bg-teal-500"] {
-  position: relative;
-  box-shadow: 0 0 16px rgba(20, 184, 166, 0.1);
-}
-
-aside nav a[class*="bg-teal-500"]::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3px;
-  height: 20px;
-  border-radius: 0 4px 4px 0;
-  background: linear-gradient(180deg, #2dd4bf, #14b8a6);
-}
-
-aside nav a[class*="bg-red-500"]::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3px;
-  height: 20px;
-  border-radius: 0 4px 4px 0;
-  background: linear-gradient(180deg, #f87171, #ef4444);
-}
-
-aside nav a[class*="bg-amber-500"]::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3px;
-  height: 20px;
-  border-radius: 0 4px 4px 0;
-  background: linear-gradient(180deg, #fbbf24, #f59e0b);
-}
-
-/* Nav link hover micro-animation */
 aside nav a {
   position: relative;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 aside nav a:hover {
   transform: translateX(2px);
 }
 
-/* User card at bottom */
+aside nav a[class*='bg-teal-500'] {
+  position: relative;
+  box-shadow: 0 0 18px rgba(20, 184, 166, 0.12);
+}
+
+aside nav a[class*='bg-teal-500']::before,
+aside nav a[class*='bg-red-500']::before,
+aside nav a[class*='bg-amber-500']::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 22px;
+  border-radius: 0 4px 4px 0;
+}
+
+aside nav a[class*='bg-teal-500']::before {
+  background: linear-gradient(180deg, #5eead4, #14b8a6);
+}
+
+aside nav a[class*='bg-red-500']::before {
+  background: linear-gradient(180deg, #fca5a5, #ef4444);
+}
+
+aside nav a[class*='bg-amber-500']::before {
+  background: linear-gradient(180deg, #fcd34d, #f59e0b);
+}
+
 aside .mt-auto {
   border-color: rgba(255,255,255,0.04);
 }
 
 aside .mt-auto .bg-navy-900 {
-  background: linear-gradient(135deg, rgba(13, 21, 38, 0.8), rgba(26, 37, 64, 0.6));
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255,255,255,0.04);
+  background: linear-gradient(135deg, rgba(13, 21, 38, 0.82), rgba(26, 37, 64, 0.72));
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.06);
 }
-
-/* ═══════════════════════════════════════════════
-   TOP BAR — Frosted Glass Header
-   ═══════════════════════════════════════════════ */
 
 header.h-16 {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
 }
 
-/* Search input premium styling */
-header input[type="text"] {
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+header input[type='text'] {
+  transition: all 0.25s ease;
 }
 
-header input[type="text"]:focus {
+header input[type='text']:focus {
   @apply bg-white shadow-md;
-  width: calc(100% + 40px);
+  width: calc(100% + 24px);
 }
 
-/* Notification bell animation */
 header button .animate-ping {
-  animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+  animation: ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
-
-/* ═══════════════════════════════════════════════
-   MAIN CONTENT AREA
-   ═══════════════════════════════════════════════ */
 
 main.flex-1 {
   overflow-y: auto;
   overflow-x: hidden;
-  background:
-    linear-gradient(180deg, rgba(248, 250, 252, 1) 0%, rgba(241, 245, 249, 1) 100%);
+  background: linear-gradient(180deg, rgba(248, 250, 252, 0.96) 0%, rgba(241, 245, 249, 1) 100%);
 }
 
-/* Page title animation */
 main h1 {
   animation: fadeInUp 0.5s ease-out;
 }
 
 main h1 + p {
-  animation: fadeInUp 0.5s ease-out 0.1s backwards;
+  animation: fadeInUp 0.5s ease-out 0.08s backwards;
 }
 
-/* ═══════════════════════════════════════════════
-   STAT CARDS — with gradient borders
-   ═══════════════════════════════════════════════ */
-
 main .grid > div.bg-white {
-  @apply transition-all duration-300;
   position: relative;
   overflow: hidden;
+  transition: all 0.28s ease;
 }
 
 main .grid > div.bg-white::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  inset: 0 auto auto 0;
+  width: 100%;
   height: 3px;
-  background: linear-gradient(90deg, transparent, rgba(20, 184, 166, 0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgba(20, 184, 166, 0.38), transparent);
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.25s ease;
 }
 
 main .grid > div.bg-white:hover::before {
@@ -256,6 +291,17 @@ main .grid > div.bg-white:hover::before {
 main .grid > div.bg-white:hover {
   @apply shadow-card-hover;
   transform: translateY(-2px);
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Stagger stat card entrance */

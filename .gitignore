@@ -54,3 +54,5 @@ yarn-error.log*
 
 # secrets
 important.md
+*.key
+*.pem

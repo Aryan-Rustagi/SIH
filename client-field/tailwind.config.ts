@@ -32,6 +32,7 @@ const config: Config = {
         'shimmer': 'shimmer 2s linear infinite',
         'pulse-glow': 'pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'float': 'float 6s ease-in-out infinite',
+        'bounce-slow': 'bounceSlow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'glow-border': 'glowBorder 3s ease-in-out infinite',
       },
       keyframes: {
@@ -66,6 +67,10 @@ const config: Config = {
         float: {
           '0%, 100%': { transform: 'translateY(0px)' },
           '50%': { transform: 'translateY(-8px)' },
+        },
+        bounceSlow: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
         },
         glowBorder: {
           '0%, 100%': { boxShadow: '0 0 8px rgba(20, 184, 166, 0.15)' },

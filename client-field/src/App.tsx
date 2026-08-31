@@ -44,50 +44,50 @@ export const App: React.FC = () => {
       <main className="main-content">
         <LayoutWrapper>
           <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route 
-            path="/dashboard" 
-            element={
-              <ProtectedRoute allowedRoles={['FIELD_OFFICER']}>
-                <FieldDashboard />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/report-disruption" 
-            element={
-              <ProtectedRoute allowedRoles={['FIELD_OFFICER']}>
-                <ReportDisruption />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/upload-report" 
-            element={
-              <ProtectedRoute allowedRoles={['FIELD_OFFICER']}>
-                <FieldReportUpload />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/route-checker" 
-            element={
-              <ProtectedRoute allowedRoles={['FIELD_OFFICER']}>
-                <RouteChecker />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/deliveries" 
-            element={
-              <ProtectedRoute allowedRoles={['FIELD_OFFICER']}>
-                <DeliveryTracker />
-              </ProtectedRoute>
-            } 
-          />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="/" element={<LandingPage />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute allowedRoles={['FIELD_OFFICER']}>
+                  <FieldDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/report-disruption"
+              element={
+                <ProtectedRoute allowedRoles={['FIELD_OFFICER']}>
+                  <ReportDisruption />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/upload-report"
+              element={
+                <ProtectedRoute allowedRoles={['FIELD_OFFICER']}>
+                  <FieldReportUpload />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/route-checker"
+              element={
+                <ProtectedRoute allowedRoles={['FIELD_OFFICER']}>
+                  <RouteChecker />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/deliveries"
+              element={
+                <ProtectedRoute allowedRoles={['FIELD_OFFICER']}>
+                  <DeliveryTracker />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </LayoutWrapper>
       </main>

@@ -6,33 +6,88 @@ interface StatCardProps {
   icon: React.ReactNode;
   trend?: string;
   trendUp?: boolean;
-  color?: 'teal' | 'red' | 'amber' | 'blue' | 'indigo';
+  color?: 'teal' | 'red' | 'amber' | 'blue' | 'indigo' | 'emerald' | 'orange';
+  description?: string;
 }
 
-export const StatCard: React.FC<StatCardProps> = ({ title, value, icon, trend, trendUp, color = 'teal' }) => {
-  const colors = {
-    teal: 'bg-teal-50 text-teal-600 border-teal-100 shadow-teal-500/10',
-    red: 'bg-red-50 text-red-600 border-red-100 shadow-red-500/10',
-    amber: 'bg-amber-50 text-amber-600 border-amber-100 shadow-amber-500/10',
-    blue: 'bg-blue-50 text-blue-600 border-blue-100 shadow-blue-500/10',
-    indigo: 'bg-indigo-50 text-indigo-600 border-indigo-100 shadow-indigo-500/10',
+export const StatCard: React.FC<StatCardProps> = ({
+  title,
+  value,
+  icon,
+  trend,
+  trendUp,
+  color = 'teal',
+  description,
+}) => {
+  const colorClasses: Record<string, { bg: string; text: string; accent: string }> = {
+    teal: {
+      bg: 'bg-teal-50/80 border-teal-200/50',
+      text: 'text-teal-600',
+      accent: 'from-teal-500 to-teal-600',
+    },
+    red: {
+      bg: 'bg-red-50/80 border-red-200/50',
+      text: 'text-red-600',
+      accent: 'from-red-500 to-red-600',
+    },
+    amber: {
+      bg: 'bg-amber-50/80 border-amber-200/50',
+      text: 'text-amber-600',
+      accent: 'from-amber-500 to-amber-600',
+    },
+    blue: {
+      bg: 'bg-blue-50/80 border-blue-200/50',
+      text: 'text-blue-600',
+      accent: 'from-blue-500 to-blue-600',
+    },
+    indigo: {
+      bg: 'bg-indigo-50/80 border-indigo-200/50',
+      text: 'text-indigo-600',
+      accent: 'from-indigo-500 to-indigo-600',
+    },
+    emerald: {
+      bg: 'bg-emerald-50/80 border-emerald-200/50',
+      text: 'text-emerald-600',
+      accent: 'from-emerald-500 to-emerald-600',
+    },
+    orange: {
+      bg: 'bg-orange-50/80 border-orange-200/50',
+      text: 'text-orange-600',
+      accent: 'from-orange-500 to-orange-600',
+    },
   };
 
+  const colors = colorClasses[color];
+
   return (
-    <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-5 hover:-translate-y-1 transition-all duration-300">
+    <div className="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col gap-5">
+      {/* Header with icon and trend */}
       <div className="flex justify-between items-start">
-        <div className={`p-3.5 rounded-xl border shadow-sm ${colors[color]}`}>
+        <div className={`p-3.5 rounded-xl border ${colors.bg} ${colors.text} shadow-sm`}>
           {icon}
         </div>
         {trend && (
-          <span className={`text-xs font-bold px-2.5 py-1 rounded-full border ${trendUp ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-700 border-rose-200'}`}>
+          <span
+            className={`text-xs font-bold px-3 py-1.5 rounded-full border ${
+              trendUp
+                ? 'bg-emerald-50 text-emerald-700 border-emerald-200/50'
+                : 'bg-rose-50 text-rose-700 border-rose-200/50'
+            }`}
+          >
             {trendUp ? '↑' : '↓'} {trend}
           </span>
         )}
       </div>
+
+      {/* Values */}
       <div>
-        <h3 className="text-4xl font-black text-slate-800 tracking-tight">{value}</h3>
-        <p className="text-sm font-semibold text-slate-500 mt-1.5 uppercase tracking-wide">{title}</p>
+        <h3 className="text-4xl font-black text-slate-900 tracking-tight leading-tight mb-2">
+          {value}
+        </h3>
+        <p className="text-sm font-semibold text-slate-600 uppercase tracking-wide">{title}</p>
+        {description && (
+          <p className="text-xs text-slate-500 mt-2">{description}</p>
+        )}
       </div>
     </div>
   );
