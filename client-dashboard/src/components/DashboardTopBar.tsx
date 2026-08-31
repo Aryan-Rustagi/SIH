@@ -13,7 +13,7 @@ export const DashboardTopBar: React.FC = () => {
         <input
           type="text"
           placeholder="Search corridors, fleet, alerts..."
-          className="w-full pl-12 pr-4 py-2.5 bg-slate-50/50 border border-slate-200/60 rounded-lg text-sm font-medium focus:outline-none focus:border-teal-400 focus:bg-white focus:ring-2 focus:ring-teal-500/10 transition-all placeholder:text-slate-400"
+          className="w-full pl-12 pr-4 py-2.5 bg-slate-50/50 border border-slate-200/60 rounded-lg text-sm font-medium focus:outline-none focus:border-green-400 focus:bg-white focus:ring-2 focus:ring-green-500/10 transition-all placeholder:text-slate-400"
         />
       </div>
       
@@ -38,9 +38,9 @@ export const DashboardTopBar: React.FC = () => {
         <div className="flex items-center gap-3 pl-3 border-l border-slate-200/50">
           <div className="text-left leading-tight hidden md:block">
             <div className="text-sm font-semibold text-slate-800">{user?.name || 'Administrator'}</div>
-            <div className="text-xs text-teal-600 font-medium">Central Command</div>
+            <div className="text-xs text-green-600 font-medium">Central Command</div>
           </div>
-          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-teal-500 to-teal-600 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-teal-500/20 hover:shadow-lg hover:shadow-teal-500/30 transition-all">
+          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-green-500 to-green-600 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-green-500/20 hover:shadow-lg hover:shadow-green-500/30 transition-all">
             {user?.name?.charAt(0) || 'A'}
           </div>
         </div>

@@ -3,8 +3,8 @@
 
 /* Legacy utility classes for component compatibility */
 .bg-white          { background-color: #ffffff; }
-.bg-gray-50        { background-color: var(--navy-50); }
-.bg-gray-100       { background-color: var(--navy-100); }
+.bg-gray-50        { background-color: var(--slate-50); }
+.bg-gray-100       { background-color: var(--slate-100); }
 .border-gray-200   { border-color: var(--border); }
 .border-gray-300   { border-color: var(--border-strong); }
 .text-gray-900     { color: var(--text-primary); }
@@ -34,7 +34,7 @@
 /* Category / modal used in incident reporting */
 .category-option {
   background: var(--bg-white);
-  border: 1.5px solid var(--border-strong);
+  border: 1.5px solid var(--border);
   color: var(--text-primary);
   border-radius: var(--r-lg);
   padding: 0.75rem 1rem;
@@ -46,8 +46,8 @@
   width: 100%;
   text-align: left;
 }
-.category-option:hover    { background: var(--teal-50); border-color: var(--teal-500); }
-.category-option.selected { background: var(--teal-50); border-color: var(--teal-600); color: var(--teal-700); }
+.category-option:hover    { background: var(--green-50); border-color: var(--green-400); }
+.category-option.selected { background: var(--green-50); border-color: var(--green-600); color: var(--green-700); }
 
 /* Contact cards */
 .contact-card {
@@ -57,30 +57,35 @@
   padding: var(--s-4);
   box-shadow: var(--shadow-sm);
 }
-.contact-card.primary { border-left: 3px solid var(--navy-900); }
+.contact-card.primary { border-left: 3px solid var(--green-600); }
 
 .contact-action-call {
-  background: var(--sky-100);
-  color: var(--sky-600);
-  border: 1px solid #bae6fd;
+  background: var(--green-50);
+  color: var(--green-700);
+  border: 1px solid var(--green-200);
   border-radius: var(--r-md);
   padding: 0.375rem 0.875rem;
   font-weight: 600;
   font-size: 0.8125rem;
   cursor: pointer;
   font-family: var(--font);
+  transition: background 0.15s;
 }
+.contact-action-call:hover { background: var(--green-100); }
+
 .contact-action-sms {
-  background: var(--navy-100);
+  background: var(--slate-100);
   color: var(--text-secondary);
-  border: 1px solid var(--border-strong);
+  border: 1px solid var(--border);
   border-radius: var(--r-md);
   padding: 0.375rem 0.875rem;
   font-weight: 600;
   font-size: 0.8125rem;
   cursor: pointer;
   font-family: var(--font);
+  transition: background 0.15s;
 }
+.contact-action-sms:hover { background: var(--slate-200); }
 
 /* Map container */
 .mappls-clean-frame {
@@ -105,7 +110,7 @@
 
 /* Risk/alert overlays */
 .risk-alert-banner { color: var(--red-700); }
-.location-box { background: var(--navy-50); border-color: var(--border-strong); color: var(--text-primary); }
+.location-box { background: var(--slate-50); border-color: var(--border); color: var(--text-primary); }
 
 /* Modal */
 .modal {
@@ -127,7 +132,7 @@
   .sms-card { padding: 1rem; }
 }
 
-/* Missing Tailwind Utility Classes for Maps/Overlays */
+/* Positioning Utility Classes */
 .absolute { position: absolute; }
 .relative { position: relative; }
 .top-3 { top: 0.75rem; }

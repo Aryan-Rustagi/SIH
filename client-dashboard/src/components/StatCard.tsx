@@ -6,7 +6,7 @@ interface StatCardProps {
   icon: React.ReactNode;
   trend?: string;
   trendUp?: boolean;
-  color?: 'teal' | 'red' | 'amber' | 'blue' | 'indigo' | 'emerald' | 'orange';
+  color?: 'green' | 'red' | 'amber' | 'blue' | 'indigo' | 'emerald' | 'orange';
   description?: string;
 }
 
@@ -16,14 +16,14 @@ export const StatCard: React.FC<StatCardProps> = ({
   icon,
   trend,
   trendUp,
-  color = 'teal',
+  color = 'green',
   description,
 }) => {
   const colorClasses: Record<string, { bg: string; text: string; accent: string }> = {
-    teal: {
-      bg: 'bg-teal-50/80 border-teal-200/50',
-      text: 'text-teal-600',
-      accent: 'from-teal-500 to-teal-600',
+    green: {
+      bg: 'bg-green-50/80 border-green-200/50',
+      text: 'text-green-600',
+      accent: 'from-green-500 to-green-600',
     },
     red: {
       bg: 'bg-red-50/80 border-red-200/50',
